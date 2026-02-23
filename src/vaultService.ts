@@ -1,7 +1,7 @@
 import type { VaultIndex, VaultEntity } from './types';
 
-// Config — points to the vault folder in the mythos-architect repo
-const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/GamerDad29/mythos-architect/main/vault';
+// Config — points to the vault folder in the mythos-vault repo
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/vault';
 
 // Simple in-memory cache
 const cache = new Map<string, { data: unknown; ts: number }>();
