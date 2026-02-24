@@ -1,6 +1,19 @@
 {
   "entities": [
     {
+      "id": "item-the-penitent-s-rod",
+      "slug": "the-penitent-s-rod",
+      "name": "The Penitent's Rod",
+      "type": "ITEM",
+      "summary": "> *Uncommon, Weapon (quarterstaff), requires attunement by a monk",
+      "tags": [
+        "item",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-24T16:14:29.013Z"
+    },
+    {
       "id": "npc-vorrak-half-tongue",
       "slug": "vorrak-half-tongue",
       "name": "Vorrak Half-Tongue",
@@ -14,5 +27,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-24T05:07:05.789Z"
+  "updatedAt": "2026-02-24T16:14:30.309Z"
 }
