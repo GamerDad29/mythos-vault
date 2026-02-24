@@ -1,6 +1,19 @@
 {
   "entities": [
     {
+      "id": "npc-osric-thane-gallowfield",
+      "slug": "osric-thane-gallowfield",
+      "name": "Osric Thane Gallowfield",
+      "type": "NPC",
+      "summary": "> *Human Veteran Warden — The Order of the Amber Threshold",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-24T19:01:27.382Z"
+    },
+    {
       "id": "npc-corven-ashbrand",
       "slug": "corven-ashbrand",
       "name": "Corven Ashbrand",
@@ -66,5 +79,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-24T17:21:54.905Z"
+  "updatedAt": "2026-02-24T19:01:28.567Z"
 }
