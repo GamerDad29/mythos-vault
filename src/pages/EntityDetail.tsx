@@ -50,6 +50,7 @@ export function EntityDetail() {
   const [entity, setEntity] = useState<VaultEntity | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     if (!type || !slug) return;
@@ -131,19 +132,42 @@ export function EntityDetail() {
               className="relative overflow-hidden"
               style={{ minHeight: '280px', background: 'hsl(15 6% 7%)' }}
             >
-              {entity.imageUrl ? (
-                <img
-                  src={entity.imageUrl}
-                  alt={entity.name}
-                  className="w-full h-full object-cover"
-                  style={{ minHeight: '280px' }}
-                />
+              {entity.imageUrl && !imgError ? (
+                <>
+                  <img
+                    src={entity.imageUrl}
+                    alt={entity.name}
+                    className="w-full h-full object-cover"
+                    style={{ minHeight: '280px', display: 'block' }}
+                    onError={() => setImgError(true)}
+                  />
+                  {/* Right-edge fade into hero content — desktop */}
+                  <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{
+                    width: '100px',
+                    background: 'linear-gradient(to right, transparent, rgba(18,14,10,0.97))',
+                  }} />
+                  {/* Bottom fade — mobile */}
+                  <div className="absolute inset-x-0 bottom-0 pointer-events-none md:hidden" style={{
+                    height: '80px',
+                    background: 'linear-gradient(to bottom, transparent, rgba(18,14,10,0.97))',
+                  }} />
+                  {/* Corner vignette */}
+                  <div className="absolute inset-0 pointer-events-none" style={{
+                    background: 'radial-gradient(ellipse at 30% 50%, transparent 40%, rgba(0,0,0,0.4) 100%)',
+                  }} />
+                </>
               ) : (
                 <div
-                  className="w-full h-full flex items-center justify-center"
-                  style={{ minHeight: '280px', color: 'hsl(15 8% 20%)' }}
+                  className="w-full h-full flex items-center justify-center relative"
+                  style={{
+                    minHeight: '280px',
+                    background: `radial-gradient(ellipse at 35% 50%, hsl(20 8% 11%) 0%, hsl(15 6% 6%) 100%)`,
+                  }}
                 >
-                  <span style={{ fontSize: '4rem', opacity: 0.3 }}>⟁</span>
+                  <span style={{ fontSize: '5rem', opacity: 0.12, color: accentColor }}>⟁</span>
+                  <div className="absolute inset-0 pointer-events-none" style={{
+                    background: 'radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.3) 100%)',
+                  }} />
                 </div>
               )}
             </div>

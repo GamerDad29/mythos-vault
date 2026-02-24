@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { User, MapPin, Shield, Package, Scroll, Swords } from 'lucide-react';
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export function EntityCard({ entity, index = 0 }: Props) {
+  const [imgError, setImgError] = useState(false);
   const factionColor = entity.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || 'hsl(25 100% 40%)';
   const href = `/${entity.type.toLowerCase()}s/${entity.slug}`;
@@ -51,15 +53,33 @@ export function EntityCard({ entity, index = 0 }: Props) {
             className="relative overflow-hidden"
             style={{ height: '180px', background: 'hsl(15 6% 7%)' }}
           >
-            {entity.imageUrl ? (
-              <img
-                src={entity.imageUrl}
-                alt={entity.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+            {entity.imageUrl && !imgError ? (
+              <>
+                <img
+                  src={entity.imageUrl}
+                  alt={entity.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={() => setImgError(true)}
+                />
+                {/* Bottom fade — image bleeds into card */}
+                <div className="absolute inset-x-0 bottom-0 pointer-events-none" style={{
+                  height: '72px',
+                  background: 'linear-gradient(to bottom, transparent, hsl(20 6% 10%))',
+                }} />
+                {/* Corner vignette */}
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  background: 'radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.35) 100%)',
+                }} />
+              </>
             ) : (
-              <div className="w-full h-full flex items-center justify-center" style={{ color: 'hsl(15 8% 25%)' }}>
-                {TYPE_ICON[entity.type] || <Scroll size={32} strokeWidth={1} />}
+              <div className="w-full h-full flex items-center justify-center relative"
+                style={{ background: 'radial-gradient(ellipse at center, hsl(20 8% 11%) 0%, hsl(15 6% 7%) 100%)' }}>
+                <div style={{ color: 'hsl(15 8% 30%)', opacity: 0.7 }}>
+                  {TYPE_ICON[entity.type] || <Scroll size={28} strokeWidth={1} />}
+                </div>
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.25) 100%)',
+                }} />
               </div>
             )}
 
