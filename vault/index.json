@@ -1,6 +1,19 @@
 {
   "entities": [
     {
+      "id": "monster-stone-dragonling",
+      "slug": "stone-dragonling",
+      "name": "STONE DRAGONLING",
+      "type": "CREATURE",
+      "summary": "> *Dragon — Challenge 3 (700 XP)",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-24T16:49:57.926Z"
+    },
+    {
       "id": "item-the-penitent-s-rod",
       "slug": "the-penitent-s-rod",
       "name": "The Penitent's Rod",
@@ -27,5 +40,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-24T16:14:30.309Z"
+  "updatedAt": "2026-02-24T16:49:59.114Z"
 }
