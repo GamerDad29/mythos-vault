@@ -1,0 +1,15 @@
+{
+  "id": "item-the-penitent-s-rod",
+  "slug": "the-penitent-s-rod",
+  "name": "The Penitent's Rod",
+  "type": "ITEM",
+  "summary": "> *Uncommon, Weapon (quarterstaff), requires attunement by a monk",
+  "content": "> *Uncommon, Weapon (quarterstaff), requires attunement by a monk*\n\n**The Penitent's Rod**\n\n*A monk of a forgotten order drove this staff through the chest of her own master when she discovered he had been selling disciples into slavery. She snapped the weapon in half over her knee afterward — and both halves became this. The seam where they were rejoined is still visible, a dark crack running the length of the wood like a wound that never healed cleanly.*\n\nThis quarterstaff is a magic weapon that deals **1d8 bludgeoning damage** (1d10 when wielded with two hands). You gain a **+1 bonus to attack and damage rolls** made with this weapon.\n\n**Cracked Soul, Clear Strike.** Whenever you spend a **Focus Point** while holding this staff, you may choose one creature you can see within 30 feet. That creature's **AC is reduced by 2** against the next attack you make before the end of your current turn. This reduction does not stack with itself.\n\n**Ghost of the Wound.** Once per turn when you hit a creature with this staff, you may choose to leave a **Shadow Mark** on the target (no action required). The mark lasts for 1 minute. While a creature is Shadow Marked:\n- You have advantage on **Dexterity (Stealth)** checks made to hide from it, as the mark draws its attention inward and unsettles its instincts.\n- You know the marked creature's exact location even if it is **invisible or behind total cover**, provided it is within 60 feet of you.\n- Only one creature may be Shadow Marked at a time.\n\n**Penance Strike.** When you score a **critical hit** with this staff, the target must succeed on a **DC 14 Wisdom saving throw** or become **frightened** of you until the end of its next turn, the crack in the staff splitting open to exhale a breath of cold shadow.",
+  "tags": [
+    "item",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-24T16:14:29.013Z",
+  "source": "The Forge"
+}
