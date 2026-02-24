@@ -1,6 +1,19 @@
 {
   "entities": [
     {
+      "id": "npc-corven-ashbrand",
+      "slug": "corven-ashbrand",
+      "name": "Corven Ashbrand",
+      "type": "NPC",
+      "summary": "> *Human Ranger/Rogue — Deep Market Syndicate",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-24T17:21:53.775Z"
+    },
+    {
       "id": "npc-marta-clinker-voss",
       "slug": "marta-clinker-voss",
       "name": "Marta \"Clinker\" Voss",
@@ -53,5 +66,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-24T16:56:18.276Z"
+  "updatedAt": "2026-02-24T17:21:54.905Z"
 }
