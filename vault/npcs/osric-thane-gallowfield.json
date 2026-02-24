@@ -1,0 +1,15 @@
+{
+  "id": "npc-osric-thane-gallowfield",
+  "slug": "osric-thane-gallowfield",
+  "name": "Osric Thane Gallowfield",
+  "type": "NPC",
+  "summary": "> *Human Veteran Warden — The Order of the Amber Threshold",
+  "content": "> *Human Veteran Warden — The Order of the Amber Threshold*\n\n**Osric Thane Gallowfield**\n*A man who has stood at the boundary between the living world and something older for so long he has started to forget which side he belongs to.*\n\n**Appearance:** Osric is enormous — broad as a doorframe, grey-bearded, with a face like weathered limestone: impressive, ancient, and entirely unyielding. His left arm from the elbow down is wrapped perpetually in linen bandages soaked in rendered amber resin, concealing wounds that healers have confirmed are simply not there anymore. He wears no insignia of rank, only a tarnished copper badge stamped with a moth.\n\n**Personality:**\n*Trait.* He is incapable of small talk. Every conversation Osric enters, he enters like a man crossing a threshold — deliberately, with full awareness of what he is leaving behind.\n*Bond.* His garrison of seven wardens died holding a boundary crossing twelve years ago. He performed the rites. He burned the bodies. He does not speak their names anymore because he believes naming the dead too often wears the path between worlds thin.\n*Flaw.* He has started hearing the voices of his dead garrison again — and he has started answering them. He does not know whether this is grief, madness, or something crossing over wearing their faces, and he is running out of time to decide.",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-24T19:01:27.382Z",
+  "source": "The Forge"
+}
