@@ -3,7 +3,8 @@
   "slug": "corven-ashbrand",
   "name": "Corven Ashbrand",
   "type": "NPC",
-  "summary": "> *Human Ranger/Rogue — Deep Market Syndicate",
+  "category": "Human Ranger/Rogue",
+  "summary": "Human Ranger/Rogue — Deep Market Syndicate",
   "content": "> *Human Ranger/Rogue — Deep Market Syndicate*\n**Corven Ashbrand**\n*A scarred, one-eyed captain who speaks to dragonlings in a low whistle that makes hardened criminals step back.*\n\n**Appearance:** Corven is a lean, weathered man in his mid-forties, his face mapped with pale burn scars that crawl from jaw to temple — souvenirs of an early career spent learning which dragonlings don't take kindly to strangers. His left eye is milky white and sightless, framed by a permanent squint; his right is sharp amber, always cataloguing exits. He wears a heavy canvas duster lined with reinforced leather scales harvested from dragonlings he's personally tamed, and a bronze signal whistle hangs on a cord at his throat like a holy symbol.\n\n**Personality:**\n*Trait.* Corven is unhurried and soft-spoken — the kind of man who never raises his voice because he doesn't have to.\n*Bond.* He considers his dragonlings genuine partners, not tools. He has given each one a name, and he remembers every one he's lost.\n*Flaw.* He is utterly, catastrophically unable to leave a suffering creature behind — even when doing so would be the tactically sound choice.",
   "tags": [
     "npc",

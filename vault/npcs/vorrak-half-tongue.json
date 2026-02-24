@@ -3,7 +3,8 @@
   "slug": "vorrak-half-tongue",
   "name": "Vorrak Half-Tongue",
   "type": "NPC",
-  "summary": "> *Orc Rogue (Mastermind) — The Open Road Consortium",
+  "category": "Orc Rogue (Mastermind)",
+  "summary": "Orc Rogue (Mastermind) — The Open Road Consortium",
   "content": "> *Orc Rogue (Mastermind) — The Open Road Consortium*\n\n**Vorrak Half-Tongue**\n*He lost half his tongue to a rival's knife and learned to say more with silence than most men say in a lifetime*\n\n**Appearance:** Vorrak is lean for an orc, almost uncomfortably so, with deep-set amber eyes that catalogue everything and reveal nothing. He dresses in the plain wool of a common drover — deliberately forgettable — but every piece of clothing conceals a pocket, a blade, or a folded document of someone else's private business. His speech is slurred by his ruined tongue, which he weaponizes; people underestimate a man they struggle to understand.\n\n**Personality:**\n- *Trait:* Vorrak deflects every personal question with a merchant's redirect — he answers with a counter-offer, never a truth.\n- *Bond:* He owes an unpayable debt to a halfling fence in Baldur's Gate named Tesswyn Cloop, who sheltered him when every guild in the city wanted him dead.\n- *Flaw:* He collects secrets the way other men collect gold — compulsively, dangerously, without knowing when to stop.",
   "tags": [
     "npc",

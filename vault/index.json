@@ -5,7 +5,8 @@
       "slug": "osric-thane-gallowfield",
       "name": "Osric Thane Gallowfield",
       "type": "NPC",
-      "summary": "> *Human Veteran Warden — The Order of the Amber Threshold",
+      "category": "Human Veteran Warden",
+      "summary": "Human Veteran Warden — The Order of the Amber Threshold",
       "tags": [
         "npc",
         "forged",
@@ -18,7 +19,8 @@
       "slug": "corven-ashbrand",
       "name": "Corven Ashbrand",
       "type": "NPC",
-      "summary": "> *Human Ranger/Rogue — Deep Market Syndicate",
+      "category": "Human Ranger/Rogue",
+      "summary": "Human Ranger/Rogue — Deep Market Syndicate",
       "tags": [
         "npc",
         "forged",
@@ -31,7 +33,8 @@
       "slug": "marta-clinker-voss",
       "name": "Marta \"Clinker\" Voss",
       "type": "NPC",
-      "summary": "> *Half-Orc Fighter/Ranger — Deep Market Syndicate",
+      "category": "Half-Orc Fighter/Ranger",
+      "summary": "Half-Orc Fighter/Ranger — Deep Market Syndicate",
       "tags": [
         "npc",
         "forged",
@@ -42,9 +45,10 @@
     {
       "id": "monster-stone-dragonling",
       "slug": "stone-dragonling",
-      "name": "STONE DRAGONLING",
+      "name": "Stone Dragonling",
       "type": "CREATURE",
-      "summary": "> *Dragon — Challenge 3 (700 XP)",
+      "category": "Dragon",
+      "summary": "Dragon — Challenge 3 (700 XP)",
       "tags": [
         "monster",
         "forged",
@@ -57,7 +61,8 @@
       "slug": "the-penitent-s-rod",
       "name": "The Penitent's Rod",
       "type": "ITEM",
-      "summary": "> *Uncommon, Weapon (quarterstaff), requires attunement by a monk",
+      "category": "Uncommon Weapon",
+      "summary": "Uncommon, Weapon (quarterstaff), requires attunement by a monk",
       "tags": [
         "item",
         "forged",
@@ -70,7 +75,8 @@
       "slug": "vorrak-half-tongue",
       "name": "Vorrak Half-Tongue",
       "type": "NPC",
-      "summary": "> *Orc Rogue (Mastermind) — The Open Road Consortium",
+      "category": "Orc Rogue (Mastermind)",
+      "summary": "Orc Rogue (Mastermind) — The Open Road Consortium",
       "tags": [
         "npc",
         "forged",
