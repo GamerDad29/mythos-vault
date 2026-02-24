@@ -1,0 +1,18 @@
+{
+  "entities": [
+    {
+      "id": "npc-vorrak-half-tongue",
+      "slug": "vorrak-half-tongue",
+      "name": "Vorrak Half-Tongue",
+      "type": "NPC",
+      "summary": "> *Orc Rogue (Mastermind) — The Open Road Consortium",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-24T05:07:04.682Z"
+    }
+  ],
+  "updatedAt": "2026-02-24T05:07:05.789Z"
+}
