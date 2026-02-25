@@ -7,6 +7,20 @@ import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
 import type { VaultEntityStub } from '../types';
 
+const SECTIONS = [
+  { label: 'NPCs', href: '/npcs', desc: 'Characters encountered in the Underdark' },
+  { label: 'Creatures', href: '/creatures', desc: 'Beasts and beings of the deep' },
+  { label: 'Locations', href: '/locations', desc: 'Cities, ruins, and places of power' },
+  { label: 'Factions', href: '/factions', desc: 'Powers that shape the Middledark' },
+  { label: 'Items', href: '/items', desc: 'Artifacts, weapons, and curiosities' },
+  { label: 'Lore', href: '/lore', desc: 'History, legends, and hidden truths' },
+];
+
+const TOOLS = [
+  { label: 'Timeline', href: '/timeline', desc: 'Chronicle events in order' },
+  { label: 'Stats', href: '/stats', desc: 'Vault contents at a glance' },
+];
+
 export function Home() {
   const [recent, setRecent] = useState<VaultEntityStub[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +29,6 @@ export function Home() {
   useEffect(() => {
     vaultService.getIndex()
       .then(index => {
-        // Most recently published, up to 6
         const sorted = [...index.entities].sort(
           (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
         );
@@ -24,14 +37,6 @@ export function Home() {
       .catch(() => setError('The Vault is sealed. No entries found.'))
       .finally(() => setLoading(false));
   }, []);
-
-  const SECTIONS = [
-    { label: 'NPCs', href: '/npcs', desc: 'Characters encountered in the Underdark' },
-    { label: 'Locations', href: '/locations', desc: 'Cities, ruins, and places of power' },
-    { label: 'Factions', href: '/factions', desc: 'Powers that shape the Middledark' },
-    { label: 'Items', href: '/items', desc: 'Artifacts, weapons, and curiosities' },
-    { label: 'Lore', href: '/lore', desc: 'History, legends, and hidden truths' },
-  ];
 
   return (
     <div className="min-h-screen">
@@ -89,17 +94,18 @@ export function Home() {
 
       {/* Section nav */}
       <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-24">
+        {/* Entity types */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
           {SECTIONS.map(({ label, href, desc }, i) => (
             <motion.div
               key={href}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.06 }}
+              transition={{ delay: 0.1 + i * 0.05 }}
             >
               <Link href={href}>
                 <div
-                  className="group cursor-pointer p-5 text-center transition-all duration-250"
+                  className="cursor-pointer p-5 text-center transition-all duration-250"
                   style={{
                     background: 'hsl(20 6% 10%)',
                     border: '1px solid hsl(15 8% 16%)',
@@ -132,6 +138,50 @@ export function Home() {
           ))}
         </div>
 
+        {/* Tools row */}
+        <div className="grid grid-cols-2 gap-3 mb-24">
+          {TOOLS.map(({ label, href, desc }, i) => (
+            <motion.div
+              key={href}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.42 + i * 0.05 }}
+            >
+              <Link href={href}>
+                <div
+                  className="cursor-pointer px-5 py-3 text-center transition-all duration-250"
+                  style={{
+                    background: 'hsl(20 5% 9%)',
+                    border: '1px solid hsl(15 8% 14%)',
+                    borderRadius: '4px',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 22%)';
+                    (e.currentTarget as HTMLElement).style.background = 'hsl(20 6% 11%)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 14%)';
+                    (e.currentTarget as HTMLElement).style.background = 'hsl(20 5% 9%)';
+                  }}
+                >
+                  <p
+                    className="font-serif uppercase tracking-[0.15em] text-xs mb-0.5"
+                    style={{ color: 'hsl(15 4% 60%)' }}
+                  >
+                    {label}
+                  </p>
+                  <p
+                    className="font-sans text-xs"
+                    style={{ color: 'hsl(15 4% 38%)', fontSize: '11px' }}
+                  >
+                    {desc}
+                  </p>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
         {/* Recent entries */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -145,12 +195,14 @@ export function Home() {
               Latest discoveries from the Underdark
             </p>
           </div>
-          <Link href="/npcs">
+          <Link href="/timeline">
             <span
               className="font-serif text-xs uppercase tracking-wider flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: 'hsl(25 80% 38%)' }}
+              onMouseEnter={e => ((e.target as HTMLElement).style.color = 'hsl(25 100% 50%)')}
+              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(25 80% 38%)')}
             >
-              Browse All <ChevronRight size={14} />
+              Full Timeline <ChevronRight size={14} />
             </span>
           </Link>
         </div>
