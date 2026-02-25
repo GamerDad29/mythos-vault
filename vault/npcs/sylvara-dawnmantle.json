@@ -1,0 +1,16 @@
+{
+  "id": "npc-sylvara-dawnmantle",
+  "slug": "sylvara-dawnmantle",
+  "name": "Sylvara Dawnmantle",
+  "type": "NPC",
+  "category": "Wood Elf Paladin",
+  "summary": "Wood Elf Paladin — Oath of the Ancients / Independent",
+  "content": "> *Wood Elf Paladin — Oath of the Ancients / Independent*\n**Sylvara Dawnmantle**\n*The woman who swore an oath to protect the living world — and is slowly realizing the god-king she once revered may be its greatest wound.*\n\n**Appearance:** Sylvara stands tall and weathered, her bark-brown skin etched with old silver scars that catch the light like cracked bark after a frost. Her pale gold eyes carry the particular stillness of someone who has seen centuries pass and found them wanting. She wears battered half-plate the color of autumn leaves, its surface carved with intertwining vines, one pauldron deliberately defaced — the emblem of The Chain's holy order scratched away but never fully gone.\n\n**Personality:**\n*Trait:* She speaks slowly and deliberately, weighing each word as though language itself is sacred — and breakable.\n*Bond:* She once pledged her sword and her soul to The Chain's crusade against the Underdark. Every life she took in that war is a name she still carries.\n*Flaw:* She cannot admit she was wrong until the proof is so overwhelming it shatters her — and even then, her pride makes her frame it as evolution rather than failure.",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-25T02:59:18.111Z",
+  "source": "The Forge"
+}
