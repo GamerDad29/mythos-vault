@@ -1,0 +1,16 @@
+{
+  "id": "npc-duchess-mira-aurenthal",
+  "slug": "duchess-mira-aurenthal",
+  "name": "Duchess Mira Aurenthal",
+  "type": "NPC",
+  "category": "Human Noble / Spy",
+  "summary": "Human Noble / Spy — House Aurenthal (Merchant Aristocracy)",
+  "content": "> *Human Noble / Spy — House Aurenthal (Merchant Aristocracy)*\n**Duchess Mira Aurenthal**\n*She has buried two husbands, outlasted three kings, and she is smiling at you like you might be next.*\n\n**Appearance:** Mira Aurenthal is somewhere past fifty and refuses to pretend otherwise — the silver threading through her black hair is worn like armor, not apology. She is tall, broad-shouldered for a noblewoman, with dark eyes that hold the particular stillness of someone who learned long ago not to react before they are ready. A thin scar bisects her left brow, poorly hidden beneath cosmetics, and her rings are too heavy and too numerous to be merely decorative.\n\n**Personality:**\n- *Trait:* She is extravagantly generous with wine, food, flattery, and information — and uses the giving of all four to study exactly what you reach for first.\n- *Bond:* House Aurenthal's fortune was built on a lie she did not tell, but has spent decades sustaining. She cannot dismantle it without destroying the hundred servants and retainers whose livelihoods depend on it.\n- *Flaw:* She respects power above almost everything — including innocence. She has sacrificed good people for strategic advantage and lost sleep over none of them.",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-25T02:50:32.960Z",
+  "source": "The Forge"
+}
