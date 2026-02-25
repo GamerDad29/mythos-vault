@@ -7,6 +7,7 @@ import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
 import { Bookmarks } from './pages/Bookmarks';
 import { Journal } from './pages/Journal';
+import { KarnukDemo } from './pages/KarnukDemo';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/stats" component={Stats} />
           <Route path="/bookmarks" component={Bookmarks} />
           <Route path="/journal" component={Journal} />
+          <Route path="/demo/karnuk" component={KarnukDemo} />
           <Route path="/:type/:slug" component={EntityDetail} />
           <Route component={NotFound} />
         </Switch>
