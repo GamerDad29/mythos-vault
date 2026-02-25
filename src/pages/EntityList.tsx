@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
@@ -15,6 +15,9 @@ const TYPE_LABELS: Record<string, { plural: string; desc: string }> = {
   CREATURE: { plural: 'Creatures', desc: 'Beasts and beings of the deep' },
 };
 
+// Tags that are too generic to be useful for filtering
+const SKIP_TAGS = new Set(['ai-generated']);
+
 interface Props {
   type: string;
 }
@@ -24,12 +27,15 @@ export function EntityList({ type }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const meta = TYPE_LABELS[type] || { plural: type + 's', desc: '' };
+  const accentColor = 'hsl(25 100% 38%)';
 
   useEffect(() => {
     setLoading(true);
     setError(null);
+    setActiveTag(null);
     vaultService.getIndex()
       .then(index => {
         const filtered = index.entities.filter(e => e.type.toUpperCase() === type.toUpperCase());
@@ -39,14 +45,17 @@ export function EntityList({ type }: Props) {
       .finally(() => setLoading(false));
   }, [type]);
 
-  const filtered = query.trim()
-    ? entities.filter(e =>
-        e.name.toLowerCase().includes(query.toLowerCase()) ||
-        e.summary?.toLowerCase().includes(query.toLowerCase()) ||
-        e.category?.toLowerCase().includes(query.toLowerCase()) ||
-        e.tags?.some(t => t.toLowerCase().includes(query.toLowerCase()))
-      )
-    : entities;
+  // Collect unique meaningful tags — exclude the entity's own type tag and noise
+  const allTags = [...new Set(
+    entities.flatMap(e => e.tags || []).filter(t => !SKIP_TAGS.has(t) && t !== type.toLowerCase())
+  )].sort();
+
+  const filtered = entities.filter(e => {
+    const q = query.trim().toLowerCase();
+    const matchesQuery = !q || [e.name, e.summary, e.category, ...(e.tags || [])].some(v => v?.toLowerCase().includes(q));
+    const matchesTag = !activeTag || (e.tags || []).includes(activeTag);
+    return matchesQuery && matchesTag;
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
@@ -75,7 +84,7 @@ export function EntityList({ type }: Props) {
       </motion.div>
 
       {/* Search */}
-      <div className="relative mb-10 max-w-md">
+      <div className="relative mb-4 max-w-md">
         <Search
           size={15}
           className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -99,6 +108,32 @@ export function EntityList({ type }: Props) {
         />
       </div>
 
+      {/* Tag filter chips */}
+      {allTags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-8">
+          {allTags.map(tag => {
+            const active = activeTag === tag;
+            return (
+              <button
+                key={tag}
+                onClick={() => setActiveTag(active ? null : tag)}
+                className="font-serif text-xs uppercase tracking-wider px-2.5 py-1 transition-all duration-200"
+                style={{
+                  background: active ? `${accentColor}22` : 'hsl(20 6% 10%)',
+                  border: `1px solid ${active ? accentColor + '66' : 'hsl(15 8% 18%)'}`,
+                  borderRadius: '2px',
+                  color: active ? accentColor : 'hsl(15 4% 45%)',
+                  cursor: 'pointer',
+                }}
+              >
+                {tag}
+                {active && <X size={10} className="inline ml-1.5 -mt-0.5" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Grid */}
       {error ? (
         <p className="font-display italic text-center py-20" style={{ color: 'hsl(15 4% 40%)' }}>
@@ -114,7 +149,9 @@ export function EntityList({ type }: Props) {
           style={{ border: '1px dashed hsl(15 8% 18%)', borderRadius: '4px' }}
         >
           <p className="font-display italic text-xl" style={{ color: 'hsl(15 4% 35%)' }}>
-            {query ? `No results for "${query}"` : `No ${meta.plural.toLowerCase()} in the Vault yet.`}
+            {query || activeTag
+              ? `No results${query ? ` for "${query}"` : ''}${activeTag ? ` tagged "${activeTag}"` : ''}`
+              : `No ${meta.plural.toLowerCase()} in the Vault yet.`}
           </p>
         </div>
       ) : (
@@ -122,6 +159,7 @@ export function EntityList({ type }: Props) {
           <p className="font-sans text-sm mb-6" style={{ color: 'hsl(15 4% 40%)', fontSize: '13px' }}>
             {filtered.length} {filtered.length === 1 ? 'entry' : 'entries'}
             {query && ` matching "${query}"`}
+            {activeTag && ` tagged "${activeTag}"`}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filtered.map((entity, i) => (

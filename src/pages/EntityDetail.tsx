@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useRoute, Link } from 'wouter';
+import { useRoute, useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { SkeletonHero } from '../components/Skeleton';
-import type { VaultEntity } from '../types';
+import type { VaultEntity, VaultEntityStub } from '../types';
 import { FACTION_COLORS } from '../types';
+
+const TYPE_PLURALS: Record<string, string> = {
+  npcs: 'NPCs',
+  creatures: 'Creatures',
+  locations: 'Locations',
+  factions: 'Factions',
+  items: 'Items',
+  lore: 'Lore',
+};
 
 function parseInline(text: string): string {
   return text
@@ -14,11 +23,34 @@ function parseInline(text: string): string {
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
 
-function renderContent(text: string, accentColor: string): React.ReactNode[] {
+function linkifyEntities(html: string, stubs: VaultEntityStub[], currentId: string): string {
+  const targets = [...stubs]
+    .filter(s => s.id !== currentId)
+    .sort((a, b) => b.name.length - a.name.length);
+  if (targets.length === 0) return html;
+  return html.replace(/((?:<[^>]*>)|([^<]+))/g, (match, _, textOnly) => {
+    if (!textOnly) return match;
+    let result = textOnly;
+    for (const stub of targets) {
+      const href = `/${stub.type.toLowerCase()}s/${stub.slug}`;
+      const esc = stub.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      result = result.replace(
+        new RegExp(`\\b(${esc})\\b`, 'gi'),
+        `<a href="${href}" data-vault-link="true" style="color:hsl(25 100% 55%);text-decoration:underline;text-underline-offset:3px;cursor:pointer;">$1</a>`
+      );
+    }
+    return result;
+  });
+}
+
+function renderContent(text: string, accentColor: string, stubs: VaultEntityStub[] = [], currentId: string = ''): React.ReactNode[] {
   const lines = text.split('\n');
   const nodes: React.ReactNode[] = [];
   let i = 0;
   let k = 0;
+
+  // li = linkified inline — applies inline markdown then cross-links
+  const li = (t: string) => linkifyEntities(parseInline(t), stubs, currentId);
 
   const isSeparatorRow = (row: string) =>
     row.split('|').slice(1, -1).every(c => /^[\s:\-]+$/.test(c));
@@ -110,7 +142,7 @@ function renderContent(text: string, accentColor: string): React.ReactNode[] {
                       </th>
                     ) : (
                       <td key={ci} className="font-sans py-2 px-2 text-sm" style={{ color: 'hsl(15 4% 78%)' }}
-                          dangerouslySetInnerHTML={{ __html: parseInline(cell) }} />
+                          dangerouslySetInnerHTML={{ __html: li(cell) }} />
                     ))}
                   </tr>
                 ))}
@@ -127,7 +159,7 @@ function renderContent(text: string, accentColor: string): React.ReactNode[] {
       nodes.push(
         <div key={k++} className="my-3 pl-4" style={{ borderLeft: `2px solid ${accentColor}44` }}>
           <p className="font-display italic" style={{ color: 'hsl(15 4% 55%)', fontSize: '15px' }}
-             dangerouslySetInnerHTML={{ __html: parseInline(line.slice(2)) }} />
+             dangerouslySetInnerHTML={{ __html: li(line.slice(2)) }} />
         </div>
       );
       i++;
@@ -140,7 +172,7 @@ function renderContent(text: string, accentColor: string): React.ReactNode[] {
         <div key={k++} className="flex gap-2 my-1">
           <span style={{ color: accentColor, flexShrink: 0, marginTop: '2px' }}>·</span>
           <p className="font-sans leading-relaxed" style={{ color: 'hsl(15 4% 78%)', fontSize: '16px' }}
-             dangerouslySetInnerHTML={{ __html: parseInline(line.replace(/^[-*]\s+/, '')) }} />
+             dangerouslySetInnerHTML={{ __html: li(line.replace(/^[-*]\s+/, '')) }} />
         </div>
       );
       i++;
@@ -151,7 +183,7 @@ function renderContent(text: string, accentColor: string): React.ReactNode[] {
     nodes.push(
       <p key={k++} className="font-sans leading-relaxed"
          style={{ color: 'hsl(15 4% 78%)', fontSize: '17px', marginBottom: '0.5rem' }}
-         dangerouslySetInnerHTML={{ __html: parseInline(line) }} />
+         dangerouslySetInnerHTML={{ __html: li(line) }} />
     );
     i++;
   }
@@ -161,6 +193,7 @@ function renderContent(text: string, accentColor: string): React.ReactNode[] {
 
 export function EntityDetail() {
   const [, params] = useRoute('/:type/:slug');
+  const [, navigate] = useLocation();
   const type = params?.type?.slice(0, -1).toUpperCase() || ''; // strip trailing 's'
   const slug = params?.slug || '';
 
@@ -168,6 +201,7 @@ export function EntityDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
+  const [indexStubs, setIndexStubs] = useState<VaultEntityStub[]>([]);
 
   useEffect(() => {
     if (!type || !slug) return;
@@ -178,16 +212,22 @@ export function EntityDetail() {
       .finally(() => setLoading(false));
   }, [type, slug]);
 
+  useEffect(() => {
+    vaultService.getIndex().then(idx => setIndexStubs(idx.entities)).catch(() => {});
+  }, []);
+
   const backHref = `/${params?.type || ''}`;
-  const backLabel = (params?.type || 'back').charAt(0).toUpperCase() + (params?.type || 'back').slice(1);
+  const backLabel = TYPE_PLURALS[params?.type || ''] || (params?.type || 'Back').charAt(0).toUpperCase() + (params?.type || 'back').slice(1);
 
   const factionColor = entity?.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || 'hsl(25 100% 38%)';
 
+  const related = indexStubs.filter(s => s.id !== entity?.id && s.type === entity?.type).slice(0, 4);
+
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <div style={{ height: '32px', width: '120px', background: 'hsl(20 6% 14%)', borderRadius: '4px', marginBottom: '32px' }} />
+        <div style={{ height: '20px', width: '220px', background: 'hsl(20 6% 14%)', borderRadius: '4px', marginBottom: '32px' }} />
         <SkeletonHero />
       </div>
     );
@@ -217,18 +257,32 @@ export function EntityDetail() {
   return (
     <div className="min-h-screen">
       <div className="max-w-5xl mx-auto px-6 py-12">
-        {/* Back button */}
-        <Link href={backHref}>
-          <div
-            className="inline-flex items-center gap-2 cursor-pointer mb-10 font-serif text-xs uppercase tracking-wider transition-colors"
-            style={{ color: 'hsl(15 4% 45%)' }}
-            onMouseEnter={e => (e.currentTarget.style.color = accentColor)}
-            onMouseLeave={e => (e.currentTarget.style.color = 'hsl(15 4% 45%)')}
-          >
-            <ArrowLeft size={14} />
-            {backLabel}
-          </div>
-        </Link>
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 mb-10 font-serif text-xs uppercase tracking-wider">
+          <Link href="/">
+            <span
+              className="cursor-pointer transition-colors"
+              style={{ color: 'hsl(15 4% 40%)' }}
+              onMouseEnter={e => ((e.target as HTMLElement).style.color = accentColor)}
+              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 40%)')}
+            >
+              Chronicle
+            </span>
+          </Link>
+          <span style={{ color: 'hsl(15 8% 22%)' }}>›</span>
+          <Link href={backHref}>
+            <span
+              className="cursor-pointer transition-colors"
+              style={{ color: 'hsl(15 4% 40%)' }}
+              onMouseEnter={e => ((e.target as HTMLElement).style.color = accentColor)}
+              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 40%)')}
+            >
+              {backLabel}
+            </span>
+          </Link>
+          <span style={{ color: 'hsl(15 8% 22%)' }}>›</span>
+          <span style={{ color: 'hsl(15 4% 65%)' }}>{entity.name}</span>
+        </nav>
 
         {/* Hero */}
         <motion.div
@@ -364,8 +418,15 @@ export function EntityDetail() {
                 border: '1px solid hsl(15 8% 16%)',
                 borderRadius: '4px',
               }}
+              onClick={(e) => {
+                const a = (e.target as HTMLElement).closest('a[data-vault-link]');
+                if (a) {
+                  e.preventDefault();
+                  navigate((a as HTMLAnchorElement).getAttribute('href') || '/');
+                }
+              }}
             >
-              {renderContent(entity.content, accentColor)}
+              {renderContent(entity.content, accentColor, indexStubs, entity.id)}
             </div>
           </div>
 
@@ -427,6 +488,48 @@ export function EntityDetail() {
                 </span>
                 <ExternalLink size={13} style={{ color: 'hsl(15 4% 40%)' }} />
               </a>
+            )}
+
+            {/* Related entries */}
+            {related.length > 0 && (
+              <div
+                className="p-6"
+                style={{
+                  background: 'hsl(20 6% 10%)',
+                  border: '1px solid hsl(15 8% 16%)',
+                  borderRadius: '4px',
+                }}
+              >
+                <h3
+                  className="font-serif font-bold uppercase tracking-[0.15em] text-sm mb-4"
+                  style={{ color: 'hsl(15 4% 70%)' }}
+                >
+                  Also in the Chronicle
+                </h3>
+                <div>
+                  {related.map((s, idx) => (
+                    <Link key={s.id} href={`/${s.type.toLowerCase()}s/${s.slug}`}>
+                      <div
+                        className="cursor-pointer py-3 transition-colors"
+                        style={{
+                          borderBottom: idx < related.length - 1 ? '1px solid hsl(15 8% 14%)' : 'none',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.color = accentColor)}
+                        onMouseLeave={e => (e.currentTarget.style.color = '')}
+                      >
+                        {s.category && (
+                          <p className="font-serif text-xs uppercase tracking-wider mb-0.5" style={{ color: 'hsl(15 4% 35%)' }}>
+                            {s.category}
+                          </p>
+                        )}
+                        <p className="font-serif text-sm" style={{ color: 'hsl(15 4% 65%)' }}>
+                          {s.name}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         </motion.div>
