@@ -1,0 +1,15 @@
+{
+  "id": "location-the-guttered-torch-quarter",
+  "slug": "the-guttered-torch-quarter",
+  "name": "The Guttered Torch Quarter",
+  "type": "LOCATION",
+  "category": "District — 05",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "steel-syndicate",
+  "summary": "Steel Syndicate territory. Aggressively, offensively new. Arc-flame lanterns, moving blueprints, Mechworks Plaza running at all hours.",
+  "tags": ["location", "karnuk", "district", "steel-syndicate"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## District 05 — Steel Syndicate\n\nAggressively, offensively new. Arc-flame lanterns in harsh white light. Moving blueprints cover the walls. Mechworks Plaza runs at all hours. Kethar Steelheart built this district to send one message to every old family watching from their ancestral halls: you're already losing.\n\nThe Syndicate Spire punches toward the cavern ceiling — a structure that shouldn't be possible in the geological formation it occupies. The engineers who said so are no longer employed by the Syndicate. The structure remains.\n\n## Notable Locations\n\n- **The Syndicate Spire** — Kethar's headquarters and primary engineering facility. Taller than anything else in Karnuk by deliberate design.\n- **Mechworks Plaza** — Where war-mech maintenance, testing, and demonstration occurs. Active twenty-four hours. Loud. On purpose.\n- **The Spark** — Syndicate R&D headquarters. Veysha \"Geargrind\" runs experiments here at all hours to the sound of music that the other districts find inappropriate.\n- **Innovation District** — The surrounding residential and commercial blocks that have adopted Syndicate aesthetics. Arc-lights, exposed gear mechanisms, modern materials. The old families find it gauche. That's also on purpose.\n\n## Atmosphere\n\nAmbition. Disruption. Future shock. Everything here is saying the same thing: this is what wins."
+}

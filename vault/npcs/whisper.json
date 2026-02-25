@@ -1,0 +1,14 @@
+{
+  "id": "npc-whisper",
+  "slug": "whisper",
+  "name": "Whisper",
+  "type": "NPC",
+  "category": "Independent Information Broker",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "summary": "No family affiliation. No known real name. Sells information to anyone who pays. Has never been wrong.",
+  "tags": ["npc", "karnuk", "underdark"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"I know what you're going to ask before you ask it. I'm deciding whether the answer is worth what you can afford.\"*\n\n## Appearance\n\nUnknown. Whisper communicates through intermediaries, written notes, and occasional disembodied voices in empty rooms. The three people who claim to have seen Whisper's face describe three entirely different individuals. At least one of them is probably lying. It is not clear which one.\n\n## Personality\n\nBrief, accurate, and priced accordingly. No ideology, no loyalty, no sentiment. Information is a product. Whisper is a merchant. The transaction is everything.\n\n## Motivation\n\nMaintain neutrality and operational independence. Continue being the one source no faction can compromise. Retire before someone figures out how to make that impossible.\n\n## Background\n\nUncertain. Whisper has been operating in Karnuk for at least twenty years — possibly much longer. Bregan D'aerthe has attempted to identify Whisper twice. Both attempts produced false leads and one very expensive lesson in operational security. The Iron Mine has either identified Whisper or become Whisper, depending on which analyst you ask.\n\n## Key Connections\n\n- **All Five Families** — all buy from Whisper; none admit it to each other\n- **Bregan D'aerthe** — professional competitors; Whisper has sold intelligence about Bregan to Bregan's own enemies, which Jevan considers impudent and professionally impressive\n- **The Iron Mine** — possible connection; uncertain depth\n\n## Plot Hooks\n\n- Whisper has information the party desperately needs. The price is not money.\n- One of the party's contacts was feeding information to Whisper. Now Whisper knows something about the party.\n- Someone has tried to eliminate Whisper. They failed. Whisper would like to know who sent them."
+}

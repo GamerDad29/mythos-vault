@@ -1,0 +1,15 @@
+{
+  "id": "npc-forgemaster-valdrin-ashmere",
+  "slug": "forgemaster-valdrin-ashmere",
+  "name": "Forgemaster Valdrin Ashmere",
+  "type": "NPC",
+  "category": "Brotherhood of the Forge Master Smith",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "brotherhood-of-forge",
+  "summary": "The second-finest smith in the Brotherhood. Has been second-finest for two centuries. Azrael considers this character-building.",
+  "tags": ["npc", "karnuk", "brotherhood-of-forge"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"Perfection requires an audience who can recognize it. Most people can't. I forge for the ones who can.\"*\n\n## Appearance\n\nA drow of middle age — roughly 280 — with the precise movements of a craftsman who has spent centuries teaching his hands to be exact. Silver-white hair kept back. Long fingers, no visible scars, which is either remarkable or a statement. Eyes like polished obsidian that evaluate everything in terms of quality.\n\n## Personality\n\nQuiet, precise, and possessed of a judgment so fine it borders on contempt. Not cruel — merely accurate. Will compliment work he considers adequate. Has not considered much work adequate.\n\n## Motivation\n\nCreate something that outlasts Karnuk itself. Achieve the technical perfection that Velith \"The Needle\" holds and Azrael recognizes. Stop being second.\n\n## Background\n\nJoined the Brotherhood at age 80 as a gifted young smith. Has been outpaced by Velith at every technical benchmark for the last century. Has accepted this the way one accepts weather — it exists, it cannot be changed, and one either forges around it or does not forge at all. Currently working on a commission that Azrael has not revealed to Velith.\n\n## Key Connections\n\n- **Azrael, \"The Spider\"** — patron, judge, the only opinion that matters\n- **Velith \"The Needle\"** — rival, technically superior, mutual professional respect masking years of quiet resentment\n- **Steel Syndicate** — recently approached by Kethar's recruiters; has not yet declined\n\n## Plot Hooks\n\n- The party needs a specific item made — something Valdrin can create, but only at a price that involves his rivalry with Velith.\n- He approaches the party with information about the Steel Syndicate's recruitment efforts inside the Brotherhood.\n- Something he's been commissioned to make has gone missing. He needs it found before Azrael asks about it."
+}

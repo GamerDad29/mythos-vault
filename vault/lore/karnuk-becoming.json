@@ -1,0 +1,14 @@
+{
+  "id": "lore-karnuk-becoming",
+  "slug": "karnuk-becoming",
+  "name": "Legends of the Iron Order: Becoming",
+  "type": "LORE",
+  "category": "Iron Order Legend",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "summary": "What happens to those who join the Order — or try to take what's theirs.",
+  "tags": ["lore", "karnuk", "iron-order"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## Becoming\n\n*What happens to those who join the Order — or try to take what's theirs.*\n\n> \"If you kill one and put on the mask, you become the Order. The city erases who you were. Your name disappears from ledgers. Your family forgets your face. You just... start patrolling.\"\n\n> \"The masks are cursed. Take one and the city drags you back. Even if you flee to the surface, you wake up on patrol again. Nobody knows how. Nobody stays gone.\"\n\n> \"Each Phalanx is four souls but one mind. Kill one and the others know who swung the blade before the body hits the floor. Before. They're already coming.\"\n\n> \"When Karnuk falls — and everything falls eventually — the Iron Order won't die. They'll walk into the dark until a new city rises. And they'll be there when it does, already on patrol, already watching.\""
+}

@@ -1,0 +1,15 @@
+{
+  "id": "npc-lady-zarra-vel-sorith",
+  "slug": "lady-zarra-vel-sorith",
+  "name": "Lady Zarra vel Sorith",
+  "type": "NPC",
+  "category": "Bregan D'aerthe Field Agent",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "bregan-daerthe",
+  "summary": "Jevan's most capable field operative. Appears in three different guild halls simultaneously. Has never been arrested. Has never been identified.",
+  "tags": ["npc", "karnuk", "bregan-daerthe"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"I've been in this room twice before. You've never seen me either time.\"*\n\n## Appearance\n\nA drow woman who looks different every time you see her, which is the point. The only consistent elements: elegant hands, and a stillness when she chooses to be still that makes her seem to disappear into whatever environment she's occupying. The rings she wears are different in each appearance. They are not decorative.\n\n## Personality\n\nCalm, precise, and operating on a different timeline than the people around her. Never reactive. Every response was prepared before the conversation began. Has a dry humor that only surfaces when she's already accomplished what she came for.\n\n## Motivation\n\nServe the Jarlaxle Doctrine. Maintain Bregan's information advantage in Karnuk. Find out who's been feeding bad intelligence into Jevan's network before it causes a cascade failure.\n\n## Background\n\nServed under Lieutenant Veyran Veyth for thirty years before being elevated to independent field operations. Specializes in long-term infiltration — months inside guild structures, building relationships that produce intelligence. Currently running active assets inside three of the five families simultaneously. She knows things about Karnuk's balance of power that even Jevan doesn't know yet.\n\n## Key Connections\n\n- **Captain Jevan Alderleaf** — commander; she reports directly to him on her most sensitive operations\n- **Lieutenant Veyran Veyth** — mentor; she learned everything from him and has since surpassed him in several categories\n- **The Five Families** — active assets inside Iron Hammer, Deepstone, Brotherhood of Forge, Steel Syndicate, and a developing one inside Iron Mine\n\n## Plot Hooks\n\n- She approaches the party — they have something she needs that she cannot acquire through conventional Bregan methods.\n- The party spots something that doesn't add up about someone they trust. The trail leads to Zarra.\n- She needs outside agents for an extraction that cannot be connected to Bregan."
+}

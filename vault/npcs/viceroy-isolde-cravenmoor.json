@@ -1,0 +1,14 @@
+{
+  "id": "npc-viceroy-isolde-cravenmoor",
+  "slug": "viceroy-isolde-cravenmoor",
+  "name": "Viceroy Isolde Cravenmoor",
+  "type": "NPC",
+  "category": "Viceroy of Karnuk",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "summary": "She holds the balance between five criminal dynasties through mechanical force and the cold arithmetic of what happens if you move against her.",
+  "tags": ["npc", "karnuk", "underdark"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"He doesn't need to be loved. He just needs forty-three war-mechs and the families' shared arithmetic of self-preservation.\"*\n\n## Appearance\n\nA half-elf in her late forties with a bearing that belongs in a throne room and eyes that belong on a battlefield. Wears ceremonial armor that hasn't been ceremonial in years — the dents are real. Commands the Hall of Chains from a position visible to anyone who enters, because governance conducted behind closed doors is governance that invites speculation.\n\n## Personality\n\nPragmatic, unhurried, and more intelligent than people expect from the woman who just happens to control all forty-three war-mechs. Doesn't raise her voice. Doesn't need to. Treats every conversation as a negotiation where she already knows the outcome.\n\n## Motivation\n\nKeep the city functional. Keep the families in check. Maintain the equilibrium that benefits Karnuk — and if that equilibrium shifts, be the one who controls the new balance before anyone else calculates the new numbers.\n\n## Background\n\nFormer Iron Hammer Clan contract administrator who proved so capable at enforcement that the guild council sponsored her appointment as Viceroy fifteen years ago. They still think that makes her theirs. It doesn't. She has spent fifteen years making the office stronger than any family that created it, which was either very patient planning or very convenient loyalty.\n\n## Key Connections\n\n- **Iron Order** — direct command relationship; the Order executes her authority within the law\n- **All Five Families** — enforced relationship; she maintains the balance they can't maintain themselves\n- **Brother Castellan Durne** — administrative liaison; she finds his precision useful and his completeness slightly unsettling\n\n## Plot Hooks\n\n- The party needs Viceroy authorization for something no family will grant.\n- She privately approaches the party — she needs a problem solved that she can't let the families see her solve.\n- One of the war-mechs has started behaving erratically. She needs people who can investigate without the families finding out there's a vulnerability."
+}

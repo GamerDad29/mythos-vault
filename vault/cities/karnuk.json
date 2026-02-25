@@ -1,0 +1,26 @@
+{
+  "id": "city-karnuk",
+  "slug": "karnuk",
+  "name": "Karnuk",
+  "type": "CITY",
+  "category": "Underdark Syndicate City",
+  "summary": "The Iron Syndicate City — five guild families, forty-three war-mechs, and one viceroy holding it all together through the cold arithmetic of force.",
+  "content": "The first thing you notice isn't the smell — though it hits you like a fist: forge smoke, weapon oil, and something copper-sweet underneath. The ghost of blood scrubbed clean from stone that never truly forgets.\n\nThe first thing you *actually* notice is the sound. The hammer-song. A rhythm playing for three hundred years without pause — the heartbeat of a city built by violence, maintained by violence, and one day to be consumed by it.\n\nBut not today. Today, Karnuk works.\n\n## The Ironclad's Grip\n\nViceroy Vorgoth the Ironclad doesn't hold power through wisdom or charm. He holds it through the cold arithmetic of forty-three war-mechs and five guild families who all do the same math and arrive at the same answer: *not yet.* No family loves him. They don't have to. What they do is the more valuable thing — they calculate. And the calculation always comes out the same.\n\n## The City's Law\n\nFour to a Phalanx. Masked, anonymous, loyal to no family — loyal to Karnuk itself. The Iron Order doesn't take bribes. They've executed their own cousins for trying. When an Iron Order Phalanx enters a room, the bosses stop talking. That's not respect. That's certainty.\n\n## The War-Mechs\n\nAt first, you think it's an earthquake. The cavern floor trembles beneath your boots. Then — like mountains that have grown legs — you see them. Armor plates the size of houses grinding against one another, runed seams glowing like veins of molten ore. Their steps thunder through the caverns until your bones rattle with each impact.\n\nThere's the other kind of silence too. The kind that prickles the back of your neck. Karnuk's soldiers call them ghost machines — war-walkers veiled by sorcery. They don't patrol. They wait. And when they move, it is already too late to do anything useful with that information.",
+  "imageUrl": null,
+  "tags": ["city", "underdark", "karnuk"],
+  "region": "underdark",
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "meta": {
+    "population": "~12,000",
+    "districts": "6",
+    "guilds": "5",
+    "government": "Viceroyalty",
+    "power": "Guild Syndicate",
+    "warMechs": "Classified",
+    "accentColor": "#C9A84C",
+    "heroSubtitle": "The Underdark · City of Chains",
+    "heroTagline": "The Iron Syndicate City",
+    "heroMotto": "\"Forge Your Worth or Burn Away\""
+  }
+}

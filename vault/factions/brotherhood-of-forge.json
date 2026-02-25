@@ -1,0 +1,15 @@
+{
+  "id": "faction-brotherhood-of-forge",
+  "slug": "brotherhood-of-forge",
+  "name": "Brotherhood of the Forge",
+  "type": "FACTION",
+  "category": "The Artists",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "brotherhood-of-forge",
+  "summary": "Brilliant, aloof, and quietly devastating. They make the finest things in Karnuk and the most dangerous enemies.",
+  "tags": ["faction", "karnuk", "underdark"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"Perfection has a price. Beauty has a higher one.\"*\n\n## Overview\n\nTheir Cathedral-Workshop is equal parts masterwork atelier and fortress. Azrael's Brotherhood controls Karnuk's high-end market with a grip so elegant most clients don't realize they're in a chokehold until they try to leave. Three Bregan D'aerthe agents have been found dead in the past year. No arrests. No witnesses. No discernible pattern. Jevan Alderleaf considers this both personally offensive and professionally impressive.\n\nThe Brotherhood is **Drow** — ancient, patient, and possessed of an artistic mastery that doubles as leverage. Every piece they make is a contract. The quality of the work is Azrael's personal guarantee.\n\n## Leadership\n\n| Name | Role | Age |\n|------|------|-----|\n| Don Azrael, \"The Spider\" | Patriarch | Unknown (ancient) |\n| Velith \"The Needle\" | Master Artisan | ~300 years |\n\n**Don Azrael, \"The Spider\"** — Ancient drow of indeterminate age. Moves through the Cathedral-Workshop like a shadow through expensive silk. Has never raised his voice. Has never needed to. Clients leave with either exactly what they came for — or an understanding of why they should not have come at all.\n\n**Velith \"The Needle\"** — Azrael's right hand and the Brotherhood's most technically gifted smith. Specializes in weapons with enchantments so refined they're invisible until activated.\n\n## Culture & Code\n\nEvery piece bearing the Brotherhood mark is a contract — the quality of the work is Azrael's personal guarantee. Clients who complain about Brotherhood craftsmanship are invited to demonstrate what, specifically, they find lacking. They rarely accept the invitation.\n\n## Relationships\n\n- **Bregan D'aerthe** · Dangerous dance — Azrael and Jevan play chess with other people's lives. Mutual professional respect. Active hostility beneath the surface.\n- **Steel Syndicate** · Targeted tension — Syndicate recruiting Brotherhood artisans with resource promises. Two have defected. Azrael hasn't responded yet.\n- **All Families** · Arms dealer — The Brotherhood takes commissions from everyone. This is not loyalty. This is leverage.\n\n## Active Threat\n\nSystematically eliminating rival master artisans across all five families. Three confirmed, more suspected. The escalation is deliberate. Azrael is consolidating the high-end market."
+}

@@ -1,17 +1,329 @@
 {
   "entities": [
     {
+      "id": "city-karnuk",
+      "slug": "karnuk",
+      "name": "Karnuk",
+      "type": "CITY",
+      "category": "Underdark Syndicate City",
+      "summary": "The Iron Syndicate City — five guild families, forty-three war-mechs, and one viceroy holding it all together through the cold arithmetic of force.",
+      "tags": ["city", "underdark", "karnuk"],
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "faction-iron-hammer-clan",
+      "slug": "iron-hammer-clan",
+      "name": "Iron Hammer Clan",
+      "type": "FACTION",
+      "category": "Old Guard",
+      "summary": "Old money. Honorable to a fault. Fading, but not fallen.",
+      "factionId": "iron-hammer-clan",
+      "tags": ["faction", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "faction-deepstone-miners",
+      "slug": "deepstone-miners",
+      "name": "Deepstone Miners",
+      "type": "FACTION",
+      "category": "The Muscle",
+      "summary": "They run the docks, control all labor, and know the city stops breathing without them.",
+      "factionId": "deepstone-miners",
+      "tags": ["faction", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "faction-brotherhood-of-forge",
+      "slug": "brotherhood-of-forge",
+      "name": "Brotherhood of the Forge",
+      "type": "FACTION",
+      "category": "The Artists",
+      "summary": "Brilliant, aloof, and quietly devastating. They make the finest things in Karnuk and the most dangerous enemies.",
+      "factionId": "brotherhood-of-forge",
+      "tags": ["faction", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "faction-brotherhood-of-iron-mine",
+      "slug": "brotherhood-of-iron-mine",
+      "name": "Brotherhood of Iron Mine",
+      "type": "FACTION",
+      "category": "The Deep Operators",
+      "summary": "The city's silent bankers. They own the debts. They own the future.",
+      "factionId": "brotherhood-of-iron-mine",
+      "tags": ["faction", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "faction-steel-syndicate",
+      "slug": "steel-syndicate",
+      "name": "Steel Syndicate",
+      "type": "FACTION",
+      "category": "The New Blood",
+      "summary": "34 years old. Already winning. Making enemies faster than allies. Doesn't care.",
+      "factionId": "steel-syndicate",
+      "tags": ["faction", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "faction-bregan-daerthe",
+      "slug": "bregan-daerthe",
+      "name": "Bregan D'aerthe",
+      "type": "FACTION",
+      "category": "The Shadow Brokers",
+      "summary": "Officially neutral. Practically indispensable. Chaos is their product.",
+      "factionId": "bregan-daerthe",
+      "tags": ["faction", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-don-thorgar-ironhammer",
+      "slug": "don-thorgar-ironhammer",
+      "name": "Don Thorgar Ironhammer",
+      "type": "NPC",
+      "category": "Iron Hammer Patriarch",
+      "summary": "487 years old. Missing three fingers from the Thousand Year War. His hammer hasn't been drawn since — he swore it. He keeps his oaths.",
+      "factionId": "iron-hammer-clan",
+      "tags": ["npc", "karnuk", "iron-hammer-clan"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-belka-sparks-stonefist",
+      "slug": "belka-sparks-stonefist",
+      "name": "Belka \"Sparks\" Stonefist",
+      "type": "NPC",
+      "category": "Deepstone Demolitions Expert",
+      "summary": "Grommash's niece. Cheerful, covered in soot, and genuinely dangerous.",
+      "factionId": "deepstone-miners",
+      "tags": ["npc", "karnuk", "deepstone-miners"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-forgemaster-valdrin-ashmere",
+      "slug": "forgemaster-valdrin-ashmere",
+      "name": "Forgemaster Valdrin Ashmere",
+      "type": "NPC",
+      "category": "Brotherhood of the Forge Master Smith",
+      "summary": "The second-finest smith in the Brotherhood. Has been second-finest for two centuries.",
+      "factionId": "brotherhood-of-forge",
+      "tags": ["npc", "karnuk", "brotherhood-of-forge"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-brother-castellan-durne",
+      "slug": "brother-castellan-durne",
+      "name": "Brother Castellan Durne",
+      "type": "NPC",
+      "category": "Iron Order Castellan",
+      "summary": "The Iron Order's administrative mind. Handles logistics, records, and the quiet enforcement that never makes it into official reports.",
+      "tags": ["npc", "karnuk", "iron-order"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-captain-sevik-thorne",
+      "slug": "captain-sevik-thorne",
+      "name": "Captain Sevik Thorne",
+      "type": "NPC",
+      "category": "Steel Syndicate War-Mech Commander",
+      "summary": "Kethar's field commander for mech deployment. Precise, professional, and increasingly uncomfortable with the orders he's receiving.",
+      "factionId": "steel-syndicate",
+      "tags": ["npc", "karnuk", "steel-syndicate"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-lady-zarra-vel-sorith",
+      "slug": "lady-zarra-vel-sorith",
+      "name": "Lady Zarra vel Sorith",
+      "type": "NPC",
+      "category": "Bregan D'aerthe Field Agent",
+      "summary": "Jevan's most capable field operative. Appears in three different guild halls simultaneously. Has never been identified.",
+      "factionId": "bregan-daerthe",
+      "tags": ["npc", "karnuk", "bregan-daerthe"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-whisper",
+      "slug": "whisper",
+      "name": "Whisper",
+      "type": "NPC",
+      "category": "Independent Information Broker",
+      "summary": "No family affiliation. No known real name. Sells information to anyone who pays. Has never been wrong.",
+      "tags": ["npc", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "npc-viceroy-isolde-cravenmoor",
+      "slug": "viceroy-isolde-cravenmoor",
+      "name": "Viceroy Isolde Cravenmoor",
+      "type": "NPC",
+      "category": "Viceroy of Karnuk",
+      "summary": "She holds the balance between five criminal dynasties through mechanical force and the cold arithmetic of what happens if you move against her.",
+      "tags": ["npc", "karnuk", "underdark"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "location-the-anvil-quarter",
+      "slug": "the-anvil-quarter",
+      "name": "The Anvil Quarter",
+      "type": "LOCATION",
+      "category": "District — 01",
+      "summary": "Iron Hammer Clan territory. Ancient dwarven stonework, hand-carved and engraved with twelve generations of master smiths.",
+      "factionId": "iron-hammer-clan",
+      "tags": ["location", "karnuk", "district"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "location-the-deep-market",
+      "slug": "the-deep-market",
+      "name": "The Deep Market",
+      "type": "LOCATION",
+      "category": "District — 02",
+      "summary": "Deepstone Miners territory. The commercial heart of Karnuk — twenty-three piers, forty-three warehouses, and the Kettle.",
+      "factionId": "deepstone-miners",
+      "tags": ["location", "karnuk", "district"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "location-smelters-row",
+      "slug": "smelters-row",
+      "name": "Smelter's Row",
+      "type": "LOCATION",
+      "category": "District — 03",
+      "summary": "Brotherhood of the Forge territory. The Cathedral-Workshop dominates — equal parts masterwork atelier and fortress.",
+      "factionId": "brotherhood-of-forge",
+      "tags": ["location", "karnuk", "district"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "location-the-quiet-district",
+      "slug": "the-quiet-district",
+      "name": "The Quiet District",
+      "type": "LOCATION",
+      "category": "District — 04",
+      "summary": "Brotherhood of Iron Mine territory. Nobody talks about what happens here. The Brotherhood prefers it that way.",
+      "factionId": "brotherhood-of-iron-mine",
+      "tags": ["location", "karnuk", "district"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "location-the-guttered-torch-quarter",
+      "slug": "the-guttered-torch-quarter",
+      "name": "The Guttered Torch Quarter",
+      "type": "LOCATION",
+      "category": "District — 05",
+      "summary": "Steel Syndicate territory. Aggressively, offensively new. Arc-flame lanterns, moving blueprints, Mechworks Plaza running at all hours.",
+      "factionId": "steel-syndicate",
+      "tags": ["location", "karnuk", "district"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "location-viceroys-terrace",
+      "slug": "viceroys-terrace",
+      "name": "Viceroy's Terrace",
+      "type": "LOCATION",
+      "category": "District — 06",
+      "summary": "Bregan D'aerthe shadow territory. The Neutral Quarter — where every family comes when they need something they can't officially want.",
+      "factionId": "bregan-daerthe",
+      "tags": ["location", "karnuk", "district"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "lore-karnuk-the-masks",
+      "slug": "karnuk-the-masks",
+      "name": "Legends of the Iron Order: The Masks",
+      "type": "LORE",
+      "category": "Iron Order Legend",
+      "summary": "What the Iron Order's masks are — and what they do to the men inside them.",
+      "tags": ["lore", "karnuk", "iron-order"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "lore-karnuk-their-loyalty",
+      "slug": "karnuk-their-loyalty",
+      "name": "Legends of the Iron Order: Their Loyalty",
+      "type": "LORE",
+      "category": "Iron Order Legend",
+      "summary": "On the Iron Order's incorruptibility — and what that cost means in a city built on transaction.",
+      "tags": ["lore", "karnuk", "iron-order"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "lore-karnuk-their-power",
+      "slug": "karnuk-their-power",
+      "name": "Legends of the Iron Order: Their Power",
+      "type": "LORE",
+      "category": "Iron Order Legend",
+      "summary": "On what the Iron Order can do — and what the war-mechs do when the Order walks past.",
+      "tags": ["lore", "karnuk", "iron-order"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "lore-karnuk-becoming",
+      "slug": "karnuk-becoming",
+      "name": "Legends of the Iron Order: Becoming",
+      "type": "LORE",
+      "category": "Iron Order Legend",
+      "summary": "What happens to those who join the Order — or try to take what's theirs.",
+      "tags": ["lore", "karnuk", "iron-order"],
+      "cityId": "karnuk",
+      "region": "underdark",
+      "publishedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
       "id": "monster-the-remembrance-heap",
       "slug": "the-remembrance-heap",
       "name": "The Remembrance Heap",
       "type": "CREATURE",
       "category": "Ooze (Shadow-Corrupted)",
       "summary": "Ooze (Shadow-Corrupted) — Challenge 8 (3,900 XP)",
-      "tags": [
-        "monster",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["monster", "forged", "ai-generated"],
       "publishedAt": "2026-02-25T03:48:02.291Z"
     },
     {
@@ -21,11 +333,7 @@
       "type": "NPC",
       "category": "Wood Elf Paladin",
       "summary": "Wood Elf Paladin — Oath of the Ancients / Independent",
-      "tags": [
-        "npc",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["npc", "forged", "ai-generated"],
       "publishedAt": "2026-02-25T02:59:18.111Z"
     },
     {
@@ -35,11 +343,7 @@
       "type": "NPC",
       "category": "Human Noble / Spy",
       "summary": "Human Noble / Spy — House Aurenthal (Merchant Aristocracy)",
-      "tags": [
-        "npc",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["npc", "forged", "ai-generated"],
       "publishedAt": "2026-02-25T02:50:32.960Z"
     },
     {
@@ -49,11 +353,7 @@
       "type": "CREATURE",
       "category": "Monstrosity (Shadow-Corrupted)",
       "summary": "Monstrosity (Shadow-Corrupted) — Challenge 7 (2,900 XP)",
-      "tags": [
-        "monster",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["monster", "forged", "ai-generated"],
       "publishedAt": "2026-02-25T01:48:41.346Z"
     },
     {
@@ -63,11 +363,7 @@
       "type": "NPC",
       "category": "Human Veteran Warden",
       "summary": "Human Veteran Warden — The Order of the Amber Threshold",
-      "tags": [
-        "npc",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["npc", "forged", "ai-generated"],
       "publishedAt": "2026-02-24T19:01:27.382Z"
     },
     {
@@ -77,11 +373,7 @@
       "type": "NPC",
       "category": "Human Ranger/Rogue",
       "summary": "Human Ranger/Rogue — Deep Market Syndicate",
-      "tags": [
-        "npc",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["npc", "forged", "ai-generated"],
       "publishedAt": "2026-02-24T17:21:53.775Z"
     },
     {
@@ -91,11 +383,7 @@
       "type": "NPC",
       "category": "Half-Orc Fighter/Ranger",
       "summary": "Half-Orc Fighter/Ranger — Deep Market Syndicate",
-      "tags": [
-        "npc",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["npc", "forged", "ai-generated"],
       "publishedAt": "2026-02-24T16:56:17.082Z"
     },
     {
@@ -105,12 +393,8 @@
       "type": "CREATURE",
       "category": "Dragon",
       "summary": "Dragon — Challenge 3 (700 XP)",
-      "tags": [
-        "monster",
-        "forged",
-        "ai-generated"
-      ],
-      "publishedAt": "2026-02-24T16:49:57.926Z"
+      "tags": ["monster", "forged", "ai-generated"],
+      "publishedAt": "2026-02-24T16:49:57.826Z"
     },
     {
       "id": "item-the-penitent-s-rod",
@@ -119,11 +403,7 @@
       "type": "ITEM",
       "category": "Uncommon Weapon",
       "summary": "Uncommon, Weapon (quarterstaff), requires attunement by a monk",
-      "tags": [
-        "item",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["item", "forged", "ai-generated"],
       "publishedAt": "2026-02-24T16:14:29.013Z"
     },
     {
@@ -133,13 +413,9 @@
       "type": "NPC",
       "category": "Orc Rogue (Mastermind)",
       "summary": "Orc Rogue (Mastermind) — The Open Road Consortium",
-      "tags": [
-        "npc",
-        "forged",
-        "ai-generated"
-      ],
+      "tags": ["npc", "forged", "ai-generated"],
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-25T03:48:03.322Z"
+  "updatedAt": "2026-02-25T12:00:00.000Z"
 }

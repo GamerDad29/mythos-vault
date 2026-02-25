@@ -1,0 +1,15 @@
+{
+  "id": "location-viceroys-terrace",
+  "slug": "viceroys-terrace",
+  "name": "Viceroy's Terrace",
+  "type": "LOCATION",
+  "category": "District — 06",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "bregan-daerthe",
+  "summary": "Bregan D'aerthe shadow territory. The Neutral Quarter — where every family comes when they need something they can't officially want.",
+  "tags": ["location", "karnuk", "district", "bregan-daerthe"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## District 06 — Bregan D'aerthe (Shadow)\n\nThe Shadowed Leaf Tea House doesn't look like a command center. That's the point. Elegant curtains, private rooms, sophisticated silence. Bregan D'aerthe runs the city's information trade from within, and the Neutral Quarter is where every family comes when they need something they can't officially want.\n\nThe Viceroy's administrative buildings occupy the formal center of this district. Everything around the formal center belongs, informally, to Jevan Alderleaf.\n\n## Notable Locations\n\n- **The Shadowed Leaf** — Bregan D'aerthe's primary Karnuk operation. Appears to be a tea house. Functions as an intelligence clearinghouse, negotiation venue, and the most bugged building in the Underdark.\n- **The Hall of Chains** — Viceroy Cravenmoor's command post. Iron angles, war-mech maintenance bays visible through floor-to-ceiling viewport slits. She governs from where everyone can watch her watching them.\n- **The Velvet Spire** — High-end lodgings used by visiting dignitaries, faction representatives, and anyone who can afford to not be where they're registered as staying.\n- **Broker Row** — The street of information traders, money changers, and neutral-territory merchants. Technically independent. Practically operating under Bregan D'aerthe's protection.\n\n## Atmosphere\n\nIntrigue. Shadow currency. Everyone owes someone. The most dangerous district in Karnuk is the one that looks the most civilized."
+}

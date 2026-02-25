@@ -1,0 +1,15 @@
+{
+  "id": "npc-brother-castellan-durne",
+  "slug": "brother-castellan-durne",
+  "name": "Brother Castellan Durne",
+  "type": "NPC",
+  "category": "Iron Order Castellan",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "iron-order",
+  "summary": "The Iron Order's administrative mind. Handles logistics, records, and the quiet enforcement that never makes it into official reports.",
+  "tags": ["npc", "karnuk", "iron-order"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"The mask is the face. The face is the Order. The Order is Karnuk. These are not three things.\"*\n\n## Appearance\n\nThe Iron Order mask is always present — the same runed iron that all Phalanx members wear, showing nothing beneath. Durne's voice is measured, dry, and precise. His armor is the standard Order kit, maintained to an exactness that suggests either obsession or ritual. Possibly both.\n\n## Personality\n\nMethodical, absolutely loyal to the Order's code, and possessed of a bureaucratic intelligence that the guild families have never properly understood. He doesn't enforce through fear. He enforces through documentation. Every violation is recorded. Every record is permanent.\n\n## Motivation\n\nMaintain the Order's administrative perfection. Ensure that every transaction, every recorded violation, every pact between the families is documented and enforceable. The Order's power is partly in its soldiers. It is equally in its archive.\n\n## Background\n\nUnknown. The Order does not reveal histories. What is known: Durne has served as Castellan for forty years, has managed the Order's administrative functions through three Viceroy transitions, and has never been wrong about a recorded fact. When he cites a precedent, there is a precedent. When he says a thing was done, it was done.\n\n## Key Connections\n\n- **Viceroy Isolde Cravenmoor** — reports through the formal Order chain; she finds him useful and slightly unnerving\n- **All Five Families** — holds their violation records; this is not a threat, merely a fact\n- **Iron Order Phalanxes** — administrative oversight; they defer to him on procedure\n\n## Plot Hooks\n\n- The party needs access to Order records that only Durne controls.\n- He approaches the party with a procedural matter that requires deniable resolution.\n- A record that should exist has been removed. Durne wants to know who — and how — before it happens again."
+}

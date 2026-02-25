@@ -1,0 +1,15 @@
+{
+  "id": "faction-brotherhood-of-iron-mine",
+  "slug": "brotherhood-of-iron-mine",
+  "name": "Brotherhood of Iron Mine",
+  "type": "FACTION",
+  "category": "The Deep Operators",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "brotherhood-of-iron-mine",
+  "summary": "The city's silent bankers. They own the debts. They own the future.",
+  "tags": ["faction", "karnuk", "underdark"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"We don't need to be seen to win.\"*\n\n## Overview\n\nNobody has seen the Iron Lord. Bregan D'aerthe — the city's most comprehensive intelligence operation — has no confirmed identity, no photograph, no reliable description. What they have is a growing file of financial transactions showing that the Brotherhood of Iron Mine quietly owns the outstanding obligations of every other family in Karnuk. They didn't win the power game. They just bought it on installment.\n\nThe Brotherhood is **Duergar** — gray dwarves of the deepest tunnels, methodical and patient in ways that other races cannot sustain. They operate through intermediaries, communicate through documents, and have never defaulted on an obligation. They've also never forgiven one.\n\n## Leadership\n\n| Name | Role | Age |\n|------|------|-----|\n| \"The Iron Lord\" | Unknown | Unknown |\n\n**\"The Iron Lord\"** — Possibly not a single individual. Bregan's analysts suspect a council structure with rotating spokespeople. The name may be a title. Nobody who has pressed this question has filed a subsequent report.\n\n## Culture & Code\n\nCommunication arrives through intermediaries. Agreements are formalized in documents with no signatures — only seals. Payment is always exact, always on time. The Brotherhood of Iron Mine has never defaulted on an obligation. They've also never forgiven one.\n\n## Relationships\n\n- **All Families** · Silent creditor — Each family believes their relationship with the Iron Mine is unique and private. None of them know the others are equally exposed.\n- **Bregan D'aerthe** · Intelligence gap — The one organization that genuinely frustrates Jevan Alderleaf. Complete information blackout.\n\n## Active Threat\n\nAcquiring the debt portfolios of all five families simultaneously. When all debts come due, the Iron Lord calls the question. No timeline is known. No contingency is adequate."
+}

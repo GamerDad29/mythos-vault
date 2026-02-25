@@ -1,0 +1,15 @@
+{
+  "id": "npc-captain-sevik-thorne",
+  "slug": "captain-sevik-thorne",
+  "name": "Captain Sevik Thorne",
+  "type": "NPC",
+  "category": "Steel Syndicate War-Mech Commander",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "steel-syndicate",
+  "summary": "Kethar's field commander for mech deployment. Precise, professional, and increasingly uncomfortable with the orders he's receiving.",
+  "tags": ["npc", "karnuk", "steel-syndicate"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"A war-mech is an argument. My job is to make sure we're the ones making it.\"*\n\n## Appearance\n\nA lean bugbear in his mid-forties, scarred across the jaw from a mech malfunction early in his career. Wears Syndicate field armor — functional, not decorative, which distinguishes him from most of Kethar's inner circle. Moves with a soldier's economy. Speaks with a soldier's directness.\n\n## Personality\n\nProfessional and disciplined in ways that predate the Syndicate's current leadership. Joined the Syndicate for the technology; has stayed because the mechs are genuinely remarkable. Follows orders. Has noticed that the orders have been getting harder to follow.\n\n## Motivation\n\nDeploy mech forces effectively. Maintain operational readiness. Avoid a war with the Deepstone Miners that would cost lives on both sides for a warehouse Kethar could simply buy.\n\n## Background\n\nFormer mercenary who transitioned to Syndicate service eight years ago when Kethar's predecessor offered access to the mech program. Has commanded the field deployment unit since the current mech generation came online. Kethar inherited him along with the mechs. They have a working relationship built on mutual usefulness and no particular warmth.\n\n## Key Connections\n\n- **Don Kethar Steelheart** — employer, commander, source of the increasingly uncomfortable orders\n- **Deepstone Miners** — the Warehouse 7 standoff is his current operational problem\n- **Veysha \"Geargrind\"** — R&D chief; he respects her engineering, she respects his field judgment; they work well together\n\n## Plot Hooks\n\n- He needs to deescalate the Warehouse 7 situation without Kethar knowing he's trying to deescalate it.\n- One of his mech units has gone missing on a routine patrol. He needs it found quietly.\n- He approaches the party with information about Kethar's Parliament contact — something he found by accident and doesn't know what to do with."
+}

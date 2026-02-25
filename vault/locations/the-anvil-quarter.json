@@ -1,0 +1,15 @@
+{
+  "id": "location-the-anvil-quarter",
+  "slug": "the-anvil-quarter",
+  "name": "The Anvil Quarter",
+  "type": "LOCATION",
+  "category": "District — 01",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "iron-hammer-clan",
+  "summary": "Iron Hammer Clan territory. Ancient dwarven stonework, hand-carved and engraved with twelve generations of master smiths.",
+  "tags": ["location", "karnuk", "district", "iron-hammer-clan"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## District 01 — Iron Hammer Clan\n\nAncient dwarven stonework, hand-carved and engraved with twelve generations of master smiths. Every block remembers every siege. Every block is still standing. The Anvilarum's doors haven't been breached in three hundred years. This is where the hammer-song was born. The new families think that makes it old. They're right, of course. They're also wrong about what that means.\n\n## Notable Locations\n\n- **The Anvilarum** — The Ironhammer clan's ancestral forge-hall. Public market by day, family sanctuary by night. Three centuries of masterwork weapons line the walls, none of them for sale.\n- **Founder's Plaza** — The stone square where Thorgar's grandfather drove the first foundation stone. The stone is still there, still bearing the original clan mark.\n- **The Old Mint** — Produces Karnuk's official currency under Iron Order oversight. The Ironhammers manage the facility; the Order manages the Ironhammers.\n- **Ironheart Tavern** — Where the clan's mid-level members drink, argue, and occasionally decide which contracts to honor and which to renegotiate.\n\n## Atmosphere\n\nLegacy. Tradition. Slow decline. The hammer-song is quieter here than it used to be. People notice but don't say so."
+}

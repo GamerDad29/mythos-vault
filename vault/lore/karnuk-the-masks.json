@@ -1,0 +1,14 @@
+{
+  "id": "lore-karnuk-the-masks",
+  "slug": "karnuk-the-masks",
+  "name": "Legends of the Iron Order: The Masks",
+  "type": "LORE",
+  "category": "Iron Order Legend",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "summary": "What the Iron Order's masks are — and what they do to the men inside them.",
+  "tags": ["lore", "karnuk", "iron-order"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## The Masks\n\n*What they say in Karnuk's taverns, alleys, and forge-floors. Some of these are true. None are safe to repeat too loudly.*\n\n> \"Those masks aren't armor — they're their faces. Once you put it on, it fuses. No one's ever seen an Iron Order man unmasked. Not even when they die.\"\n\n> \"The masks don't hide faces. They hide nothing. Inside there's only smoke and echo.\"\n\n> \"If you look too long into the mask's runes, you'll see your own crimes written back at you. Every one of them.\"\n\n> \"The masks glow brighter when danger comes. That's when you run. Before you can think about it. Before your legs catch up with what your eyes have seen.\""
+}

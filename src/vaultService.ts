@@ -31,6 +31,11 @@ export const vaultService = {
     return fetchJson<VaultEntity>(`${GITHUB_RAW_BASE}/${type.toLowerCase()}s/${slug}.json`);
   },
 
+  // Fetch a city entity by slug (lives at vault/cities/{slug}.json)
+  async getCity(slug: string): Promise<VaultEntity> {
+    return fetchJson<VaultEntity>(`${GITHUB_RAW_BASE}/cities/${slug}.json`);
+  },
+
   // Fetch all entities of a type
   async getByType(type: string): Promise<VaultEntity[]> {
     const index = await this.getIndex();

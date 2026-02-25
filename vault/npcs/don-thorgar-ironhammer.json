@@ -1,0 +1,15 @@
+{
+  "id": "npc-don-thorgar-ironhammer",
+  "slug": "don-thorgar-ironhammer",
+  "name": "Don Thorgar Ironhammer",
+  "type": "NPC",
+  "category": "Iron Hammer Patriarch",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "iron-hammer-clan",
+  "summary": "487 years old. Missing three fingers from the Thousand Year War. His hammer hasn't been drawn since — he swore it. He keeps his oaths.",
+  "tags": ["npc", "karnuk", "iron-hammer-clan"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"My word is iron. My patience is not.\"*\n\n## Appearance\n\nWhite-bearded dwarf with forge-scarred arms and the kind of stillness that comes from having been the most dangerous person in every room for four centuries. Wears a simple leather apron over mithral chain. The missing fingers are visible. He doesn't hide them.\n\n## Personality\n\nGruff, honorable to a fault, deeply traditional. Believes contracts written in blood are the only contracts worth making. Despises shortcuts. Calls Steel Syndicate \"children playing with fire\" — not as an insult, as a diagnosis.\n\n## Motivation\n\nPreserve dwarven codes. Ensure the family legacy outlives him. Prevent Karnuk from becoming \"just another pit of greed.\"\n\n## Background\n\nFought in the Thousand Year War as a young dwarf. Returned to help rebuild Karnuk when his grandfather's company still held controlling interest in the city. Has watched the city change around him without changing himself, which he considers a virtue.\n\n## Key Connections\n\n- **Borin Ironhammer** — grandson, underboss, potential betrayer\n- **Steel Syndicate** — existential threat he refuses to acknowledge\n- **Iron Order** — deep mutual respect, one of the few he genuinely honors\n\n## Plot Hooks\n\n- He needs someone to investigate rumors of Borin's meetings — he won't believe it from anyone he trusts.\n- Thorgar wants to hire outside muscle for something he can't trust to family.\n- He holds information the party needs, but will only give it in exchange for something that tests their honor."
+}

@@ -12,6 +12,8 @@ export interface VaultEntity {
   tags?: string[];
   factionId?: string;
   locationId?: string;
+  cityId?: string;      // e.g. "karnuk" — links entity to a city view
+  region?: string;      // e.g. "underdark", "surface"
   publishedAt: string;  // ISO date
   source: string;       // "The Forge" | "Lore Import" | etc.
   hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
@@ -33,6 +35,8 @@ export interface VaultEntityStub {
   tags?: string[];
   factionId?: string;
   locationId?: string;
+  cityId?: string;
+  region?: string;
   publishedAt: string;
   hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
 }
@@ -45,6 +49,7 @@ export const FACTION_COLORS: Record<string, string> = {
   'brotherhood-of-forge': '#9370DB',
   'brotherhood-of-iron-mine': '#708090',
   'steel-syndicate': '#00CED1',
+  'bregan-daerthe': '#7B68EE',
 };
 
 export const TYPE_ICONS: Record<string, string> = {
@@ -55,4 +60,5 @@ export const TYPE_ICONS: Record<string, string> = {
   CREATURE: '🐉',
   LORE: '📜',
   PC: '🛡️',
+  CITY: '🏙',
 };

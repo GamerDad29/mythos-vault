@@ -1,0 +1,15 @@
+{
+  "id": "npc-belka-sparks-stonefist",
+  "slug": "belka-sparks-stonefist",
+  "name": "Belka \"Sparks\" Stonefist",
+  "type": "NPC",
+  "category": "Deepstone Demolitions Expert",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "deepstone-miners",
+  "summary": "Grommash's niece. Cheerful, covered in soot, and genuinely dangerous. The only person in the Miners whose accidents are never accidental.",
+  "tags": ["npc", "karnuk", "deepstone-miners"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"If you hear a bang, don't worry — you'll be fine. If you don't hear a bang, then worry.\"*\n\n## Appearance\n\nA young hobgoblin woman, early twenties, with perpetually singed eyebrows and a wide grin that suggests she finds most things funnier than they are. Wears a heavy apron studded with small pouches. The pouches always clink. She never explains what's in them.\n\n## Personality\n\nBright, cheerful, and operating on a fundamentally different relationship with risk than most people. Finds explosions educational. Considers \"only slightly catastrophic\" to be a success. Deeply loyal to her uncle Grommash, though she occasionally gives him heart attacks.\n\n## Motivation\n\nProtect Deepstone territory. Push the boundaries of what demolitions can do. Earn enough reputation that Grommash stops treating her like the little cousin and starts treating her like an asset.\n\n## Background\n\nApprenticed to the Deepstone mining crew at fourteen. Discovered a talent for controlled demolitions that her mentors called \"alarming\" and she called \"efficient.\" Has been running demolitions for the Miners for six years. Her record: twenty-three successful operations, two partial successes, and one incident that is not discussed but that explains why Warehouse 11 has a new east wall.\n\n## Key Connections\n\n- **Don Grommash Stonefist** — uncle, boss, simultaneously proud and terrified\n- **Throk \"The Hook\"** — works alongside on dock operations\n- **Steel Syndicate** — they've tried to recruit her twice; she declined both times and left each recruiter considerably shorter\n\n## Plot Hooks\n\n- The party needs something destroyed quietly. Belka is the only one who can do it without leveling the block.\n- She's discovered something in the deep tunnels during a demolitions job — something that wasn't on any map.\n- Grommash asks the party to keep an eye on her during a sensitive operation. She doesn't know they're watching."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "location-the-quiet-district",
+  "slug": "the-quiet-district",
+  "name": "The Quiet District",
+  "type": "LOCATION",
+  "category": "District — 04",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "brotherhood-of-iron-mine",
+  "summary": "Brotherhood of Iron Mine territory. Nobody talks about what happens here. The Brotherhood prefers it that way.",
+  "tags": ["location", "karnuk", "district", "brotherhood-of-iron-mine"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## District 04 — Brotherhood of Iron Mine\n\nThe Quiet District earns its name. Other districts of Karnuk buzz with commerce, argument, and the constant percussion of industry. This district doesn't. The stone-grey Duergar who occupy it move with purpose and without conversation. Their operations — whatever they are — produce neither noise nor witnesses. Bregan D'aerthe has three active surveillance assets in this district. All three have filed reports indicating nothing unusual. This itself is unusual.\n\n## Notable Locations\n\n- **The Sealed Exchange** — Where Brotherhood financial transactions are processed. No signage. Entry by introduction only. The door doesn't have a handle on the outside.\n- **The Deep Tunnels** — Access points to the lower excavation network beneath Karnuk. The Brotherhood controls transit rights to these tunnels. The other families would very much like to know what's down there.\n- **The Archive** — Where the Brotherhood stores debt documentation for all five families. Location confirmed by two independent sources. Confirmed-confirmed by the fact that neither source filed a follow-up report.\n- **Ironstone Row** — Residential blocks for Brotherhood personnel. Well-maintained, completely private, never photographed.\n\n## Atmosphere\n\nSilence. Documentation. The particular weight of a place that knows exactly what it owns."
+}

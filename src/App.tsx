@@ -8,6 +8,7 @@ import { Stats } from './pages/Stats';
 import { Bookmarks } from './pages/Bookmarks';
 import { Journal } from './pages/Journal';
 import { KarnukDemo } from './pages/KarnukDemo';
+import { CityView } from './pages/CityView';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/bookmarks" component={Bookmarks} />
           <Route path="/journal" component={Journal} />
           <Route path="/demo/karnuk" component={KarnukDemo} />
+          <Route path="/city/:slug" component={CityView} />
           <Route path="/:type/:slug" component={EntityDetail} />
           <Route component={NotFound} />
         </Switch>

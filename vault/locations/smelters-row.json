@@ -1,0 +1,15 @@
+{
+  "id": "location-smelters-row",
+  "slug": "smelters-row",
+  "name": "Smelter's Row",
+  "type": "LOCATION",
+  "category": "District — 03",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "brotherhood-of-forge",
+  "summary": "Brotherhood of the Forge territory. The Cathedral-Workshop dominates — equal parts masterwork atelier and fortress.",
+  "tags": ["location", "karnuk", "district", "brotherhood-of-forge"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## District 03 — Brotherhood of the Forge\n\nThe Cathedral-Workshop dominates the district skyline — or would, if the cavern ceiling permitted a skyline. Instead it simply dominates: a structure of impossible precision that is simultaneously the most beautiful and most intimidating building in Karnuk. The Brotherhood's artisans work here. Their clients come here. Their enemies do not come here twice.\n\n## Notable Locations\n\n- **The Cathedral-Workshop** — Azrael's headquarters and the Brotherhood's primary production facility. Equal parts masterwork atelier and fortress. Entry by appointment only. The appointment process is not published.\n- **Artisan's Row** — The street of specialist shops that supply the Cathedral-Workshop. Every vendor here was vetted by Azrael personally. Every vendor knows it.\n- **The Viewing Gallery** — Where clients inspect completed commissions. The light is perfect. The angles are perfect. This is not accidental.\n- **The Quiet Rooms** — Private meeting spaces behind the gallery. Used for negotiation. Soundproofed. Thoroughly.\n\n## Atmosphere\n\nPerfection. Controlled beauty. The particular silence of spaces where every detail has been considered and nothing has been left to chance."
+}

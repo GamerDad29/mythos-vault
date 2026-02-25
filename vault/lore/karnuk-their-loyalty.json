@@ -1,0 +1,14 @@
+{
+  "id": "lore-karnuk-their-loyalty",
+  "slug": "karnuk-their-loyalty",
+  "name": "Legends of the Iron Order: Their Loyalty",
+  "type": "LORE",
+  "category": "Iron Order Legend",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "summary": "On the Iron Order's incorruptibility — and what that cost means in a city built on transaction.",
+  "tags": ["lore", "karnuk", "iron-order"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## Their Loyalty\n\n*On the Iron Order's incorruptibility — and what that cost means in a city built on transaction.*\n\n> \"No one has bribed them in over five centuries. They've executed their own cousins for trying. Not the cousin who offered the bribe. The cousin who stood there and watched it happen.\"\n\n> \"They say Vorgoth doesn't command them. He asks. And if he asks for the wrong thing, they'll tell him. Once.\"\n\n> \"Each Phalanx is four different bloodlines — hobgoblin, duergar, drow, bugbear — so no one family can claim them as kin. That was by design. That was always by design.\"\n\n> \"The Iron Order were the first militia, back when Karnuk was a camp of exiles. They never left. Every other power structure in this city came after them. They're still here.\""
+}

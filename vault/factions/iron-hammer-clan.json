@@ -1,0 +1,15 @@
+{
+  "id": "faction-iron-hammer-clan",
+  "slug": "iron-hammer-clan",
+  "name": "Iron Hammer Clan",
+  "type": "FACTION",
+  "category": "Old Guard",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "iron-hammer-clan",
+  "summary": "Old money. Honorable to a fault. Fading, but not fallen.",
+  "tags": ["faction", "karnuk", "underdark"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "> *\"The Family that built this town.\"*\n\n## Overview\n\nThree hundred years ago, Thorgar Ironhammer's grandfather drove the first foundation stone into the cavern floor and declared it a city. Every contract signed in Karnuk since that day has Ironhammer ink on the original. Their word is the only currency that hasn't been debased. That's both their greatest strength and the reason they're losing.\n\nThe Iron Hammer Clan controls the Anvil Quarter and holds claim to the oldest forge-rights in Karnuk. They are dwarves — **Dwarves** — who believe that a handshake is a contract, that a contract is a vow, and that a vow broken is a death earned.\n\n## Leadership\n\n| Name | Role | Age |\n|------|------|-----|\n| Don Thorgar Ironhammer | Patriarch | 487 years |\n| Borin \"The Ledger\" | Underboss | 112 years |\n| Merra Ashforge | Production Capo | 340 years |\n| Kragath \"Hammerfall\" | Enforcer | 290 years |\n\n**Don Thorgar Ironhammer** — White-bearded, forge-scarred, missing three fingers from the Thousand Year War. Wears a simple leather apron over mithral chain. His hammer Oathkeeper has not been drawn since the war ended — he swore it. He keeps his oaths.\n\n**Borin \"The Ledger\"** — Thorgar's grandson. Calculating, pragmatic, quietly resentful. Handles day-to-day accounts and contract enforcement. Has been taking private meetings with Steel Syndicate representatives for six weeks.\n\n**Merra Ashforge** — Stern perfectionist who personally inspects every piece bearing the clan mark. Absolute loyalty to Thorgar and the old ways.\n\n**Kragath \"Hammerfall\"** — Polite, almost apologetic. Breaks kneecaps with surgical precision. \"Nothing personal, just business.\" Never kills unless Thorgar orders it in writing.\n\n## Culture & Code\n\nNew members swear oaths over Thorgar's anvil with a hand on hot iron. Monthly Remembrance Forges craft weapons for the fallen. Removing gloves to show scarred palms is the sign of respect. Breaking your word is not a business dispute. It is a death sentence.\n\n## Relationships\n\n- **Steel Syndicate** · Active conflict — Syndicate buying their properties. Thorgar calls Kethar \"a child playing with fire.\"\n- **Bregan D'aerthe** · Respectful distance — Thorgar distrusts them but acknowledges their usefulness. Borin is secretly courting them.\n- **Iron Order** · Deep respect — One of only two families that genuinely honors the Order rather than simply fearing them.\n\n## Active Threat\n\nSteel Syndicate is systematically buying Ironhammer properties at below-value. Three warehouses already gone. Borin is considering a deal — or worse, a coup. Thorgar refuses to see it."
+}

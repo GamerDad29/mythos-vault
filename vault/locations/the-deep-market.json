@@ -1,0 +1,15 @@
+{
+  "id": "location-the-deep-market",
+  "slug": "the-deep-market",
+  "name": "The Deep Market",
+  "type": "LOCATION",
+  "category": "District — 02",
+  "cityId": "karnuk",
+  "region": "underdark",
+  "factionId": "deepstone-miners",
+  "summary": "Deepstone Miners territory. The commercial heart of Karnuk — twenty-three piers, forty-three warehouses, and the Kettle.",
+  "tags": ["location", "karnuk", "district", "deepstone-miners"],
+  "publishedAt": "2026-02-25T00:00:00.000Z",
+  "source": "Lore Import",
+  "content": "## District 02 — Deepstone Miners\n\nTwenty-three piers. Forty-three warehouses. The commercial jugular of the Underdark's most industrialized city. If goods move in Karnuk, Deepstone moves them. The Kettle — the cramped working-class district against the waterfront — smells like brine and charcoal and honest exhaustion. This is where the actual work gets done.\n\n## Notable Locations\n\n- **Deepstone Docks** — The beating heart of Karnuk's import/export economy. Grommash controls every loading crew, every ferry captain, every longshoreman's guild card.\n- **The Kettle** — Working-class housing district. Dense, loud, loyal. The people here have lived in Karnuk longer than most of the guild families have existed.\n- **Grinder's Rest** — The union hall where Deepstone workers meet monthly. Mandatory attendance. Sacred ground. No family business is conducted inside — by mutual agreement enforced by Grommash personally.\n- **Warehouse Row** — Forty-three warehouses controlled by Deepstone. Warehouse 7 is currently contested. Don't ask about Warehouse 7.\n\n## Atmosphere\n\nLabor. Muscle. Controlled chaos. The docks never sleep. The workers never stop. Grommash makes sure of both."
+}
