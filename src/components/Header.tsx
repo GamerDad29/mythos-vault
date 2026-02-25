@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'wouter';
-import { BookOpen, Clock, BarChart2, Bookmark } from 'lucide-react';
+import { BookOpen, Clock, BarChart2, Bookmark, ScrollText } from 'lucide-react';
 import { useBookmarks } from '../hooks/useBookmarks';
 
 const ENTITY_NAV = [
@@ -9,11 +9,13 @@ const ENTITY_NAV = [
   { label: 'Factions', href: '/factions' },
   { label: 'Items', href: '/items' },
   { label: 'Lore', href: '/lore' },
+  { label: 'Characters', href: '/characters' },
 ];
 
 const TOOL_NAV = [
   { label: 'Timeline', href: '/timeline', Icon: Clock },
   { label: 'Stats', href: '/stats', Icon: BarChart2 },
+  { label: 'Journal', href: '/journal', Icon: ScrollText },
 ];
 
 export function Header() {
@@ -78,7 +80,7 @@ export function Header() {
         {/* Entity nav + tool nav */}
         <div className="hidden md:flex items-center gap-1">
           {ENTITY_NAV.map(({ label, href }) => {
-            const active = location.startsWith(href);
+            const active = location.startsWith(href) || (href === '/characters' && location.startsWith('/pcs'));
             return (
               <Link key={href} href={href}>
                 <span

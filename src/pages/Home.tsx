@@ -15,11 +15,13 @@ const SECTIONS = [
   { label: 'Factions', href: '/factions', desc: 'Powers that shape the Middledark' },
   { label: 'Items', href: '/items', desc: 'Artifacts, weapons, and curiosities' },
   { label: 'Lore', href: '/lore', desc: 'History, legends, and hidden truths' },
+  { label: 'Characters', href: '/characters', desc: 'The party of adventurers' },
 ];
 
 const TOOLS = [
   { label: 'Timeline', href: '/timeline', desc: 'Chronicle events in order' },
   { label: 'Stats', href: '/stats', desc: 'Vault contents at a glance' },
+  { label: 'Journal', href: '/journal', desc: 'Recaps and lore chronicles' },
 ];
 
 export function Home() {
@@ -97,7 +99,7 @@ export function Home() {
       {/* Section nav */}
       <section className="max-w-5xl mx-auto px-6 pb-20">
         {/* Entity types */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-4">
           {SECTIONS.map(({ label, href, desc }, i) => (
             <motion.div
               key={href}
@@ -141,7 +143,7 @@ export function Home() {
         </div>
 
         {/* Tools row */}
-        <div className="grid grid-cols-2 gap-3 mb-24">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-24">
           {TOOLS.map(({ label, href, desc }, i) => (
             <motion.div
               key={href}

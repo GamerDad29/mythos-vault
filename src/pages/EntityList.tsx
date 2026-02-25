@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, X } from 'lucide-react';
+import { Search, X, Lock } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
@@ -13,7 +13,75 @@ const TYPE_LABELS: Record<string, { plural: string; desc: string }> = {
   ITEM: { plural: 'Items', desc: 'Artifacts, weapons, and curiosities' },
   LORE: { plural: 'Lore', desc: 'History, legends, and hidden truths' },
   CREATURE: { plural: 'Creatures', desc: 'Beasts and beings of the deep' },
+  PC: { plural: 'Characters', desc: 'The party of adventurers' },
 };
+
+function LockedCard({ entity, index }: { entity: VaultEntityStub; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05, duration: 0.4 }}
+    >
+      <div
+        className="overflow-hidden"
+        style={{
+          background: 'hsl(15 6% 8%)',
+          border: '1px solid hsl(15 8% 14%)',
+          borderRadius: '4px',
+          opacity: 0.7,
+        }}
+      >
+        {/* Mystery image area */}
+        <div
+          className="relative flex items-center justify-center"
+          style={{ height: '180px', background: 'hsl(15 6% 6%)' }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'repeating-linear-gradient(45deg, hsl(15 6% 8%) 0px, hsl(15 6% 8%) 4px, hsl(15 6% 6%) 4px, hsl(15 6% 6%) 8px)',
+            }}
+          />
+          <Lock size={28} strokeWidth={1} style={{ color: 'hsl(15 8% 22%)', position: 'relative' }} />
+          {/* Type badge */}
+          <div
+            className="absolute top-3 left-3 font-serif text-xs uppercase tracking-[0.15em] px-2 py-1"
+            style={{
+              background: 'rgba(10,8,6,0.85)',
+              border: '1px solid hsl(15 8% 18%)',
+              color: 'hsl(15 4% 35%)',
+              borderRadius: '2px',
+            }}
+          >
+            {entity.type}
+          </div>
+        </div>
+        {/* Content */}
+        <div className="p-5">
+          <p
+            className="font-display text-xs uppercase tracking-[0.15em] mb-2"
+            style={{ color: 'hsl(15 4% 30%)' }}
+          >
+            Not yet revealed
+          </p>
+          <h3
+            className="font-serif font-bold text-lg uppercase tracking-wide mb-2 leading-tight"
+            style={{ color: 'hsl(15 4% 40%)', filter: 'blur(4px)', userSelect: 'none' }}
+          >
+            {entity.name}
+          </h3>
+          <p
+            className="font-sans text-sm"
+            style={{ color: 'hsl(15 4% 28%)', fontSize: '14px' }}
+          >
+            This entry has not yet been uncovered.
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 // Tags that are too generic to be useful for filtering
 const SKIP_TAGS = new Set(['ai-generated']);
@@ -162,9 +230,13 @@ export function EntityList({ type }: Props) {
             {activeTag && ` tagged "${activeTag}"`}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {filtered.map((entity, i) => (
-              <EntityCard key={entity.id} entity={entity} index={i} />
-            ))}
+            {filtered.map((entity, i) =>
+              entity.hidden ? (
+                <LockedCard key={entity.id} entity={entity} index={i} />
+              ) : (
+                <EntityCard key={entity.id} entity={entity} index={i} />
+              )
+            )}
           </div>
         </>
       )}

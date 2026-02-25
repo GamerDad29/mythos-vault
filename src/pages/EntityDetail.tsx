@@ -16,6 +16,7 @@ const TYPE_PLURALS: Record<string, string> = {
   factions: 'Factions',
   items: 'Items',
   lore: 'Lore',
+  pcs: 'Characters',
 };
 
 function parseInline(text: string): string {
@@ -43,6 +44,10 @@ function linkifyEntities(html: string, stubs: VaultEntityStub[], currentId: stri
     }
     return result;
   });
+}
+
+function stripHiddenBlocks(text: string): string {
+  return text.replace(/\[HIDDEN\][\s\S]*?\[\/HIDDEN\]/gi, '').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 function renderContent(text: string, accentColor: string, stubs: VaultEntityStub[] = [], currentId: string = ''): React.ReactNode[] {
@@ -234,7 +239,7 @@ export function EntityDetail() {
   const backLabel = TYPE_PLURALS[params?.type || ''] || (params?.type || 'Back').charAt(0).toUpperCase() + (params?.type || 'back').slice(1);
 
   const factionColor = entity?.factionId ? FACTION_COLORS[entity.factionId] : undefined;
-  const accentColor = factionColor || 'hsl(25 100% 38%)';
+  const accentColor = factionColor || (entity?.type === 'PC' ? 'hsl(200 70% 45%)' : 'hsl(25 100% 38%)');
 
   const related = indexStubs.filter(s => s.id !== entity?.id && s.type === entity?.type).slice(0, 4);
 
@@ -267,6 +272,38 @@ export function EntityDetail() {
       </div>
     );
   }
+
+  if (entity?.hidden) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-center px-6">
+        <div>
+          <p className="font-serif text-5xl mb-6" style={{ color: 'hsl(15 8% 18%)' }}>⟁</p>
+          <p
+            className="font-display text-xs uppercase tracking-[0.2em] mb-3"
+            style={{ color: 'hsl(15 4% 30%)' }}
+          >
+            Not yet revealed
+          </p>
+          <h1
+            className="font-serif font-bold text-3xl uppercase tracking-wide mb-4 select-none"
+            style={{ color: 'hsl(15 4% 45%)', filter: 'blur(5px)' }}
+          >
+            {entity.name}
+          </h1>
+          <p className="font-display italic mb-8" style={{ color: 'hsl(15 4% 35%)' }}>
+            This entry has not yet been uncovered.
+          </p>
+          <Link href={backHref}>
+            <span className="font-serif text-sm uppercase tracking-wider cursor-pointer" style={{ color: accentColor }}>
+              ← Back to {backLabel}
+            </span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const displayContent = stripHiddenBlocks(entity.content);
 
   return (
     <div className="min-h-screen">
@@ -440,7 +477,7 @@ export function EntityDetail() {
                 }
               }}
             >
-              {renderContent(entity.content, accentColor, indexStubs, entity.id)}
+              {renderContent(displayContent, accentColor, indexStubs, entity.id)}
             </div>
           </div>
 

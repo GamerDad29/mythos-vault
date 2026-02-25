@@ -6,6 +6,7 @@ import { EntityDetail } from './pages/EntityDetail';
 import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
 import { Bookmarks } from './pages/Bookmarks';
+import { Journal } from './pages/Journal';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -21,9 +22,12 @@ export default function App() {
           <Route path="/factions" component={() => <EntityList type="FACTION" />} />
           <Route path="/items" component={() => <EntityList type="ITEM" />} />
           <Route path="/lore" component={() => <EntityList type="LORE" />} />
+          <Route path="/characters" component={() => <EntityList type="PC" />} />
+          <Route path="/pcs" component={() => <EntityList type="PC" />} />
           <Route path="/timeline" component={Timeline} />
           <Route path="/stats" component={Stats} />
           <Route path="/bookmarks" component={Bookmarks} />
+          <Route path="/journal" component={Journal} />
           <Route path="/:type/:slug" component={EntityDetail} />
           <Route component={NotFound} />
         </Switch>

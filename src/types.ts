@@ -4,7 +4,7 @@ export interface VaultEntity {
   id: string;
   slug: string;
   name: string;
-  type: string;         // NPC, LOCATION, FACTION, ITEM, etc.
+  type: string;         // NPC, LOCATION, FACTION, ITEM, PC, etc.
   category?: string;    // e.g. "Human Paladin", "Fortified Criminal Institution"
   summary?: string;
   content: string;      // Markdown body, DM sections removed
@@ -14,6 +14,7 @@ export interface VaultEntity {
   locationId?: string;
   publishedAt: string;  // ISO date
   source: string;       // "The Forge" | "Lore Import" | etc.
+  hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
 }
 
 export interface VaultIndex {
@@ -33,6 +34,7 @@ export interface VaultEntityStub {
   factionId?: string;
   locationId?: string;
   publishedAt: string;
+  hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
 }
 
 // Faction colors from Replitv2 design system
@@ -52,4 +54,5 @@ export const TYPE_ICONS: Record<string, string> = {
   ITEM: '⚗️',
   CREATURE: '🐉',
   LORE: '📜',
+  PC: '🛡️',
 };
