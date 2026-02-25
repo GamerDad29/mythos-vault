@@ -5,6 +5,7 @@ import { EntityList } from './pages/EntityList';
 import { EntityDetail } from './pages/EntityDetail';
 import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
+import { Bookmarks } from './pages/Bookmarks';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/lore" component={() => <EntityList type="LORE" />} />
           <Route path="/timeline" component={Timeline} />
           <Route path="/stats" component={Stats} />
+          <Route path="/bookmarks" component={Bookmarks} />
           <Route path="/:type/:slug" component={EntityDetail} />
           <Route component={NotFound} />
         </Switch>

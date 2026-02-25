@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { User, MapPin, Shield, Package, Scroll, Swords } from 'lucide-react';
+import { User, MapPin, Shield, Package, Scroll, Swords, Bookmark } from 'lucide-react';
 import type { VaultEntityStub } from '../types';
 import { FACTION_COLORS } from '../types';
+import { vaultService } from '../vaultService';
+import { useBookmarks } from '../hooks/useBookmarks';
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
   NPC: <User size={20} strokeWidth={1.5} />,
@@ -21,15 +23,18 @@ interface Props {
 
 export function EntityCard({ entity, index = 0 }: Props) {
   const [imgError, setImgError] = useState(false);
+  const { isBookmarked, toggle } = useBookmarks();
   const factionColor = entity.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || 'hsl(25 100% 40%)';
   const href = `/${entity.type.toLowerCase()}s/${entity.slug}`;
+  const bookmarked = isBookmarked(entity.id);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.4 }}
+      style={{ position: 'relative' }}
     >
       <Link href={href}>
         <div
@@ -42,6 +47,8 @@ export function EntityCard({ entity, index = 0 }: Props) {
           onMouseEnter={e => {
             (e.currentTarget as HTMLElement).style.borderColor = `${accentColor}55`;
             (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 24px -8px ${accentColor}33`;
+            // Prefetch full entity so navigation is instant
+            vaultService.getEntity(entity.type, entity.slug).catch(() => {});
           }}
           onMouseLeave={e => {
             (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 16%)';
@@ -61,12 +68,10 @@ export function EntityCard({ entity, index = 0 }: Props) {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={() => setImgError(true)}
                 />
-                {/* Bottom fade — image bleeds into card */}
                 <div className="absolute inset-x-0 bottom-0 pointer-events-none" style={{
                   height: '72px',
                   background: 'linear-gradient(to bottom, transparent, hsl(20 6% 10%))',
                 }} />
-                {/* Corner vignette */}
                 <div className="absolute inset-0 pointer-events-none" style={{
                   background: 'radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.35) 100%)',
                 }} />
@@ -143,6 +148,24 @@ export function EntityCard({ entity, index = 0 }: Props) {
           </div>
         </div>
       </Link>
+
+      {/* Bookmark button — outside Link so it doesn't trigger navigation */}
+      <button
+        onClick={e => { e.preventDefault(); e.stopPropagation(); toggle(entity.id); }}
+        className="absolute top-3 right-3 z-10 flex items-center justify-center transition-all duration-200"
+        style={{
+          width: '28px',
+          height: '28px',
+          background: bookmarked ? `${accentColor}22` : 'rgba(10,8,6,0.75)',
+          border: `1px solid ${bookmarked ? accentColor + '66' : 'rgba(255,255,255,0.08)'}`,
+          borderRadius: '2px',
+          color: bookmarked ? accentColor : 'hsl(15 4% 45%)',
+          cursor: 'pointer',
+        }}
+        title={bookmarked ? 'Remove bookmark' : 'Bookmark'}
+      >
+        <Bookmark size={12} fill={bookmarked ? 'currentColor' : 'none'} />
+      </button>
     </motion.div>
   );
 }

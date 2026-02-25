@@ -6,6 +6,7 @@ import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
 import type { VaultEntityStub } from '../types';
+import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 
 const SECTIONS = [
   { label: 'NPCs', href: '/npcs', desc: 'Characters encountered in the Underdark' },
@@ -25,6 +26,7 @@ export function Home() {
   const [recent, setRecent] = useState<VaultEntityStub[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { recent: recentlyViewed } = useRecentlyViewed();
 
   useEffect(() => {
     vaultService.getIndex()
@@ -181,6 +183,77 @@ export function Home() {
             </motion.div>
           ))}
         </div>
+
+        {/* Continue reading — recently viewed */}
+        {recentlyViewed.length > 0 && (
+          <div className="mb-16">
+            <div className="mb-6 flex items-center justify-between">
+              <h2
+                className="font-serif font-bold uppercase tracking-[0.15em] text-xl"
+                style={{ color: 'hsl(15 4% 88%)' }}
+              >
+                Continue Reading
+              </h2>
+              <Link href="/bookmarks">
+                <span
+                  className="font-serif text-xs uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                  style={{ color: 'hsl(15 4% 45%)' }}
+                  onMouseEnter={e => ((e.target as HTMLElement).style.color = 'hsl(25 80% 45%)')}
+                  onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 45%)')}
+                >
+                  Bookmarks <ChevronRight size={14} />
+                </span>
+              </Link>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
+              {recentlyViewed.map(entity => {
+                const href = `/${entity.type.toLowerCase()}s/${entity.slug}`;
+                return (
+                  <Link key={entity.id} href={href}>
+                    <div
+                      className="flex-shrink-0 cursor-pointer transition-all duration-200 p-4"
+                      style={{
+                        width: '200px',
+                        background: 'hsl(20 6% 10%)',
+                        border: '1px solid hsl(15 8% 16%)',
+                        borderRadius: '4px',
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 25%)';
+                        (e.currentTarget as HTMLElement).style.background = 'hsl(20 8% 12%)';
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 16%)';
+                        (e.currentTarget as HTMLElement).style.background = 'hsl(20 6% 10%)';
+                      }}
+                    >
+                      <p
+                        className="font-serif text-xs uppercase tracking-wider mb-1"
+                        style={{ color: 'hsl(25 80% 38%)' }}
+                      >
+                        {entity.type}
+                      </p>
+                      <p
+                        className="font-serif font-bold text-sm uppercase leading-tight"
+                        style={{ color: 'hsl(15 4% 88%)' }}
+                      >
+                        {entity.name}
+                      </p>
+                      {entity.category && (
+                        <p
+                          className="font-display italic text-xs mt-1 leading-snug"
+                          style={{ color: 'hsl(15 4% 48%)' }}
+                        >
+                          {entity.category}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Recent entries */}
         <div className="mb-8 flex items-center justify-between">
