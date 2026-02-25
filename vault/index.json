@@ -1,6 +1,20 @@
 {
   "entities": [
     {
+      "id": "monster-plague-thrall-fang-beetle-alpha",
+      "slug": "plague-thrall-fang-beetle-alpha",
+      "name": "PLAGUE-THRALL FANG BEETLE, ALPHA",
+      "type": "CREATURE",
+      "category": "Monstrosity (Shadow-Corrupted)",
+      "summary": "Monstrosity (Shadow-Corrupted) — Challenge 7 (2,900 XP)",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-25T01:48:41.346Z"
+    },
+    {
       "id": "npc-osric-thane-gallowfield",
       "slug": "osric-thane-gallowfield",
       "name": "Osric Thane Gallowfield",
@@ -85,5 +99,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-24T19:01:28.567Z"
+  "updatedAt": "2026-02-25T01:48:42.377Z"
 }
