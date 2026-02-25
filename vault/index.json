@@ -1,6 +1,20 @@
 {
   "entities": [
     {
+      "id": "npc-duchess-mira-aurenthal",
+      "slug": "duchess-mira-aurenthal",
+      "name": "Duchess Mira Aurenthal",
+      "type": "NPC",
+      "category": "Human Noble / Spy",
+      "summary": "Human Noble / Spy — House Aurenthal (Merchant Aristocracy)",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-25T02:50:32.960Z"
+    },
+    {
       "id": "monster-plague-thrall-fang-beetle-alpha",
       "slug": "plague-thrall-fang-beetle-alpha",
       "name": "PLAGUE-THRALL FANG BEETLE, ALPHA",
@@ -99,5 +113,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-25T01:48:42.377Z"
+  "updatedAt": "2026-02-25T02:50:34.554Z"
 }
