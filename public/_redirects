@@ -1,1 +1,2 @@
-/*    /index.html    200
+# SPA routing handled via 404.html (see vite.config.ts)
+# Cloudflare Pages ignores /* /index.html 200 as an "infinite loop"
