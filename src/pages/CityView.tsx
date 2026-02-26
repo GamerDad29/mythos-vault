@@ -34,6 +34,7 @@ function EntityDrawer({
 }) {
   const [entity, setEntity] = useState<VaultEntity | null>(null);
   const [loading, setLoading] = useState(true);
+  const [imgError, setImgError] = useState(false);
   const [, navigate] = useLocation();
 
   const factionColor = stub.factionId ? FACTION_COLORS[stub.factionId] : undefined;
@@ -126,6 +127,26 @@ function EntityDrawer({
             </p>
           )}
         </div>
+
+        {/* Hero image — only rendered when entity has imageUrl */}
+        {entity?.imageUrl && !imgError && (
+          <div className="relative overflow-hidden" style={{ height: '260px' }}>
+            <img
+              src={entity.imageUrl}
+              alt={entity.name}
+              className="w-full h-full object-cover"
+              onError={() => setImgError(true)}
+            />
+            <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
+              height: '48px',
+              background: 'linear-gradient(to bottom, hsl(15 8% 7%), transparent)',
+            }} />
+            <div className="absolute inset-x-0 bottom-0 pointer-events-none" style={{
+              height: '80px',
+              background: 'linear-gradient(to bottom, transparent, hsl(15 8% 7%))',
+            }} />
+          </div>
+        )}
 
         {/* Content */}
         <div
