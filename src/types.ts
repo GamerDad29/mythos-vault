@@ -14,6 +14,7 @@ export interface VaultEntity {
   locationId?: string;
   cityId?: string;      // e.g. "karnuk" — links entity to a city view
   region?: string;      // e.g. "underdark", "surface"
+  parentId?: string;    // slug of parent entity (sub-faction → faction, nested location, etc.)
   publishedAt: string;  // ISO date
   source: string;       // "The Forge" | "Lore Import" | etc.
   hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
@@ -37,6 +38,7 @@ export interface VaultEntityStub {
   locationId?: string;
   cityId?: string;
   region?: string;
+  parentId?: string;    // slug of parent entity (sub-faction → faction, nested location, etc.)
   publishedAt: string;
   hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
 }
