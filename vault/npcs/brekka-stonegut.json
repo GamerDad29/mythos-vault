@@ -1,0 +1,17 @@
+{
+  "id": "npc-brekka-stonegut",
+  "slug": "brekka-stonegut",
+  "name": "Brekka Stonegut",
+  "type": "NPC",
+  "category": "Dwarf Ex-Soldier / Reluctant Enforcer",
+  "summary": "Dwarf Ex-Soldier / Reluctant Enforcer — Blackfire Alchemists (Head of Security & Acquisitions)",
+  "content": "> *Dwarf Ex-Soldier / Reluctant Enforcer — Blackfire Alchemists (Head of Security & Acquisitions)*\n**Brekka Stonegut**\n*The only person in the Blackfire Alchemists who joined specifically because she wanted to stop hurting people — and the irony of that has not escaped her.*\n\n**Appearance:** Brekka is a broad-shouldered dwarf woman in her middle years, her auburn beard shot through with grey at the plaits, her face carrying the particular topography of someone who has walked through fire — literally, twice — and come out mostly whole. She wears no armor on principle, favoring a heavy canvas work coat with reinforced elbows that makes her look more like a warehouse foreman than a soldier, which is entirely the point. Her hands are large enough to palm a human's skull, and she keeps them very deliberately still, very deliberately open, whenever she's talking to someone she's trying not to frighten.\n\n**Personality:**\n- **Trait:** Brekka has an almost aggressive commitment to straightforwardness — she states prices, consequences, and intentions plainly, and finds deception physically exhausting in the way seasickness is exhausting.\n- **Bond:** She sends a third of everything she earns back to the families of soldiers she commanded in a border campaign that went catastrophically wrong. She has never told the families where the money comes from.\n- **Flaw:** She cannot walk away from a fight she believes is unjust, even when walking away is tactically correct and she knows it — a fact Zogrin exploits with guilt-laden regularity.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772157957418-6k5mxl.jpg",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-27T02:06:07.746Z",
+  "source": "The Forge"
+}
