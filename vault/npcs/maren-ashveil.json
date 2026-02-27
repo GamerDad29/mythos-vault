@@ -1,0 +1,17 @@
+{
+  "id": "npc-maren-ashveil",
+  "slug": "maren-ashveil",
+  "name": "Maren Ashveil",
+  "type": "NPC",
+  "category": "Human Fighter/Veteran",
+  "summary": "Human Fighter/Veteran — Independent Merchant Caravan",
+  "content": "> *Human Fighter/Veteran — Independent Merchant Caravan*\n**Maren Ashveil**\n*A woman who has buried three caravan masters and intends to outlive a fourth — she reads the road the way priests read omens.*\n\n**Appearance:** Maren is a broad-shouldered woman in her mid-forties, her dark hair shot through with iron-grey and pulled back in a severe braid. A burn scar climbs from her left collarbone to her jaw — old, smooth, deliberate in the way it healed, as though the fire that made it was patient. She wears battered half-plate bearing no heraldry, and a shortsword on each hip, handles worn pale from use.\n\n**Personality:**\n*Trait.* She speaks rarely, but when she does, men stop moving to listen.\n*Bond.* The thirty-odd hands in her caravan are her only family — she will burn the world before she lets harm come to them.\n*Flaw.* She trusts no magic, no mages, and no one who smells faintly of alchemical reagents. This hatred is older than reason and she knows it.\n\n## SPECIAL TRAITS\n\n***Iron Reading.*** Maren has advantage on Wisdom (Insight) checks against creatures attempting to deceive her, and on Wisdom (Perception) checks related to ambushes or pursuit along roads and trade routes.\n\n***Caravan Discipline.*** While Maren is conscious and able to issue commands, allied guards within 30 feet of her have advantage on saving throws against the *frightened* condition.\n\n***Alchemy Sense (Flaw-Driven).*** Maren automatically detects the presence of alchemical reagents, potions, or explosives within 10 feet by scent. She must succeed on a DC 13 Wisdom saving throw or become hostile in disposition — not in combat statistics — toward the carrier until she receives a convincing explanation.\n\n## ACTIONS\n\n***Multiattack.*** Maren makes two Shortsword attacks, or one Shortsword attack and one Hand Crossbow attack.\n\n***Shortsword (Melee Weapon Attack).*** *+6 to hit, reach 5 ft., one target.* Hit: 7 (1d6 + 4) piercing damage.\n\n***Hand Crossbow (Ranged Weapon Attack).*** *+4 to hit, range 30/120 ft., one target.* Hit: 5 (1d6 + 2) piercing damage.\n\n***Call the Formation.*** Maren commands her guards (up to 6 **Guards**, *MM* p. 347) to advance, hold, or withdraw. Each guard acts on her initiative count this round, taking the designated action as a group.\n\n## REACTIONS\n\n***Cover the Flank.*** When an ally within 5 feet is targeted by an attack, Maren can impose disadvantage on that attack roll by interposing herself — she takes the hit if it still connects.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155732191-shq5bc.jpg",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-27T01:29:10.795Z",
+  "source": "The Forge"
+}
