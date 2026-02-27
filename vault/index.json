@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "monster-the-symposium",
+      "slug": "the-symposium",
+      "name": "The Symposium",
+      "type": "CREATURE",
+      "category": "Aberration",
+      "summary": "Aberration — Challenge 15 (13,000 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772161654592-bgtz25.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-27T03:07:42.345Z"
+    },
+    {
       "id": "npc-brekka-stonegut",
       "slug": "brekka-stonegut",
       "name": "Brekka Stonegut",
@@ -602,5 +617,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-27T02:06:09.146Z"
+  "updatedAt": "2026-02-27T03:07:43.342Z"
 }
