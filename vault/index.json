@@ -1,19 +1,19 @@
 {
   "entities": [
     {
-      "id": "npc-durgan-velk",
-      "slug": "durgan-velk",
-      "name": "Durgan Velk",
+      "id": "npc-maren-ashveil",
+      "slug": "maren-ashveil",
+      "name": "Maren Ashveil",
       "type": "NPC",
-      "category": "Half-Orc Fighter/Mercenary",
-      "summary": "Half-Orc Fighter/Mercenary — The Stonepath Merchant Consortium",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155633453-076z7g.jpg",
+      "category": "Human Fighter/Veteran",
+      "summary": "Human Fighter/Veteran — Independent Merchant Caravan",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155732191-shq5bc.jpg",
       "tags": [
         "npc",
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-27T01:27:57.424Z"
+      "publishedAt": "2026-02-27T01:29:10.795Z"
     },
     {
       "id": "faction-the-ledger-eternal",
@@ -587,5 +587,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-27T01:27:58.853Z"
+  "updatedAt": "2026-02-27T01:29:12.109Z"
 }
