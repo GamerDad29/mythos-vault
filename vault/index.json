@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "npc-durgan-velk",
+      "slug": "durgan-velk",
+      "name": "Durgan Velk",
+      "type": "NPC",
+      "category": "Half-Orc Fighter/Mercenary",
+      "summary": "Half-Orc Fighter/Mercenary — The Stonepath Merchant Consortium",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155633453-076z7g.jpg",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-02-27T01:27:57.424Z"
+    },
+    {
       "id": "faction-the-ledger-eternal",
       "slug": "the-ledger-eternal",
       "name": "The Ledger Eternal",
@@ -572,5 +587,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-26T22:04:28.043Z"
+  "updatedAt": "2026-02-27T01:27:58.853Z"
 }
