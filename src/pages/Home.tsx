@@ -6,7 +6,7 @@ import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
 import type { VaultEntityStub } from '../types';
-import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
+import { tokens } from '../tokens';
 
 const SECTIONS = [
   { label: 'NPCs', href: '/npcs', desc: 'Characters encountered in the Underdark' },
@@ -28,8 +28,6 @@ export function Home() {
   const [recent, setRecent] = useState<VaultEntityStub[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { recent: recentlyViewed } = useRecentlyViewed();
-
   useEffect(() => {
     vaultService.getIndex()
       .then(index => {
@@ -109,30 +107,38 @@ export function Home() {
             >
               <Link href={href}>
                 <div
-                  className="cursor-pointer p-5 text-center transition-all duration-250"
+                  className="cursor-pointer p-4 text-center flex flex-col justify-center"
                   style={{
-                    background: 'hsl(20 6% 10%)',
-                    border: '1px solid hsl(15 8% 16%)',
-                    borderRadius: '4px',
+                    background: tokens.color.bg.card,
+                    border: `1px solid ${tokens.color.border.default}`,
+                    borderRadius: tokens.radius.tile,
+                    minHeight: '72px',
+                    transition: tokens.transition.card,
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 80% 30%)';
-                    (e.currentTarget as HTMLElement).style.background = 'hsl(20 8% 12%)';
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = `${tokens.color.accent}55`;
+                    el.style.background = tokens.color.bg.elevated;
+                    el.style.transform = 'translateY(-4px)';
+                    el.style.boxShadow = tokens.shadow.cardHover(tokens.color.accent);
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 16%)';
-                    (e.currentTarget as HTMLElement).style.background = 'hsl(20 6% 10%)';
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = tokens.color.border.default;
+                    el.style.background = tokens.color.bg.card;
+                    el.style.transform = 'translateY(0)';
+                    el.style.boxShadow = 'none';
                   }}
                 >
                   <p
                     className="font-serif font-bold uppercase tracking-[0.15em] text-sm mb-1"
-                    style={{ color: 'hsl(15 4% 88%)' }}
+                    style={{ color: tokens.color.text.primary }}
                   >
                     {label}
                   </p>
                   <p
-                    className="font-sans text-xs leading-snug"
-                    style={{ color: 'hsl(15 4% 45%)', fontSize: '12px' }}
+                    className="font-sans text-xs leading-snug line-clamp-2 overflow-hidden"
+                    style={{ color: tokens.color.text.muted, fontSize: '11px' }}
                   >
                     {desc}
                   </p>
@@ -153,19 +159,26 @@ export function Home() {
             >
               <Link href={href}>
                 <div
-                  className="cursor-pointer px-5 py-3 text-center transition-all duration-250"
+                  className="cursor-pointer px-5 py-3 text-center"
                   style={{
-                    background: 'hsl(20 5% 9%)',
-                    border: '1px solid hsl(15 8% 14%)',
-                    borderRadius: '4px',
+                    background: tokens.color.bg.cardAlt,
+                    border: `1px solid ${tokens.color.border.subtle}`,
+                    borderRadius: tokens.radius.tile,
+                    transition: tokens.transition.card,
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 22%)';
-                    (e.currentTarget as HTMLElement).style.background = 'hsl(20 6% 11%)';
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = `${tokens.color.accent}33`;
+                    el.style.background = tokens.color.bg.elevated;
+                    el.style.transform = 'translateY(-4px)';
+                    el.style.boxShadow = `0 0 16px ${tokens.color.accent}18, 0 0 32px ${tokens.color.accent}08`;
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 14%)';
-                    (e.currentTarget as HTMLElement).style.background = 'hsl(20 5% 9%)';
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = tokens.color.border.subtle;
+                    el.style.background = tokens.color.bg.cardAlt;
+                    el.style.transform = 'translateY(0)';
+                    el.style.boxShadow = 'none';
                   }}
                 >
                   <p
@@ -176,7 +189,7 @@ export function Home() {
                   </p>
                   <p
                     className="font-sans text-xs"
-                    style={{ color: 'hsl(15 4% 38%)', fontSize: '11px' }}
+                    style={{ color: tokens.color.text.faint, fontSize: '11px' }}
                   >
                     {desc}
                   </p>
@@ -185,77 +198,6 @@ export function Home() {
             </motion.div>
           ))}
         </div>
-
-        {/* Continue reading — recently viewed */}
-        {recentlyViewed.length > 0 && (
-          <div className="mb-16">
-            <div className="mb-6 flex items-center justify-between">
-              <h2
-                className="font-serif font-bold uppercase tracking-[0.15em] text-xl"
-                style={{ color: 'hsl(15 4% 88%)' }}
-              >
-                Continue Reading
-              </h2>
-              <Link href="/bookmarks">
-                <span
-                  className="font-serif text-xs uppercase tracking-wider flex items-center gap-1 cursor-pointer"
-                  style={{ color: 'hsl(15 4% 45%)' }}
-                  onMouseEnter={e => ((e.target as HTMLElement).style.color = 'hsl(25 80% 45%)')}
-                  onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 45%)')}
-                >
-                  Bookmarks <ChevronRight size={14} />
-                </span>
-              </Link>
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
-              {recentlyViewed.map(entity => {
-                const href = `/${entity.type.toLowerCase()}s/${entity.slug}`;
-                return (
-                  <Link key={entity.id} href={href}>
-                    <div
-                      className="flex-shrink-0 cursor-pointer transition-all duration-200 p-4"
-                      style={{
-                        width: '200px',
-                        background: 'hsl(20 6% 10%)',
-                        border: '1px solid hsl(15 8% 16%)',
-                        borderRadius: '4px',
-                      }}
-                      onMouseEnter={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 25%)';
-                        (e.currentTarget as HTMLElement).style.background = 'hsl(20 8% 12%)';
-                      }}
-                      onMouseLeave={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 16%)';
-                        (e.currentTarget as HTMLElement).style.background = 'hsl(20 6% 10%)';
-                      }}
-                    >
-                      <p
-                        className="font-serif text-xs uppercase tracking-wider mb-1"
-                        style={{ color: 'hsl(25 80% 38%)' }}
-                      >
-                        {entity.type}
-                      </p>
-                      <p
-                        className="font-serif font-bold text-sm uppercase leading-tight"
-                        style={{ color: 'hsl(15 4% 88%)' }}
-                      >
-                        {entity.name}
-                      </p>
-                      {entity.category && (
-                        <p
-                          className="font-display italic text-xs mt-1 leading-snug"
-                          style={{ color: 'hsl(15 4% 48%)' }}
-                        >
-                          {entity.category}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
 
         {/* Recent entries */}
         <div className="mb-8 flex items-center justify-between">

@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'wouter';
-import { BookOpen, Clock, BarChart2, Bookmark, ScrollText } from 'lucide-react';
-import { useBookmarks } from '../hooks/useBookmarks';
+import { BookOpen, Clock, BarChart2, ScrollText } from 'lucide-react';
 
 const ENTITY_NAV = [
   { label: 'NPCs', href: '/npcs' },
@@ -20,7 +19,6 @@ const TOOL_NAV = [
 
 export function Header() {
   const [location] = useLocation();
-  const { bookmarks } = useBookmarks();
 
   return (
     <header
@@ -34,46 +32,24 @@ export function Header() {
         <Link href="/">
           <div className="flex items-center gap-3 cursor-pointer flex-shrink-0">
             <BookOpen
-              size={20}
-              style={{ color: 'hsl(25 100% 40%)' }}
+              size={22}
+              style={{ color: 'hsl(25 100% 40%)', flexShrink: 0 }}
               strokeWidth={1.5}
             />
-            <div>
+            <div className="flex flex-col justify-center" style={{ gap: '3px' }}>
               <div
-                className="font-serif font-bold text-sm uppercase tracking-[0.2em]"
-                style={{ color: 'hsl(15 4% 92%)' }}
+                className="font-serif font-bold uppercase tracking-[0.2em]"
+                style={{ color: 'hsl(15 4% 92%)', fontSize: '13px', lineHeight: 1 }}
               >
                 Mythos Vault
               </div>
               <div
-                className="font-display text-xs italic"
-                style={{ color: 'hsl(15 4% 50%)', letterSpacing: '0.05em' }}
+                className="font-display italic"
+                style={{ color: 'hsl(15 4% 50%)', fontSize: '11px', letterSpacing: '0.08em', lineHeight: 1 }}
               >
                 Pathways Unseen
               </div>
             </div>
-          </div>
-        </Link>
-
-        {/* Bookmark icon — always visible */}
-        <Link href="/bookmarks">
-          <div
-            className="relative cursor-pointer flex items-center justify-center md:hidden"
-            style={{ width: '36px', height: '36px', color: location === '/bookmarks' ? 'hsl(25 100% 45%)' : 'hsl(15 4% 55%)' }}
-          >
-            <Bookmark size={18} strokeWidth={1.5} />
-            {bookmarks.length > 0 && (
-              <span
-                className="absolute top-0.5 right-0.5 font-sans text-xs flex items-center justify-center"
-                style={{
-                  minWidth: '14px', height: '14px', padding: '0 3px',
-                  background: 'hsl(25 100% 38%)', color: '#fff',
-                  borderRadius: '7px', fontSize: '9px', fontWeight: 700,
-                }}
-              >
-                {bookmarks.length}
-              </span>
-            )}
           </div>
         </Link>
 
@@ -107,34 +83,6 @@ export function Header() {
             className="mx-2 self-stretch w-px"
             style={{ background: 'hsl(15 8% 18%)', marginTop: '4px', marginBottom: '4px' }}
           />
-
-          {/* Bookmark link */}
-          <Link href="/bookmarks">
-            <span
-              className="relative flex items-center gap-1.5 font-serif text-xs uppercase tracking-[0.12em] px-3 py-2 cursor-pointer transition-all duration-200"
-              style={{
-                color: location === '/bookmarks' ? 'hsl(25 100% 45%)' : 'hsl(15 4% 48%)',
-                borderBottom: location === '/bookmarks' ? '1px solid hsl(25 100% 40%)' : '1px solid transparent',
-              }}
-              onMouseEnter={e => { if (location !== '/bookmarks') (e.currentTarget as HTMLElement).style.color = 'hsl(15 4% 75%)'; }}
-              onMouseLeave={e => { if (location !== '/bookmarks') (e.currentTarget as HTMLElement).style.color = 'hsl(15 4% 48%)'; }}
-            >
-              <Bookmark size={11} style={{ display: 'inline' }} />
-              Saved
-              {bookmarks.length > 0 && (
-                <span
-                  className="font-sans flex items-center justify-center"
-                  style={{
-                    minWidth: '14px', height: '14px', padding: '0 3px',
-                    background: 'hsl(25 100% 38%)', color: '#fff',
-                    borderRadius: '7px', fontSize: '9px', fontWeight: 700,
-                  }}
-                >
-                  {bookmarks.length}
-                </span>
-              )}
-            </span>
-          </Link>
 
           {/* Tool nav */}
           {TOOL_NAV.map(({ label, href, Icon }) => {

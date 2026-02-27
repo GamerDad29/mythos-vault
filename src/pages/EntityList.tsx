@@ -7,6 +7,13 @@ import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
 import type { VaultEntityStub } from '../types';
 
+function toGroupLabel(key: string | undefined, groupBy: string): string {
+  if (!key) return groupBy === 'cityId' ? 'Unaffiliated' : 'Other';
+  return key.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+const LAST_GROUPS = new Set(['Unaffiliated', 'Other']);
+
 const TYPE_LABELS: Record<string, { plural: string; desc: string }> = {
   NPC: { plural: 'NPCs', desc: 'Characters encountered in the Underdark' },
   LOCATION: { plural: 'Locations', desc: 'Cities, ruins, and places of power' },
@@ -89,9 +96,10 @@ const SKIP_TAGS = new Set(['ai-generated']);
 
 interface Props {
   type: string;
+  groupBy?: 'cityId' | 'category';
 }
 
-export function EntityList({ type }: Props) {
+export function EntityList({ type, groupBy }: Props) {
   const [entities, setEntities] = useState<VaultEntityStub[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -145,6 +153,23 @@ export function EntityList({ type }: Props) {
     }
     return results;
   }, [entities, query, activeTags, fuse]);
+
+  // Build groups when groupBy is set and no active search/tag filter
+  const groups = useMemo(() => {
+    if (!groupBy || query.trim() || activeTags.size > 0) return null;
+    const map: Record<string, VaultEntityStub[]> = {};
+    for (const e of filtered) {
+      const rawKey = (e as any)[groupBy] as string | undefined;
+      const label = toGroupLabel(rawKey, groupBy);
+      if (!map[label]) map[label] = [];
+      map[label].push(e);
+    }
+    return Object.entries(map).sort(([a], [b]) => {
+      if (LAST_GROUPS.has(a) && !LAST_GROUPS.has(b)) return 1;
+      if (!LAST_GROUPS.has(a) && LAST_GROUPS.has(b)) return -1;
+      return a.localeCompare(b);
+    });
+  }, [filtered, groupBy, query, activeTags]);
 
   function toggleTag(tag: string) {
     setActiveTags(prev => {
@@ -275,7 +300,42 @@ export function EntityList({ type }: Props) {
               : `No ${meta.plural.toLowerCase()} in the Vault yet.`}
           </p>
         </div>
+      ) : groups ? (
+        /* ── Grouped view ── */
+        <div className="space-y-12">
+          {groups.map(([label, items], gi) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: gi * 0.06 }}
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <p
+                  className="font-serif text-xs uppercase tracking-[0.25em] flex-shrink-0"
+                  style={{ color: 'hsl(25 80% 40%)' }}
+                >
+                  {label}
+                </p>
+                <div className="flex-1" style={{ height: '1px', background: 'hsl(15 8% 16%)' }} />
+                <p className="font-sans text-xs flex-shrink-0" style={{ color: 'hsl(15 4% 35%)', fontSize: '12px' }}>
+                  {items.length}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {items.map((entity, i) =>
+                  entity.hidden ? (
+                    <LockedCard key={entity.id} entity={entity} index={i} />
+                  ) : (
+                    <EntityCard key={entity.id} entity={entity} index={i} />
+                  )
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       ) : (
+        /* ── Flat grid (search active or no groupBy) ── */
         <>
           <p className="font-sans text-sm mb-6" style={{ color: 'hsl(15 4% 40%)', fontSize: '13px' }}>
             {filtered.length} {filtered.length === 1 ? 'entry' : 'entries'}

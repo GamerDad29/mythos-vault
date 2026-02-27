@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useRoute, useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ExternalLink, Bookmark } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { SkeletonHero } from '../components/Skeleton';
 import type { VaultEntity, VaultEntityStub } from '../types';
 import { FACTION_COLORS } from '../types';
-import { useBookmarks } from '../hooks/useBookmarks';
-import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 import { renderContent, stripHiddenBlocks } from '../utils/renderContent';
 
 const TYPE_PLURALS: Record<string, string> = {
@@ -26,9 +24,6 @@ export function EntityDetail() {
   const type = params?.type?.slice(0, -1).toUpperCase() || ''; // strip trailing 's'
   const slug = params?.slug || '';
 
-  const { isBookmarked, toggle } = useBookmarks();
-  const { track } = useRecentlyViewed();
-
   const [entity, setEntity] = useState<VaultEntity | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,13 +36,6 @@ export function EntityDetail() {
     vaultService.getEntity(type, slug)
       .then(e => {
         setEntity(e);
-        // Track in recently viewed
-        track({
-          id: e.id, slug: e.slug, name: e.name, type: e.type,
-          category: e.category, summary: e.summary, imageUrl: e.imageUrl,
-          tags: e.tags, factionId: e.factionId, locationId: e.locationId,
-          publishedAt: e.publishedAt,
-        });
       })
       .catch(() => setError('This entry has not been revealed.'))
       .finally(() => setLoading(false));
@@ -326,27 +314,13 @@ export function EntityDetail() {
                 borderRadius: '4px',
               }}
             >
-              <div className="flex items-center justify-between mb-5">
+              <div className="mb-5">
                 <h3
                   className="font-serif font-bold uppercase tracking-[0.15em] text-sm"
                   style={{ color: 'hsl(15 4% 70%)' }}
                 >
                   Details
                 </h3>
-                <button
-                  onClick={() => toggle(entity.id)}
-                  className="flex items-center gap-1.5 font-serif text-xs uppercase tracking-wider px-2.5 py-1 transition-all duration-200"
-                  style={{
-                    background: isBookmarked(entity.id) ? `${accentColor}18` : 'transparent',
-                    border: `1px solid ${isBookmarked(entity.id) ? accentColor + '44' : 'hsl(15 8% 20%)'}`,
-                    borderRadius: '2px',
-                    color: isBookmarked(entity.id) ? accentColor : 'hsl(15 4% 45%)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <Bookmark size={11} fill={isBookmarked(entity.id) ? 'currentColor' : 'none'} />
-                  {isBookmarked(entity.id) ? 'Saved' : 'Bookmark'}
-                </button>
               </div>
               <div className="space-y-4">
                 <div>

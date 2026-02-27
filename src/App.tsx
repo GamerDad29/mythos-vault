@@ -2,10 +2,10 @@ import { Switch, Route } from 'wouter';
 import { Header } from './components/Header';
 import { Home } from './pages/Home';
 import { EntityList } from './pages/EntityList';
+import { LocationList } from './pages/LocationList';
 import { EntityDetail } from './pages/EntityDetail';
 import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
-import { Bookmarks } from './pages/Bookmarks';
 import { Journal } from './pages/Journal';
 import { KarnukDemo } from './pages/KarnukDemo';
 import { CityView } from './pages/CityView';
@@ -18,17 +18,16 @@ export default function App() {
       <main>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/npcs" component={() => <EntityList type="NPC" />} />
+          <Route path="/npcs" component={() => <EntityList type="NPC" groupBy="cityId" />} />
           <Route path="/creatures" component={() => <EntityList type="CREATURE" />} />
-          <Route path="/locations" component={() => <EntityList type="LOCATION" />} />
-          <Route path="/factions" component={() => <EntityList type="FACTION" />} />
-          <Route path="/items" component={() => <EntityList type="ITEM" />} />
+          <Route path="/locations" component={LocationList} />
+          <Route path="/factions" component={() => <EntityList type="FACTION" groupBy="cityId" />} />
+          <Route path="/items" component={() => <EntityList type="ITEM" groupBy="category" />} />
           <Route path="/lore" component={() => <EntityList type="LORE" />} />
           <Route path="/characters" component={() => <EntityList type="PC" />} />
           <Route path="/pcs" component={() => <EntityList type="PC" />} />
           <Route path="/timeline" component={Timeline} />
           <Route path="/stats" component={Stats} />
-          <Route path="/bookmarks" component={Bookmarks} />
           <Route path="/journal" component={Journal} />
           <Route path="/demo/karnuk" component={KarnukDemo} />
           <Route path="/city/:slug" component={CityView} />
