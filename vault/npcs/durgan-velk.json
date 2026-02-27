@@ -1,0 +1,17 @@
+{
+  "id": "npc-durgan-velk",
+  "slug": "durgan-velk",
+  "name": "Durgan Velk",
+  "type": "NPC",
+  "category": "Half-Orc Fighter/Mercenary",
+  "summary": "Half-Orc Fighter/Mercenary — The Stonepath Merchant Consortium",
+  "content": "> *Half-Orc Fighter/Mercenary — The Stonepath Merchant Consortium*\n**Durgan Velk**\n*He was the best sellsword coin could buy — until his conscience became more expensive than his employers expected.*\n\n**Appearance:** Durgan stands six-foot-three with the kind of build that makes doorframes an inconvenience, his grey-green skin mapped with the white lines of old blade work. He keeps his tusks filed short — a habit from years of presenting a less threatening face to nervous merchants — and wears a captain's insignia on his pauldron that he clearly forged himself from lesser metals. His eyes are a startling amber, and they are always counting exits.\n\n**Personality:**\n*Trait.* He deflects seriousness with rough humor, laughing loudest at himself — but the jokes stop the moment steel clears a scabbard.\n*Bond.* He owes a life-debt to the merchant he currently serves, a debt he considers sacred even when the merchant does not.\n*Flaw.* He has never once in his adult life asked for help, and this will eventually kill him or someone he cares about.\n\n## SPECIAL TRAITS\n\n***Hard Miles.*** Durgan has advantage on Constitution saving throws against exhaustion from forced marching and on Survival checks related to navigating roads, weather, or wilderness travel in overland contexts.\n\n***Threat Assessment.*** At the start of combat, Durgan can identify the most dangerous creature within 60 feet that he can see. He has advantage on his first attack roll against that creature each combat.\n\n***Weight of Silence.*** Durgan has disadvantage on Charisma (Deception) checks when directly questioned about the specific incident involving the Blackfire Alchemists cargo. He cannot bring himself to outright lie about it, though he will deflect, change the subject, and drink heavily.\n\n## ACTIONS\n\n***Multiattack.*** Durgan makes two Longsword attacks, or one Longsword attack and one Handaxe throw.\n\n***Longsword (Melee Weapon Attack).*** *+6 to hit, reach 5 ft., one target.* Hit: 9 (1d8 + 5) slashing damage, or 10 (1d10 + 5) slashing damage if used two-handed.\n\n***Handaxe (Ranged Weapon Attack).*** *+6 to hit, range 20/60 ft., one target.* Hit: 8 (1d6 + 5) slashing damage.\n\n***Brace the Line (Recharge 5–6).*** Durgan plants himself and issues a rallying cry. All allies within 30 feet who can hear him regain 5 (1d10) hit points and may immediately make a saving throw against one ongoing condition affecting them (frightened, paralyzed, or stunned only).\n\n## BONUS ACTIONS\n\n***Shove Through.*** Durgan attempts to shove one creature within 5 feet. The target must succeed on a DC 15 Strength saving throw or be pushed 10 feet in a direction of Durgan's choice and knocked prone.\n\n## REACTIONS\n\n***Take the Blow.*** When an ally within 5 feet would be reduced to 0 hit points by an attack Durgan can see, he can use his reaction to redirect that attack to himself. He takes the damage instead.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155633453-076z7g.jpg",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-27T01:27:57.424Z",
+  "source": "The Forge"
+}
