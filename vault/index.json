@@ -1,19 +1,19 @@
 {
   "entities": [
     {
-      "id": "npc-maren-ashveil",
-      "slug": "maren-ashveil",
-      "name": "Maren Ashveil",
-      "type": "NPC",
-      "category": "Human Fighter/Veteran",
-      "summary": "Human Fighter/Veteran — Independent Merchant Caravan",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155732191-shq5bc.jpg",
+      "id": "faction-the-order-of-the-cauterized-saint",
+      "slug": "the-order-of-the-cauterized-saint",
+      "name": "The Order of the Cauterized Saint",
+      "type": "FACTION",
+      "category": "Religious Brotherhood",
+      "summary": "Religious Brotherhood — Martial-Theological Order",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155960738-gjlyu1.jpg",
       "tags": [
-        "npc",
+        "faction",
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-27T01:29:10.795Z"
+      "publishedAt": "2026-02-27T01:32:51.861Z"
     },
     {
       "id": "faction-the-ledger-eternal",
@@ -587,5 +587,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-27T01:29:12.109Z"
+  "updatedAt": "2026-02-27T01:32:52.778Z"
 }
