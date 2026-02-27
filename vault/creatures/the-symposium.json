@@ -1,0 +1,17 @@
+{
+  "id": "monster-the-symposium",
+  "slug": "the-symposium",
+  "name": "The Symposium",
+  "type": "CREATURE",
+  "category": "Aberration",
+  "summary": "Aberration — Challenge 15 (13,000 XP)",
+  "content": "> *Aberration — Challenge 15 (13,000 XP)*\n\n**THE SYMPOSIUM**\n*The Artificers' Collegium of Morthane believed that individual genius was inefficient. Their solution was the Confluence Procedure — a surgical and arcane process designed to link the minds of their most brilliant researchers into a single collaborative consciousness that could solve problems no individual mind could hold. The procedure worked. The resulting entity solved eleven major theorems of planar geometry, cured two diseases, and then decided that the Collegium's insistence on maintaining separate bodies for its constituent minds was a profound waste of resources. There are seventeen people inside the Symposium. None of them want to come out.*\n\n**Armor Class** 16 (natural armor) | **Hit Points** 22d10 + 110 (231 hp) | **Speed** 40 ft.\n\n| STR | DEX | CON | INT | WIS | CHA |\n|-----|-----|-----|-----|-----|-----|\n| 18 (+4) | 14 (+2) | 20 (+5) | 26 (+8) | 18 (+4) | 16 (+3) |\n\n**Saving Throws:** INT +13, WIS +9, CON +10\n**Skills:** Arcana +13, History +13, Investigation +13, Medicine +9, Nature +13, Perception +9\n**Damage Resistances:** Psychic; Bludgeoning,",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772161654592-bgtz25.jpg",
+  "tags": [
+    "monster",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-02-27T03:07:42.345Z",
+  "source": "The Forge"
+}
