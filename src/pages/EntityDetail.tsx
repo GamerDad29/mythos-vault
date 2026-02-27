@@ -63,7 +63,19 @@ export function EntityDetail() {
   const factionColor = entity?.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || (entity?.type === 'PC' ? 'hsl(200 70% 45%)' : 'hsl(25 100% 38%)');
 
-  const related = indexStubs.filter(s => s.id !== entity?.id && s.type === entity?.type).slice(0, 4);
+  // Related entries — priority: same faction > same location > same city > same type
+  const seen = new Set<string>();
+  const pickRelated = (candidates: VaultEntityStub[], limit: number) =>
+    candidates.filter(s => !s.hidden && s.id !== entity?.id && !seen.has(s.id))
+      .slice(0, limit)
+      .map(s => { seen.add(s.id); return s; });
+
+  const relatedByFaction  = entity?.factionId  ? pickRelated(indexStubs.filter(s => s.factionId  === entity.factionId),  4) : [];
+  const relatedByLocation = entity?.locationId ? pickRelated(indexStubs.filter(s => s.locationId === entity.locationId), 3) : [];
+  const relatedByCity     = entity?.cityId     ? pickRelated(indexStubs.filter(s => s.cityId     === entity.cityId),     3) : [];
+  const relatedByType     = entity?.type       ? pickRelated(indexStubs.filter(s => s.type       === entity.type),       4) : [];
+
+  const hasRelated = relatedByFaction.length + relatedByLocation.length + relatedByCity.length + relatedByType.length > 0;
 
   if (loading) {
     return (
@@ -380,7 +392,7 @@ export function EntityDetail() {
             )}
 
             {/* Related entries */}
-            {related.length > 0 && (
+            {hasRelated && (
               <div
                 className="p-6"
                 style={{
@@ -393,31 +405,45 @@ export function EntityDetail() {
                   className="font-serif font-bold uppercase tracking-[0.15em] text-sm mb-4"
                   style={{ color: 'hsl(15 4% 70%)' }}
                 >
-                  Also in the Chronicle
+                  Related Entries
                 </h3>
-                <div>
-                  {related.map((s, idx) => (
-                    <Link key={s.id} href={`/${s.type.toLowerCase()}s/${s.slug}`}>
-                      <div
-                        className="cursor-pointer py-3 transition-colors"
-                        style={{
-                          borderBottom: idx < related.length - 1 ? '1px solid hsl(15 8% 14%)' : 'none',
-                        }}
-                        onMouseEnter={e => (e.currentTarget.style.color = accentColor)}
-                        onMouseLeave={e => (e.currentTarget.style.color = '')}
-                      >
-                        {s.category && (
-                          <p className="font-serif text-xs uppercase tracking-wider mb-0.5" style={{ color: 'hsl(15 4% 35%)' }}>
-                            {s.category}
+
+                {[
+                  { label: 'Same Faction',  items: relatedByFaction },
+                  { label: 'Same Location', items: relatedByLocation },
+                  { label: 'Same City',     items: relatedByCity },
+                  { label: 'Also in the Chronicle', items: relatedByType },
+                ].filter(g => g.items.length > 0).map(group => (
+                  <div key={group.label} className="mb-4 last:mb-0">
+                    <p
+                      className="font-serif text-xs uppercase tracking-[0.2em] mb-2"
+                      style={{ color: accentColor, opacity: 0.6 }}
+                    >
+                      {group.label}
+                    </p>
+                    {group.items.map((s, idx) => (
+                      <Link key={s.id} href={`/${s.type.toLowerCase()}s/${s.slug}`}>
+                        <div
+                          className="cursor-pointer py-2.5 transition-colors"
+                          style={{
+                            borderBottom: idx < group.items.length - 1 ? '1px solid hsl(15 8% 14%)' : 'none',
+                          }}
+                          onMouseEnter={e => (e.currentTarget.style.color = accentColor)}
+                          onMouseLeave={e => (e.currentTarget.style.color = '')}
+                        >
+                          {s.category && (
+                            <p className="font-serif text-xs uppercase tracking-wider mb-0.5" style={{ color: 'hsl(15 4% 35%)' }}>
+                              {s.category}
+                            </p>
+                          )}
+                          <p className="font-serif text-sm" style={{ color: 'hsl(15 4% 65%)' }}>
+                            {s.name}
                           </p>
-                        )}
-                        <p className="font-serif text-sm" style={{ color: 'hsl(15 4% 65%)' }}>
-                          {s.name}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                ))}
               </div>
             )}
           </div>

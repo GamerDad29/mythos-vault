@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Search, X, Lock } from 'lucide-react';
+import Fuse from 'fuse.js';
 import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
@@ -95,7 +96,7 @@ export function EntityList({ type }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
 
   const meta = TYPE_LABELS[type] || { plural: type + 's', desc: '' };
   const accentColor = 'hsl(25 100% 38%)';
@@ -103,7 +104,8 @@ export function EntityList({ type }: Props) {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    setActiveTag(null);
+    setActiveTags(new Set());
+    setQuery('');
     vaultService.getIndex()
       .then(index => {
         const filtered = index.entities.filter(e => e.type.toUpperCase() === type.toUpperCase());
@@ -113,17 +115,44 @@ export function EntityList({ type }: Props) {
       .finally(() => setLoading(false));
   }, [type]);
 
-  // Collect unique meaningful tags — exclude the entity's own type tag and noise
-  const allTags = [...new Set(
-    entities.flatMap(e => e.tags || []).filter(t => !SKIP_TAGS.has(t) && t !== type.toLowerCase())
-  )].sort();
+  // Fuse.js instance — rebuilt only when entities change
+  const fuse = useMemo(() => new Fuse(entities, {
+    keys: [
+      { name: 'name',     weight: 0.5 },
+      { name: 'summary',  weight: 0.3 },
+      { name: 'category', weight: 0.15 },
+      { name: 'tags',     weight: 0.05 },
+    ],
+    threshold: 0.35,
+    includeScore: true,
+  }), [entities]);
 
-  const filtered = entities.filter(e => {
-    const q = query.trim().toLowerCase();
-    const matchesQuery = !q || [e.name, e.summary, e.category, ...(e.tags || [])].some(v => v?.toLowerCase().includes(q));
-    const matchesTag = !activeTag || (e.tags || []).includes(activeTag);
-    return matchesQuery && matchesTag;
-  });
+  // Collect unique meaningful tags
+  const allTags = useMemo(() => [...new Set(
+    entities.flatMap(e => e.tags || []).filter(t => !SKIP_TAGS.has(t) && t !== type.toLowerCase())
+  )].sort(), [entities, type]);
+
+  // Filter: fuzzy search first, then AND tag filter
+  const filtered = useMemo(() => {
+    let results: VaultEntityStub[] = entities;
+    if (query.trim()) {
+      results = fuse.search(query.trim()).map(r => r.item);
+    }
+    if (activeTags.size > 0) {
+      results = results.filter(e =>
+        [...activeTags].every(tag => (e.tags || []).includes(tag))
+      );
+    }
+    return results;
+  }, [entities, query, activeTags, fuse]);
+
+  function toggleTag(tag: string) {
+    setActiveTags(prev => {
+      const next = new Set(prev);
+      next.has(tag) ? next.delete(tag) : next.add(tag);
+      return next;
+    });
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
@@ -174,17 +203,26 @@ export function EntityList({ type }: Props) {
           onFocus={e => (e.target.style.borderColor = 'hsl(25 60% 28%)')}
           onBlur={e => (e.target.style.borderColor = 'hsl(15 8% 18%)')}
         />
+        {query && (
+          <button
+            onClick={() => setQuery('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+            style={{ color: 'hsl(15 4% 40%)', cursor: 'pointer' }}
+          >
+            <X size={13} />
+          </button>
+        )}
       </div>
 
       {/* Tag filter chips */}
       {allTags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-8 items-center">
           {allTags.map(tag => {
-            const active = activeTag === tag;
+            const active = activeTags.has(tag);
             return (
               <button
                 key={tag}
-                onClick={() => setActiveTag(active ? null : tag)}
+                onClick={() => toggleTag(tag)}
                 className="font-serif text-xs uppercase tracking-wider px-2.5 py-1 transition-all duration-200"
                 style={{
                   background: active ? `${accentColor}22` : 'hsl(20 6% 10%)',
@@ -199,6 +237,21 @@ export function EntityList({ type }: Props) {
               </button>
             );
           })}
+          {activeTags.size > 1 && (
+            <button
+              onClick={() => setActiveTags(new Set())}
+              className="font-serif text-xs uppercase tracking-wider px-2.5 py-1 transition-all duration-200"
+              style={{
+                background: 'transparent',
+                border: '1px solid hsl(15 8% 18%)',
+                borderRadius: '2px',
+                color: 'hsl(15 4% 35%)',
+                cursor: 'pointer',
+              }}
+            >
+              Clear all
+            </button>
+          )}
         </div>
       )}
 
@@ -217,8 +270,8 @@ export function EntityList({ type }: Props) {
           style={{ border: '1px dashed hsl(15 8% 18%)', borderRadius: '4px' }}
         >
           <p className="font-display italic text-xl" style={{ color: 'hsl(15 4% 35%)' }}>
-            {query || activeTag
-              ? `No results${query ? ` for "${query}"` : ''}${activeTag ? ` tagged "${activeTag}"` : ''}`
+            {query || activeTags.size > 0
+              ? `No results${query ? ` for "${query}"` : ''}${activeTags.size > 0 ? ` tagged "${[...activeTags].join(' + ')}"` : ''}`
               : `No ${meta.plural.toLowerCase()} in the Vault yet.`}
           </p>
         </div>
@@ -227,7 +280,7 @@ export function EntityList({ type }: Props) {
           <p className="font-sans text-sm mb-6" style={{ color: 'hsl(15 4% 40%)', fontSize: '13px' }}>
             {filtered.length} {filtered.length === 1 ? 'entry' : 'entries'}
             {query && ` matching "${query}"`}
-            {activeTag && ` tagged "${activeTag}"`}
+            {activeTags.size > 0 && ` tagged "${[...activeTags].join(' + ')}"`}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filtered.map((entity, i) =>
