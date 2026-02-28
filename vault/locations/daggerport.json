@@ -1,0 +1,14 @@
+{
+  "id": "location-daggerport",
+  "slug": "daggerport",
+  "name": "Daggerport",
+  "type": "LOCATION",
+  "category": "Surface Trading Port",
+  "summary": "The docks that move more wealth than most kingdoms — and the merchant houses willing to bleed each other for control of them.",
+  "content": "Daggerport's harbor never closes. The tides are inconvenient, the weather is hostile, and the labor disputes are legendary, but the ships keep coming because the cargo they carry — Underdark minerals, bioluminescent textiles, refined alchemical compounds, and goods that don't appear on any manifest — is worth the trouble. The city grew up around these docks the way a callus grows around a wound: dense, functional, and not particularly pleasant to touch.\n\nThe merchant houses of Daggerport — there are seven major ones and dozens of smaller operations that spend their time trying to become one of the seven — control the city with the kind of iron grip that looks, from a distance, like open commerce. The Harbor Council makes decisions publicly and unanimously. The decisions are made privately and unanimously before the Council meets. What the houses fight over is the back-room arithmetic, the routing agreements, the exclusive contracts with Underdark suppliers, and the occasional warehouse fire that shifts the balance of what the next contract will cost. The fighting is elegant, mostly. When it isn't elegant, the harbor has deep water and busy shipping lanes, and bodies are not found.\n\n## The Underdark Trade\n\nDaggerport is where most Underdark goods enter the surface economy in large quantities. The transition happens at the deep docks — a section of the harbor that was expanded twice when the original builders underestimated how much subterranean commerce there would be. Underdark merchants don't come to the surface themselves. Their agents do. The agents are surface people who have spent enough time below that their eyes have changed, and who are trusted by both sides primarily because neither side trusts them completely.\n\n## The Cost of Doing Business\n\nEverything in Daggerport has a tax. Imports, exports, storage, transit, the privilege of doing business in the harbor district, the insurance you buy because the harbor district is dangerous. The city government collects all of these. The merchant houses collect additional fees for services the city government technically doesn't provide but which you cannot do business without. It is a system of entirely voluntary transactions from which there is no practical alternative.",
+  "region": "surface",
+  "tags": ["location", "surface", "trade", "harbor", "hidden"],
+  "hidden": true,
+  "publishedAt": "2026-02-27T00:00:00.000Z",
+  "source": "Lore Import"
+}

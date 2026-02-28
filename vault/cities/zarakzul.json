@@ -1,0 +1,20 @@
+{
+  "id": "city-zarakzul",
+  "slug": "zarakzul",
+  "name": "Zarakzul",
+  "type": "CITY",
+  "category": "Underdark Trade Nexus",
+  "summary": "Where the commerce of three continents meets in a cavern the size of a cathedral — Zarakzul doesn't have politics. It has prices.",
+  "content": "The merchants of Zarakzul say that everything has a price, and they mean it without metaphor. Your loyalty has a price. Your silence has a price. Your name, your bloodline, the debt your grandfather forgot to mention — all of it, denominated, recorded, and available for the right buyer. This is not a city that grew corrupt. It is a city that was designed this way, by people who understood that idealism is a luxury and commerce is oxygen.\n\nThe Zarakzul Exchange is the physical and spiritual heart of the city — a structure so large that its upper floors are perpetually lost in artificial smog, built from three hundred years of deal-smoke and lamp oil. Every major surface civilization has a trading house here. Most of them also have a spying operation. The Exchange has a standing policy of diplomatic immunity for all registered merchants, which means that technically, anyone who wants to conduct war on Zarakzulian soil has to do it as a licensed commercial transaction. This creates interesting paperwork.\n\n## The Debt Market\n\nZarakzul's most unique feature, and the one that makes every other Underdark city slightly nervous, is the Debt Market — a secondary exchange where outstanding obligations can be bought, sold, bundled, and resold. If you owe someone in Zarakzul, you may not know who owns that debt tomorrow. The city runs on this uncertainty. Fortunes have been made and lost on the wrong guess about who holds a particular outstanding promise.\n\n## What It Costs\n\nZarakzul is genuinely wealthy, which means it is also genuinely dangerous in the specific way that wealth creates: not through desperation, but through calculation. The most dangerous person in Zarakzul is not the one who needs money. It is the one who has enough money to decide you're a problem worth solving.",
+  "imageUrl": null,
+  "tags": ["city", "underdark", "zarakzul", "trade"],
+  "region": "underdark",
+  "publishedAt": "2026-02-27T00:00:00.000Z",
+  "source": "Lore Import",
+  "meta": {
+    "accentColor": "#C9A84C",
+    "heroSubtitle": "The Underdark · Trade Nexus",
+    "heroTagline": "A Jewel in the Underdark",
+    "heroMotto": "\"Everything has a price. Everything.\""
+  }
+}

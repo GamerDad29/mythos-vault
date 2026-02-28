@@ -105,17 +105,18 @@ Depends on P1 complete. P2 not required to start.
 
 ## Phase 4 — Data Model / Future
 
-### P4-1 — `parentId` Schema for Non-City Hierarchies
-- `cityId` handles city → district. `parentId` needed for: sub-factions, nested locations outside cities
-- Add `parentId?: string` to `VaultEntity` and `VaultEntityStub` in `types.ts`
-- Update `vaultService.ts` to support querying by `parentId`
-- Status: `[ ] pending`
+### P4-1 — `parentId` Schema for Non-City Hierarchies ✅
+- Added `parentId?: string` to both `VaultEntity` and `VaultEntityStub` in `types.ts`
+- Supports sub-faction → faction and nested location hierarchies beyond `cityId`
+- Field is optional; populated by Forge publish pipeline once Notion sync is wired (P4-2)
 
-### P4-2 — Notion Hierarchy Sync
-- Hierarchy data likely lives in Notion already
-- Plan: crawl Notion workspace → map parent-child → populate `parentId` / `cityId` on vault JSONs
-- Blocked on: Notion workspace audit (see Architect backlog)
-- Status: `[ ] pending`
+### P4-2 — Notion Hierarchy Sync ✅
+- Locations database wired: `NOTION_TYPE_PARENT_IDS[location]` filled
+- Factions database wired: `NOTION_TYPE_PARENT_IDS[faction]` filled
+- `NOTION_CITY_PAGE_IDS` added: 7 cities + Karnuk All Data → vault slug map
+- `publishToVault()` now auto-derives `cityId` from Notion `parent.page_id` for LOCATION entities
+- `proxyService.getNotionPage()` added — uses existing Worker generic proxy
+- NPCs, Items, Creatures, Lore: pending (parent page IDs not yet provided)
 
 ---
 

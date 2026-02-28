@@ -1,0 +1,14 @@
+{
+  "id": "location-eternal-archive",
+  "slug": "eternal-archive",
+  "name": "Eternal Archive",
+  "type": "LOCATION",
+  "category": "Surface Fortress-Library",
+  "summary": "A fortress built to protect knowledge and a library built to dispense it — the monks inside have spent centuries deciding which knowledge qualifies as which.",
+  "content": "The Eternal Archive was founded on a principle so simple it survived every political upheaval, institutional crisis, and architectural renovation since its founding: knowledge should be preserved, and the people who preserve it should be protected. The walls are thirty feet thick. The guards are also scholars. The distinction between the two categories is not always clear, which is intentional.\n\nThe Archive's collections have expanded twice since its founding to accommodate new categories of knowledge — the Underdark annexes, built when the scope of subterranean civilization became impossible to ignore, now occupy an entire wing that the original founders would not recognize. Ancient rituals, binding contracts with entities whose names cannot be spoken aloud, artifacts catalogued but not studied because the study itself poses risks — all of it is here, filed, cross-referenced, and accessible to researchers who have gone through an application process that takes between three months and six years depending on what they're applying to access.\n\n## The Monks\n\nThe Archive's monks are not a religious order, though they are often mistaken for one. What they practice is a discipline of preservation — of text, of object, of memory, of the specific obligation to ensure that what has been learned is not lost. They are genuinely committed to this in the way that people are committed to things that cost them something. They have refused access to kings. They have buried knowledge that asked to be buried. They have also, on seventeen documented occasions, dispatched recovery teams to retrieve items that left the Archive without authorization. All seventeen items were recovered. What happened to the people who removed them is not documented, which is itself a kind of documentation.\n\n## The Quests\n\nThe monks offer commissions — they are careful not to call them quests, because quests imply adventure and the Archive does not endorse adventure — for the recovery of specific items that have been identified as belonging in the collection. The commissions pay well. They are dangerous in the specific way that goes unmentioned in the briefing documents and becomes apparent approximately halfway through the job. The Archive is meticulous about honoring payment. It is less meticulous about briefing.",
+  "region": "surface",
+  "tags": ["location", "surface", "library", "archive", "hidden"],
+  "hidden": true,
+  "publishedAt": "2026-02-27T00:00:00.000Z",
+  "source": "Lore Import"
+}

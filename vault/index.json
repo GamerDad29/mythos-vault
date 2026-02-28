@@ -1,6 +1,208 @@
 {
   "entities": [
     {
+      "id": "city-ulfgar",
+      "slug": "ulfgar",
+      "name": "Ulfgar",
+      "type": "CITY",
+      "category": "Underdark Gemcraft City",
+      "summary": "The crown jewel of the upper Underdark — beauty carved from nothing, defended by people who know exactly what beauty costs.",
+      "tags": ["city", "underdark", "ulfgar", "gemcraft"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "city-zarakzul",
+      "slug": "zarakzul",
+      "name": "Zarakzul",
+      "type": "CITY",
+      "category": "Underdark Trade Nexus",
+      "summary": "Where the commerce of three continents meets in a cavern the size of a cathedral — Zarakzul doesn't have politics. It has prices.",
+      "tags": ["city", "underdark", "zarakzul", "trade"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "city-uttp",
+      "slug": "uttp",
+      "name": "Uttp",
+      "type": "CITY",
+      "category": "Underdark/Surface Gateway",
+      "summary": "Neither surface nor deep — a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
+      "tags": ["city", "underdark", "uttp", "surface", "trade", "gateway"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "city-vragathul",
+      "slug": "vragathul",
+      "name": "Vragathul",
+      "type": "CITY",
+      "category": "Underdark Metropolis",
+      "summary": "Half a million souls beneath the stone, and the politics to match — Vragathul is the Underdark at full scale, with all the beauty and horror that implies.",
+      "tags": ["city", "underdark", "vragathul", "metropolis"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "city-hammerhold",
+      "slug": "hammerhold",
+      "name": "Hammerhold",
+      "type": "CITY",
+      "category": "Reclaimed Dwarven Stronghold",
+      "summary": "It was Mithral Hall once. That name belongs to a history the current rulers don't acknowledge and the old families don't forget.",
+      "tags": ["city", "underdark", "hammerhold", "dwarven", "mithral-hall"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "city-ironbeard-bastion",
+      "slug": "ironbeard-bastion",
+      "name": "Ironbeard Bastion",
+      "type": "CITY",
+      "category": "Military Fortification",
+      "summary": "Less a city than a promise — carved into the cavern wall as a warning to anything approaching from the deep.",
+      "tags": ["city", "underdark", "ironbeard-bastion", "military", "fortress"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "city-murkhold",
+      "slug": "murkhold",
+      "name": "Murkhold",
+      "type": "CITY",
+      "category": "Underdark Waystation",
+      "summary": "It exists because someone needed it to exist. Nobody's proud of it. Everybody uses it.",
+      "tags": ["city", "underdark", "murkhold", "waystation"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-shadowed-flask",
+      "slug": "shadowed-flask",
+      "name": "The Shadowed Flask",
+      "type": "LOCATION",
+      "category": "Underdark Tavern",
+      "summary": "Murkhold's most important establishment — where the only rule is that there are no rules that apply to anyone who can afford the drinks.",
+      "cityId": "murkhold",
+      "tags": ["location", "underdark", "murkhold", "tavern"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-abyssal-spire",
+      "slug": "abyssal-spire",
+      "name": "Abyssal Spire",
+      "type": "LOCATION",
+      "category": "Surface Diplomatic Citadel",
+      "summary": "Where the surface world and the Underdark negotiate — a city of towers above and tunnels below, built on the premise that cooperation is preferable to the alternative.",
+      "tags": ["location", "surface", "diplomatic", "hidden"],
+      "region": "surface",
+      "hidden": true,
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-daggerport",
+      "slug": "daggerport",
+      "name": "Daggerport",
+      "type": "LOCATION",
+      "category": "Surface Trading Port",
+      "summary": "The docks that move more wealth than most kingdoms — and the merchant houses willing to bleed each other for control of them.",
+      "tags": ["location", "surface", "trade", "harbor", "hidden"],
+      "region": "surface",
+      "hidden": true,
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-phoenixs-respite",
+      "slug": "phoenixs-respite",
+      "name": "Phoenix's Respite",
+      "type": "LOCATION",
+      "category": "Surface Fortified City",
+      "summary": "A city that burned and rebuilt itself into something harder — now the surface world's primary line of supply for the Underdark's defense.",
+      "tags": ["location", "surface", "fortress", "supply", "hidden"],
+      "region": "surface",
+      "hidden": true,
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-luminary-haven",
+      "slug": "luminary-haven",
+      "name": "Luminary Haven",
+      "type": "LOCATION",
+      "category": "Surface Arcane Citadel",
+      "summary": "The greatest center of magical knowledge in the world — currently occupied by something ancient, elven, and genocidal.",
+      "tags": ["location", "surface", "arcane", "the-chain", "hidden", "threat"],
+      "region": "surface",
+      "hidden": true,
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-eternal-archive",
+      "slug": "eternal-archive",
+      "name": "Eternal Archive",
+      "type": "LOCATION",
+      "category": "Surface Fortress-Library",
+      "summary": "A fortress built to protect knowledge and a library built to dispense it — the monks inside have spent centuries deciding which knowledge qualifies as which.",
+      "tags": ["location", "surface", "library", "archive", "hidden"],
+      "region": "surface",
+      "hidden": true,
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "location-starhaven",
+      "slug": "starhaven",
+      "name": "Starhaven",
+      "type": "LOCATION",
+      "category": "Surface Frontier Town",
+      "summary": "Where the road to the Underdark begins — and where everyone who's about to do something dangerous stops to reconsider.",
+      "tags": ["location", "surface", "frontier", "trade", "hidden"],
+      "region": "surface",
+      "hidden": true,
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "faction-the-syndicate-shadows",
+      "slug": "the-syndicate-shadows",
+      "name": "The Syndicate Shadows",
+      "type": "FACTION",
+      "category": "Shadow Network",
+      "summary": "The Zhentarim didn't die. They adapted. They have no headquarters because they are the infrastructure.",
+      "tags": ["faction", "underdark", "shadow", "zhentarim"],
+      "region": "underdark",
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "faction-the-crimson-concordat",
+      "slug": "the-crimson-concordat",
+      "name": "The Crimson Concordat",
+      "type": "FACTION",
+      "category": "Arcane Collective",
+      "summary": "The Red Wizards burned their old hierarchy when the world changed. What rose from those ashes was worse.",
+      "tags": ["faction", "arcane", "wizards", "concordat"],
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "faction-the-verdant-accord",
+      "slug": "the-verdant-accord",
+      "name": "The Verdant Accord",
+      "type": "FACTION",
+      "category": "Balance Covenant",
+      "summary": "Two organizations that used to argue about methods realized they shared the same enemy. The alliance is practical. The conviction is not.",
+      "tags": ["faction", "balance", "harpers", "enclave", "nature"],
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
+      "id": "faction-the-spire-covenant",
+      "slug": "the-spire-covenant",
+      "name": "The Spire Covenant",
+      "type": "FACTION",
+      "category": "Arcane Brotherhood",
+      "summary": "Power unbound from any kingdom, answerable to no throne — the Arcane Brotherhood stripped itself of politics and kept only the part that mattered.",
+      "tags": ["faction", "arcane", "brotherhood", "covenant"],
+      "publishedAt": "2026-02-27T00:00:00.000Z"
+    },
+    {
       "id": "monster-the-symposium",
       "slug": "the-symposium",
       "name": "The Symposium",
@@ -617,5 +819,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-27T03:07:43.342Z"
+  "updatedAt": "2026-02-27T12:00:00.000Z"
 }

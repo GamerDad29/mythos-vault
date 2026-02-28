@@ -1,0 +1,13 @@
+{
+  "id": "faction-the-spire-covenant",
+  "slug": "the-spire-covenant",
+  "name": "The Spire Covenant",
+  "type": "FACTION",
+  "category": "Arcane Brotherhood",
+  "summary": "Power unbound from any kingdom, answerable to no throne — the Arcane Brotherhood stripped itself of politics and kept only the part that mattered.",
+  "content": "The Arcane Brotherhood's original sin was attachment: to Luskan, to the Host Tower, to the specific geography and political arrangement that gave them a base of operations. When those arrangements became a cage, the Brotherhood learned what every institution learns eventually — that what you are built around is also what you are built into. They extracted themselves from the extraction.\n\nThe Spire Covenant operates from no fixed location. It has spires — towers, outposts, and working spaces distributed across both surface and Underdark, none of which is more important than any other and none of which the Covenant would be unable to abandon if circumstances required. This is not an accident of organization. It is a philosophy made architecture: power belongs to those who hold it, not to any place that once held it for them.\n\n## The Covenant's Law\n\nThe Covenant has one rule, stated plainly in its founding charter: no Covenant member may use the Covenant's resources against another Covenant member. Everything else is permitted. This sounds simple. In practice, defining \"resources\" has produced seventeen years of internal jurisprudence, two formal schisms, and a body of case law sophisticated enough to serve as the basis for a small legal system. The Covenant takes the rule seriously. It also takes the edge cases seriously.\n\n## What They Study\n\nThe Covenant studies everything, but with particular focus on what they call boundary magic — the magic that operates at the edge of what is understood, that crosses the line between the arcane and the divine, between the living and the dead, between the world and whatever lies adjacent to it. This is not curiosity without purpose. The Covenant believes that power's ultimate frontier is in those boundary spaces, and that whoever maps them controls something no army and no government can compete with. Whether they're right is a question the world has not yet had to answer.",
+  "region": "underdark",
+  "tags": ["faction", "arcane", "brotherhood", "covenant"],
+  "publishedAt": "2026-02-27T00:00:00.000Z",
+  "source": "Lore Import"
+}

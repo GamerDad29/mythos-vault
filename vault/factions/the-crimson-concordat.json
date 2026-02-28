@@ -1,0 +1,13 @@
+{
+  "id": "faction-the-crimson-concordat",
+  "slug": "the-crimson-concordat",
+  "name": "The Crimson Concordat",
+  "type": "FACTION",
+  "category": "Arcane Collective",
+  "summary": "The Red Wizards burned their old hierarchy when the world changed. What rose from those ashes was worse.",
+  "content": "The Red Wizards of Thay were defined by their hierarchy: a rigid structure of ranks, oaths, and a Zulkir council that ensured no one member could accumulate enough power to threaten the whole. This structure was the organization's strength and its vulnerability. When the world changed and the old structure became a liability, it was dismantled by the people inside it who understood that the structure was the problem.\n\nThe Crimson Concordat is what the Red Wizards became when they stopped believing in hierarchy and started believing in results. The Concordat has no Zulkirs. It has no ranks. What it has is a compact — a binding agreement, sustained by arcane oath, that defines what all members are working toward and what no member may do to another member in pursuit of it. Within those parameters, everything is permitted. The compact is the only law. The compact was written by the most dangerous people in the room, and it shows.\n\n## The Work\n\nThe Concordat's stated purpose is the advancement of arcane knowledge beyond the limitations previously imposed by institutional politics. Their unstated purpose is the accumulation of power sufficient to ensure that the Concordat's members are never again subject to the kind of institutional politics that dismantled them. These two purposes are not in conflict. They are, in fact, the same purpose expressed at different levels of abstraction.\n\n## Red Still\n\nThe Concordat's members do not wear red. They are aware that red has history. But the magic they practice is the same magic the Red Wizards practiced, the philosophy is the same philosophy, and the conclusions they reach about the relationship between power and the people who hold it are the same conclusions reached by generations of Zulkirs before them. They are not sentimental about the organization that was. They are, in ways they would not use that word to describe, its heirs.",
+  "region": "underdark",
+  "tags": ["faction", "arcane", "wizards", "concordat"],
+  "publishedAt": "2026-02-27T00:00:00.000Z",
+  "source": "Lore Import"
+}
