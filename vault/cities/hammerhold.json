@@ -5,15 +5,21 @@
   "type": "CITY",
   "category": "Reclaimed Dwarven Stronghold",
   "summary": "It was Mithral Hall once. That name belongs to a history the current rulers don't acknowledge and the old families don't forget.",
-  "content": "There are two kinds of people in Hammerhold. Those who remember what it was, and those who are building what it is. They do not get along.\n\nMithral Hall fell — that part isn't contested. The *way* it fell, who bears responsibility, and what the word \"fell\" actually means when applied to a dwarven stronghold that is demonstrably still standing are all subjects of ongoing, vicious debate. What is certain: the old families who built Mithral Hall across six generations of labor and warfare do not control it anymore. What controls it now is a coalition of interests that prefers the name Hammerhold because Hammerhold has no history and therefore no claims against it. The old families find this reasoning convenient. They do not find it acceptable.\n\n## The New Order\n\nHammerhold's current administration is the Compact of the Recovered Hold — a governance structure assembled from the practical necessity of running a city when the people who knew how to run it are either dead, exiled, or refusing to cooperate. The Compact is competent. It is not beloved. It makes decisions in writing and posts them publicly, which is the first thing a government does when it is trying to establish that it has a right to make decisions. The old families make their own decisions. They also post them publicly. It makes for interesting reading.\n\n## The Hall Beneath\n\nThe lower halls of Hammerhold — the deep workings, the ancestral forges, the sealed chamber the old families call the King's Rest and the Compact calls the Secured Storage Area — remain in dispute. The Compact controls the entrances. The old families maintain that the entrances don't matter because those halls have other ways in and out. Neither party wants to test this claim publicly. The standoff has lasted eleven years. Every year that passes without resolution is technically a victory for the Compact. Every year that passes is also another year the old families are preparing for what comes after the standoff.",
-  "imageUrl": null,
-  "tags": ["city", "underdark", "hammerhold", "dwarven", "mithral-hall"],
+  "content": "There are two kinds of people in Hammerhold. Those who remember what it was, and those who are building what it is. They do not get along.\n\nMithral Hall fell â that part isn't contested. The *way* it fell, who bears responsibility, and what the word \"fell\" actually means when applied to a dwarven stronghold that is demonstrably still standing are all subjects of ongoing, vicious debate. What is certain: the old families who built Mithral Hall across six generations of labor and warfare do not control it anymore. What controls it now is a coalition of interests that prefers the name Hammerhold because Hammerhold has no history and therefore no claims against it. The old families find this reasoning convenient. They do not find it acceptable.\n\n## The New Order\n\nHammerhold's current administration is the Compact of the Recovered Hold â a governance structure assembled from the practical necessity of running a city when the people who knew how to run it are either dead, exiled, or refusing to cooperate. The Compact is competent. It is not beloved. It makes decisions in writing and posts them publicly, which is the first thing a government does when it is trying to establish that it has a right to make decisions. The old families make their own decisions. They also post them publicly. It makes for interesting reading.\n\n## The Hall Beneath\n\nThe lower halls of Hammerhold â the deep workings, the ancestral forges, the sealed chamber the old families call the King's Rest and the Compact calls the Secured Storage Area â remain in dispute. The Compact controls the entrances. The old families maintain that the entrances don't matter because those halls have other ways in and out. Neither party wants to test this claim publicly. The standoff has lasted eleven years. Every year that passes without resolution is technically a victory for the Compact. Every year that passes is also another year the old families are preparing for what comes after the standoff.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-hammerhold.jpg",
+  "tags": [
+    "city",
+    "underdark",
+    "hammerhold",
+    "dwarven",
+    "mithral-hall"
+  ],
   "region": "underdark",
   "publishedAt": "2026-02-27T00:00:00.000Z",
   "source": "Lore Import",
   "meta": {
     "accentColor": "#8896A8",
-    "heroSubtitle": "The Underdark · Reclaimed Stronghold",
+    "heroSubtitle": "The Underdark Â· Reclaimed Stronghold",
     "heroTagline": "Formerly Mithral Hall",
     "heroMotto": "\"What was built can be rebuilt. What was taken can be reclaimed.\""
   }
