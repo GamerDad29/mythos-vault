@@ -4,16 +4,23 @@
   "name": "Uttp",
   "type": "CITY",
   "category": "Underdark/Surface Gateway",
-  "summary": "Neither surface nor deep — a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
-  "content": "UTTP stands for Upper Tunnels Trading Post, which tells you everything about who named it and nothing about what it actually is. The merchants who named it were surface people, practical and alphabetically inclined, who needed a place to offload goods without having to go any further into the dark than strictly necessary. They built a post. The post became a settlement. The settlement became a city of forty thousand souls who have collectively decided that the question of whether they live on the surface or beneath it is less important than whether the loading docks stay open.\n\nThe Seam — the geological fault line that UTTP straddles — means that parts of the city exist in open air while others burrow thirty feet into solid rock. You can stand in UTTP's central market with one foot in daylight and one foot in cavern shadow. Some residents find this philosophically interesting. Most find it pragmatically useful. Tariffs work differently depending on which side of the Seam the transaction occurs. The city government has spent sixty years pretending this is an oversight rather than the entire economic strategy.\n\n## The Gatekeepers\n\nUTTP is officially ungoverned — a Free City, with all the optimism that implies. What it actually has is the Gatekeeper Compact, an agreement between four major trading houses that divides the city into zones of informal jurisdiction. The Compact is renegotiated every five years. The last renegotiation took four months and ended with two fires, one disappearance, and a trade deal that every house privately considers unfair. The next one is in eighteen months. Everyone is quietly preparing.\n\n## The Undermarket\n\nBelow the visible UTTP — below even the cavern sections — is the Undermarket, which officially doesn't exist. It handles the trade that neither surface nor Underdark merchants want documented. Visiting it requires a referral. Getting a referral requires being trusted by someone who has one. The fact that it exists is the city's worst-kept secret and most reliable revenue source.",
-  "imageUrl": null,
-  "tags": ["city", "underdark", "uttp", "surface", "trade", "gateway"],
+  "summary": "Neither surface nor deep â a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
+  "content": "UTTP stands for Upper Tunnels Trading Post, which tells you everything about who named it and nothing about what it actually is. The merchants who named it were surface people, practical and alphabetically inclined, who needed a place to offload goods without having to go any further into the dark than strictly necessary. They built a post. The post became a settlement. The settlement became a city of forty thousand souls who have collectively decided that the question of whether they live on the surface or beneath it is less important than whether the loading docks stay open.\n\nThe Seam â the geological fault line that UTTP straddles â means that parts of the city exist in open air while others burrow thirty feet into solid rock. You can stand in UTTP's central market with one foot in daylight and one foot in cavern shadow. Some residents find this philosophically interesting. Most find it pragmatically useful. Tariffs work differently depending on which side of the Seam the transaction occurs. The city government has spent sixty years pretending this is an oversight rather than the entire economic strategy.\n\n## The Gatekeepers\n\nUTTP is officially ungoverned â a Free City, with all the optimism that implies. What it actually has is the Gatekeeper Compact, an agreement between four major trading houses that divides the city into zones of informal jurisdiction. The Compact is renegotiated every five years. The last renegotiation took four months and ended with two fires, one disappearance, and a trade deal that every house privately considers unfair. The next one is in eighteen months. Everyone is quietly preparing.\n\n## The Undermarket\n\nBelow the visible UTTP â below even the cavern sections â is the Undermarket, which officially doesn't exist. It handles the trade that neither surface nor Underdark merchants want documented. Visiting it requires a referral. Getting a referral requires being trusted by someone who has one. The fact that it exists is the city's worst-kept secret and most reliable revenue source.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-uttp.jpg",
+  "tags": [
+    "city",
+    "underdark",
+    "uttp",
+    "surface",
+    "trade",
+    "gateway"
+  ],
   "region": "underdark",
   "publishedAt": "2026-02-27T00:00:00.000Z",
   "source": "Lore Import",
   "meta": {
     "accentColor": "#A07840",
-    "heroSubtitle": "Upper Tunnels · Gateway City",
+    "heroSubtitle": "Upper Tunnels Â· Gateway City",
     "heroTagline": "The Upper Tunnels Trading Post",
     "heroMotto": "\"If it moves, we tax it. If it doesn't move, we move it.\""
   }
