@@ -4,16 +4,22 @@
   "name": "Ironbeard Bastion",
   "type": "CITY",
   "category": "Military Fortification",
-  "summary": "Less a city than a promise — carved into the cavern wall as a warning to anything approaching from the deep.",
-  "content": "Ironbeard Bastion was not designed to be comfortable. This was intentional. The founders understood that the deep Underdark produces things that need to be stopped at a chokepoint rather than negotiated with in a market, and they designed their city accordingly. The result is a place that functions — efficiently, without complaint, without particular warmth — and that would be deeply disturbing to live in if you had not been born to it and knew nothing else.\n\nThe city is carved into a two-hundred-meter cliff face at the narrowest point of the Ironbeard Passage, the primary route between the mid-Underdark and the regions below. Everything that comes up from the deep must pass through Ironbeard. Everything that goes down must have papers. The garrison refers to this as \"control of the vertical,\" which sounds like a military term and is also an accurate description of the city's entire economy, politics, and self-understanding.\n\n## The Ironbeard Garrison\n\nThe Garrison is the city in the same way that a sword is a sword — what you see is what it is. Twelve hundred soldiers, organized into four Walls: the Upper Wall (surface liaison and supply), the Middle Wall (civilian governance and commerce), the Lower Wall (active patrol and interdiction), and the Dark Wall (the part nobody talks about and everyone understands to mean the things that come up from the deep and need to be handled before anyone else knows they exist). The Dark Wall has its own flag. The flag has no insignia. This is considered extremely funny by people who work there and not at all funny by people who don't.\n\n## The Town\n\nThere is a civilian settlement attached to the Bastion — traders, craftspeople, families of garrison members, the various support functions that armies generate over a century of occupation. It is called, with characteristic Ironbeard creativity, The Town. It has a market. The market sells weapons, armor, supplies, medicine, and approximately nothing else. The residents find this perfectly adequate.",
-  "imageUrl": null,
-  "tags": ["city", "underdark", "ironbeard-bastion", "military", "fortress"],
+  "summary": "Less a city than a promise â carved into the cavern wall as a warning to anything approaching from the deep.",
+  "content": "Ironbeard Bastion was not designed to be comfortable. This was intentional. The founders understood that the deep Underdark produces things that need to be stopped at a chokepoint rather than negotiated with in a market, and they designed their city accordingly. The result is a place that functions â efficiently, without complaint, without particular warmth â and that would be deeply disturbing to live in if you had not been born to it and knew nothing else.\n\nThe city is carved into a two-hundred-meter cliff face at the narrowest point of the Ironbeard Passage, the primary route between the mid-Underdark and the regions below. Everything that comes up from the deep must pass through Ironbeard. Everything that goes down must have papers. The garrison refers to this as \"control of the vertical,\" which sounds like a military term and is also an accurate description of the city's entire economy, politics, and self-understanding.\n\n## The Ironbeard Garrison\n\nThe Garrison is the city in the same way that a sword is a sword â what you see is what it is. Twelve hundred soldiers, organized into four Walls: the Upper Wall (surface liaison and supply), the Middle Wall (civilian governance and commerce), the Lower Wall (active patrol and interdiction), and the Dark Wall (the part nobody talks about and everyone understands to mean the things that come up from the deep and need to be handled before anyone else knows they exist). The Dark Wall has its own flag. The flag has no insignia. This is considered extremely funny by people who work there and not at all funny by people who don't.\n\n## The Town\n\nThere is a civilian settlement attached to the Bastion â traders, craftspeople, families of garrison members, the various support functions that armies generate over a century of occupation. It is called, with characteristic Ironbeard creativity, The Town. It has a market. The market sells weapons, armor, supplies, medicine, and approximately nothing else. The residents find this perfectly adequate.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-ironbeard-bastion.jpg",
+  "tags": [
+    "city",
+    "underdark",
+    "ironbeard-bastion",
+    "military",
+    "fortress"
+  ],
   "region": "underdark",
   "publishedAt": "2026-02-27T00:00:00.000Z",
   "source": "Lore Import",
   "meta": {
     "accentColor": "#607080",
-    "heroSubtitle": "The Underdark · Military Bastion",
+    "heroSubtitle": "The Underdark Â· Military Bastion",
     "heroTagline": "The Ironbeard Garrison",
     "heroMotto": "\"Nothing passes that we don't allow. Nothing comes up that we don't stop.\""
   }
