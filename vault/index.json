@@ -6,10 +6,16 @@
       "name": "Ulfgar",
       "type": "CITY",
       "category": "Underdark Gemcraft City",
-      "summary": "The crown jewel of the upper Underdark — beauty carved from nothing, defended by people who know exactly what beauty costs.",
-      "tags": ["city", "underdark", "ulfgar", "gemcraft"],
+      "summary": "The crown jewel of the upper Underdark â beauty carved from nothing, defended by people who know exactly what beauty costs.",
+      "tags": [
+        "city",
+        "underdark",
+        "ulfgar",
+        "gemcraft"
+      ],
       "region": "underdark",
-      "publishedAt": "2026-02-27T00:00:00.000Z"
+      "publishedAt": "2026-02-27T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-ulfgar.jpg"
     },
     {
       "id": "city-zarakzul",
@@ -17,8 +23,13 @@
       "name": "Zarakzul",
       "type": "CITY",
       "category": "Underdark Trade Nexus",
-      "summary": "Where the commerce of three continents meets in a cavern the size of a cathedral — Zarakzul doesn't have politics. It has prices.",
-      "tags": ["city", "underdark", "zarakzul", "trade"],
+      "summary": "Where the commerce of three continents meets in a cavern the size of a cathedral â Zarakzul doesn't have politics. It has prices.",
+      "tags": [
+        "city",
+        "underdark",
+        "zarakzul",
+        "trade"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -28,8 +39,15 @@
       "name": "Uttp",
       "type": "CITY",
       "category": "Underdark/Surface Gateway",
-      "summary": "Neither surface nor deep — a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
-      "tags": ["city", "underdark", "uttp", "surface", "trade", "gateway"],
+      "summary": "Neither surface nor deep â a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
+      "tags": [
+        "city",
+        "underdark",
+        "uttp",
+        "surface",
+        "trade",
+        "gateway"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -39,8 +57,13 @@
       "name": "Vragathul",
       "type": "CITY",
       "category": "Underdark Metropolis",
-      "summary": "Half a million souls beneath the stone, and the politics to match — Vragathul is the Underdark at full scale, with all the beauty and horror that implies.",
-      "tags": ["city", "underdark", "vragathul", "metropolis"],
+      "summary": "Half a million souls beneath the stone, and the politics to match â Vragathul is the Underdark at full scale, with all the beauty and horror that implies.",
+      "tags": [
+        "city",
+        "underdark",
+        "vragathul",
+        "metropolis"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -51,7 +74,13 @@
       "type": "CITY",
       "category": "Reclaimed Dwarven Stronghold",
       "summary": "It was Mithral Hall once. That name belongs to a history the current rulers don't acknowledge and the old families don't forget.",
-      "tags": ["city", "underdark", "hammerhold", "dwarven", "mithral-hall"],
+      "tags": [
+        "city",
+        "underdark",
+        "hammerhold",
+        "dwarven",
+        "mithral-hall"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -61,8 +90,14 @@
       "name": "Ironbeard Bastion",
       "type": "CITY",
       "category": "Military Fortification",
-      "summary": "Less a city than a promise — carved into the cavern wall as a warning to anything approaching from the deep.",
-      "tags": ["city", "underdark", "ironbeard-bastion", "military", "fortress"],
+      "summary": "Less a city than a promise â carved into the cavern wall as a warning to anything approaching from the deep.",
+      "tags": [
+        "city",
+        "underdark",
+        "ironbeard-bastion",
+        "military",
+        "fortress"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -73,7 +108,12 @@
       "type": "CITY",
       "category": "Underdark Waystation",
       "summary": "It exists because someone needed it to exist. Nobody's proud of it. Everybody uses it.",
-      "tags": ["city", "underdark", "murkhold", "waystation"],
+      "tags": [
+        "city",
+        "underdark",
+        "murkhold",
+        "waystation"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -83,9 +123,14 @@
       "name": "The Shadowed Flask",
       "type": "LOCATION",
       "category": "Underdark Tavern",
-      "summary": "Murkhold's most important establishment — where the only rule is that there are no rules that apply to anyone who can afford the drinks.",
+      "summary": "Murkhold's most important establishment â where the only rule is that there are no rules that apply to anyone who can afford the drinks.",
       "cityId": "murkhold",
-      "tags": ["location", "underdark", "murkhold", "tavern"],
+      "tags": [
+        "location",
+        "underdark",
+        "murkhold",
+        "tavern"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -95,8 +140,13 @@
       "name": "Abyssal Spire",
       "type": "LOCATION",
       "category": "Surface Diplomatic Citadel",
-      "summary": "Where the surface world and the Underdark negotiate — a city of towers above and tunnels below, built on the premise that cooperation is preferable to the alternative.",
-      "tags": ["location", "surface", "diplomatic", "hidden"],
+      "summary": "Where the surface world and the Underdark negotiate â a city of towers above and tunnels below, built on the premise that cooperation is preferable to the alternative.",
+      "tags": [
+        "location",
+        "surface",
+        "diplomatic",
+        "hidden"
+      ],
       "region": "surface",
       "hidden": true,
       "publishedAt": "2026-02-27T00:00:00.000Z"
@@ -107,8 +157,14 @@
       "name": "Daggerport",
       "type": "LOCATION",
       "category": "Surface Trading Port",
-      "summary": "The docks that move more wealth than most kingdoms — and the merchant houses willing to bleed each other for control of them.",
-      "tags": ["location", "surface", "trade", "harbor", "hidden"],
+      "summary": "The docks that move more wealth than most kingdoms â and the merchant houses willing to bleed each other for control of them.",
+      "tags": [
+        "location",
+        "surface",
+        "trade",
+        "harbor",
+        "hidden"
+      ],
       "region": "surface",
       "hidden": true,
       "publishedAt": "2026-02-27T00:00:00.000Z"
@@ -119,8 +175,14 @@
       "name": "Phoenix's Respite",
       "type": "LOCATION",
       "category": "Surface Fortified City",
-      "summary": "A city that burned and rebuilt itself into something harder — now the surface world's primary line of supply for the Underdark's defense.",
-      "tags": ["location", "surface", "fortress", "supply", "hidden"],
+      "summary": "A city that burned and rebuilt itself into something harder â now the surface world's primary line of supply for the Underdark's defense.",
+      "tags": [
+        "location",
+        "surface",
+        "fortress",
+        "supply",
+        "hidden"
+      ],
       "region": "surface",
       "hidden": true,
       "publishedAt": "2026-02-27T00:00:00.000Z"
@@ -131,8 +193,15 @@
       "name": "Luminary Haven",
       "type": "LOCATION",
       "category": "Surface Arcane Citadel",
-      "summary": "The greatest center of magical knowledge in the world — currently occupied by something ancient, elven, and genocidal.",
-      "tags": ["location", "surface", "arcane", "the-chain", "hidden", "threat"],
+      "summary": "The greatest center of magical knowledge in the world â currently occupied by something ancient, elven, and genocidal.",
+      "tags": [
+        "location",
+        "surface",
+        "arcane",
+        "the-chain",
+        "hidden",
+        "threat"
+      ],
       "region": "surface",
       "hidden": true,
       "publishedAt": "2026-02-27T00:00:00.000Z"
@@ -143,8 +212,14 @@
       "name": "Eternal Archive",
       "type": "LOCATION",
       "category": "Surface Fortress-Library",
-      "summary": "A fortress built to protect knowledge and a library built to dispense it — the monks inside have spent centuries deciding which knowledge qualifies as which.",
-      "tags": ["location", "surface", "library", "archive", "hidden"],
+      "summary": "A fortress built to protect knowledge and a library built to dispense it â the monks inside have spent centuries deciding which knowledge qualifies as which.",
+      "tags": [
+        "location",
+        "surface",
+        "library",
+        "archive",
+        "hidden"
+      ],
       "region": "surface",
       "hidden": true,
       "publishedAt": "2026-02-27T00:00:00.000Z"
@@ -155,8 +230,14 @@
       "name": "Starhaven",
       "type": "LOCATION",
       "category": "Surface Frontier Town",
-      "summary": "Where the road to the Underdark begins — and where everyone who's about to do something dangerous stops to reconsider.",
-      "tags": ["location", "surface", "frontier", "trade", "hidden"],
+      "summary": "Where the road to the Underdark begins â and where everyone who's about to do something dangerous stops to reconsider.",
+      "tags": [
+        "location",
+        "surface",
+        "frontier",
+        "trade",
+        "hidden"
+      ],
       "region": "surface",
       "hidden": true,
       "publishedAt": "2026-02-27T00:00:00.000Z"
@@ -168,7 +249,12 @@
       "type": "FACTION",
       "category": "Shadow Network",
       "summary": "The Zhentarim didn't die. They adapted. They have no headquarters because they are the infrastructure.",
-      "tags": ["faction", "underdark", "shadow", "zhentarim"],
+      "tags": [
+        "faction",
+        "underdark",
+        "shadow",
+        "zhentarim"
+      ],
       "region": "underdark",
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
@@ -179,7 +265,12 @@
       "type": "FACTION",
       "category": "Arcane Collective",
       "summary": "The Red Wizards burned their old hierarchy when the world changed. What rose from those ashes was worse.",
-      "tags": ["faction", "arcane", "wizards", "concordat"],
+      "tags": [
+        "faction",
+        "arcane",
+        "wizards",
+        "concordat"
+      ],
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
     {
@@ -189,7 +280,13 @@
       "type": "FACTION",
       "category": "Balance Covenant",
       "summary": "Two organizations that used to argue about methods realized they shared the same enemy. The alliance is practical. The conviction is not.",
-      "tags": ["faction", "balance", "harpers", "enclave", "nature"],
+      "tags": [
+        "faction",
+        "balance",
+        "harpers",
+        "enclave",
+        "nature"
+      ],
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
     {
@@ -198,8 +295,13 @@
       "name": "The Spire Covenant",
       "type": "FACTION",
       "category": "Arcane Brotherhood",
-      "summary": "Power unbound from any kingdom, answerable to no throne — the Arcane Brotherhood stripped itself of politics and kept only the part that mattered.",
-      "tags": ["faction", "arcane", "brotherhood", "covenant"],
+      "summary": "Power unbound from any kingdom, answerable to no throne â the Arcane Brotherhood stripped itself of politics and kept only the part that mattered.",
+      "tags": [
+        "faction",
+        "arcane",
+        "brotherhood",
+        "covenant"
+      ],
       "publishedAt": "2026-02-27T00:00:00.000Z"
     },
     {
@@ -208,7 +310,7 @@
       "name": "The Symposium",
       "type": "CREATURE",
       "category": "Aberration",
-      "summary": "Aberration — Challenge 15 (13,000 XP)",
+      "summary": "Aberration â Challenge 15 (13,000 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772161654592-bgtz25.jpg",
       "tags": [
         "monster",
@@ -223,7 +325,7 @@
       "name": "Brekka Stonegut",
       "type": "NPC",
       "category": "Dwarf Ex-Soldier / Reluctant Enforcer",
-      "summary": "Dwarf Ex-Soldier / Reluctant Enforcer — Blackfire Alchemists (Head of Security & Acquisitions)",
+      "summary": "Dwarf Ex-Soldier / Reluctant Enforcer â Blackfire Alchemists (Head of Security & Acquisitions)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772157957418-6k5mxl.jpg",
       "tags": [
         "npc",
@@ -238,7 +340,7 @@
       "name": "The Order of the Cauterized Saint",
       "type": "FACTION",
       "category": "Religious Brotherhood",
-      "summary": "Religious Brotherhood — Martial-Theological Order",
+      "summary": "Religious Brotherhood â Martial-Theological Order",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155960738-gjlyu1.jpg",
       "tags": [
         "faction",
@@ -253,7 +355,7 @@
       "name": "The Ledger Eternal",
       "type": "FACTION",
       "category": "Secret Society",
-      "summary": "Secret Society — Arcane/Political",
+      "summary": "Secret Society â Arcane/Political",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772143446803-brl5fy.jpg",
       "tags": [
         "faction",
@@ -268,7 +370,7 @@
       "name": "Karnuk",
       "type": "CITY",
       "category": "Underdark Syndicate City",
-      "summary": "The Iron Syndicate City — five guild families, forty-three war-mechs, and one viceroy holding it all together through the cold arithmetic of force.",
+      "summary": "The Iron Syndicate City â five guild families, forty-three war-mechs, and one viceroy holding it all together through the cold arithmetic of force.",
       "tags": [
         "city",
         "underdark",
@@ -385,7 +487,7 @@
       "name": "Don Thorgar Ironhammer",
       "type": "NPC",
       "category": "Iron Hammer Patriarch",
-      "summary": "487 years old. Missing three fingers from the Thousand Year War. His hammer hasn't been drawn since — he swore it. He keeps his oaths.",
+      "summary": "487 years old. Missing three fingers from the Thousand Year War. His hammer hasn't been drawn since â he swore it. He keeps his oaths.",
       "factionId": "iron-hammer-clan",
       "tags": [
         "npc",
@@ -517,7 +619,7 @@
       "slug": "the-anvil-quarter",
       "name": "The Anvil Quarter",
       "type": "LOCATION",
-      "category": "District — 01",
+      "category": "District â 01",
       "summary": "Iron Hammer Clan territory. Ancient dwarven stonework, hand-carved and engraved with twelve generations of master smiths.",
       "factionId": "iron-hammer-clan",
       "tags": [
@@ -534,8 +636,8 @@
       "slug": "the-deep-market",
       "name": "The Deep Market",
       "type": "LOCATION",
-      "category": "District — 02",
-      "summary": "Deepstone Miners territory. The commercial heart of Karnuk — twenty-three piers, forty-three warehouses, and the Kettle.",
+      "category": "District â 02",
+      "summary": "Deepstone Miners territory. The commercial heart of Karnuk â twenty-three piers, forty-three warehouses, and the Kettle.",
       "factionId": "deepstone-miners",
       "tags": [
         "location",
@@ -551,8 +653,8 @@
       "slug": "smelters-row",
       "name": "Smelter's Row",
       "type": "LOCATION",
-      "category": "District — 03",
-      "summary": "Brotherhood of the Forge territory. The Cathedral-Workshop dominates — equal parts masterwork atelier and fortress.",
+      "category": "District â 03",
+      "summary": "Brotherhood of the Forge territory. The Cathedral-Workshop dominates â equal parts masterwork atelier and fortress.",
       "factionId": "brotherhood-of-forge",
       "tags": [
         "location",
@@ -568,7 +670,7 @@
       "slug": "the-quiet-district",
       "name": "The Quiet District",
       "type": "LOCATION",
-      "category": "District — 04",
+      "category": "District â 04",
       "summary": "Brotherhood of Iron Mine territory. Nobody talks about what happens here. The Brotherhood prefers it that way.",
       "factionId": "brotherhood-of-iron-mine",
       "tags": [
@@ -585,7 +687,7 @@
       "slug": "the-guttered-torch-quarter",
       "name": "The Guttered Torch Quarter",
       "type": "LOCATION",
-      "category": "District — 05",
+      "category": "District â 05",
       "summary": "Steel Syndicate territory. Aggressively, offensively new. Arc-flame lanterns, moving blueprints, Mechworks Plaza running at all hours.",
       "factionId": "steel-syndicate",
       "tags": [
@@ -602,8 +704,8 @@
       "slug": "viceroys-terrace",
       "name": "Viceroy's Terrace",
       "type": "LOCATION",
-      "category": "District — 06",
-      "summary": "Bregan D'aerthe shadow territory. The Neutral Quarter — where every family comes when they need something they can't officially want.",
+      "category": "District â 06",
+      "summary": "Bregan D'aerthe shadow territory. The Neutral Quarter â where every family comes when they need something they can't officially want.",
       "factionId": "bregan-daerthe",
       "tags": [
         "location",
@@ -620,7 +722,7 @@
       "name": "Legends of the Iron Order: The Masks",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "What the Iron Order's masks are — and what they do to the men inside them.",
+      "summary": "What the Iron Order's masks are â and what they do to the men inside them.",
       "tags": [
         "lore",
         "karnuk",
@@ -636,7 +738,7 @@
       "name": "Legends of the Iron Order: Their Loyalty",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "On the Iron Order's incorruptibility — and what that cost means in a city built on transaction.",
+      "summary": "On the Iron Order's incorruptibility â and what that cost means in a city built on transaction.",
       "tags": [
         "lore",
         "karnuk",
@@ -652,7 +754,7 @@
       "name": "Legends of the Iron Order: Their Power",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "On what the Iron Order can do — and what the war-mechs do when the Order walks past.",
+      "summary": "On what the Iron Order can do â and what the war-mechs do when the Order walks past.",
       "tags": [
         "lore",
         "karnuk",
@@ -668,7 +770,7 @@
       "name": "Legends of the Iron Order: Becoming",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "What happens to those who join the Order — or try to take what's theirs.",
+      "summary": "What happens to those who join the Order â or try to take what's theirs.",
       "tags": [
         "lore",
         "karnuk",
@@ -684,7 +786,7 @@
       "name": "The Remembrance Heap",
       "type": "CREATURE",
       "category": "Ooze (Shadow-Corrupted)",
-      "summary": "Ooze (Shadow-Corrupted) — Challenge 8 (3,900 XP)",
+      "summary": "Ooze (Shadow-Corrupted) â Challenge 8 (3,900 XP)",
       "tags": [
         "monster",
         "forged",
@@ -698,7 +800,7 @@
       "name": "Sylvara Dawnmantle",
       "type": "NPC",
       "category": "Wood Elf Paladin",
-      "summary": "Wood Elf Paladin — Oath of the Ancients / Independent",
+      "summary": "Wood Elf Paladin â Oath of the Ancients / Independent",
       "tags": [
         "npc",
         "forged",
@@ -712,7 +814,7 @@
       "name": "Duchess Mira Aurenthal",
       "type": "NPC",
       "category": "Human Noble / Spy",
-      "summary": "Human Noble / Spy — House Aurenthal (Merchant Aristocracy)",
+      "summary": "Human Noble / Spy â House Aurenthal (Merchant Aristocracy)",
       "tags": [
         "npc",
         "forged",
@@ -726,7 +828,7 @@
       "name": "PLAGUE-THRALL FANG BEETLE, ALPHA",
       "type": "CREATURE",
       "category": "Monstrosity (Shadow-Corrupted)",
-      "summary": "Monstrosity (Shadow-Corrupted) — Challenge 7 (2,900 XP)",
+      "summary": "Monstrosity (Shadow-Corrupted) â Challenge 7 (2,900 XP)",
       "tags": [
         "monster",
         "forged",
@@ -740,7 +842,7 @@
       "name": "Osric Thane Gallowfield",
       "type": "NPC",
       "category": "Human Veteran Warden",
-      "summary": "Human Veteran Warden — The Order of the Amber Threshold",
+      "summary": "Human Veteran Warden â The Order of the Amber Threshold",
       "tags": [
         "npc",
         "forged",
@@ -754,7 +856,7 @@
       "name": "Corven Ashbrand",
       "type": "NPC",
       "category": "Human Ranger/Rogue",
-      "summary": "Human Ranger/Rogue — Deep Market Syndicate",
+      "summary": "Human Ranger/Rogue â Deep Market Syndicate",
       "tags": [
         "npc",
         "forged",
@@ -768,7 +870,7 @@
       "name": "Marta \"Clinker\" Voss",
       "type": "NPC",
       "category": "Half-Orc Fighter/Ranger",
-      "summary": "Half-Orc Fighter/Ranger — Deep Market Syndicate",
+      "summary": "Half-Orc Fighter/Ranger â Deep Market Syndicate",
       "tags": [
         "npc",
         "forged",
@@ -782,7 +884,7 @@
       "name": "Stone Dragonling",
       "type": "CREATURE",
       "category": "Dragon",
-      "summary": "Dragon — Challenge 3 (700 XP)",
+      "summary": "Dragon â Challenge 3 (700 XP)",
       "tags": [
         "monster",
         "forged",
@@ -810,7 +912,7 @@
       "name": "Vorrak Half-Tongue",
       "type": "NPC",
       "category": "Orc Rogue (Mastermind)",
-      "summary": "Orc Rogue (Mastermind) — The Open Road Consortium",
+      "summary": "Orc Rogue (Mastermind) â The Open Road Consortium",
       "tags": [
         "npc",
         "forged",
@@ -819,5 +921,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-27T12:00:00.000Z"
+  "updatedAt": "2026-02-28T02:02:22.701Z"
 }
