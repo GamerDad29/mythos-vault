@@ -4,16 +4,21 @@
   "name": "Ulfgar",
   "type": "CITY",
   "category": "Underdark Gemcraft City",
-  "summary": "The crown jewel of the upper Underdark — beauty carved from nothing, defended by people who know exactly what beauty costs.",
-  "content": "The first thing the gem-cutters of Ulfgar will tell you is that a flawed stone isn't a failure — it's information. Every inclusion, every fracture plane, every carbon smear is the rock telling you what it is. You listen, or you waste it. The second thing they'll tell you, if you've been around long enough to earn the second thing, is that people work the same way.\n\nUlfgar built itself on a principle its founders called the Bright Seam — the idea that there is always something of value in the deep, if you know how to cut for it. Three centuries later, the Bright Seam is a street, a philosophy, a warning carved above the city gate in six languages, and the name of the guild that controls forty percent of all gem transit in the upper Underdark. The founders would recognize it. They'd also recognize the blood under the polish.\n\n## The Cutters' Council\n\nUlfgar has no king, no viceroy, no war-leader. It has the Cutters' Council — seven seats, one per major trade house, rotated every seven years in a process that is technically democratic and functionally ruthless. Seat changes are announced in advance. Seat holders who lose votes have a habit of leaving the city quietly in the months before the count. Ulfgar is civilized about it. Nobody ever says the word \"exile.\" They say \"seeking new opportunity,\" and everyone understands.\n\n## The Deep Vault\n\nBeneath the market district, behind three locked doors and more politics than most small wars, lies the Deep Vault — Ulfgar's reserve of unmounted stones assessed at enough value to destabilize three Underdark economies simultaneously. The Vault has never been opened in anger. The fact that it *could* be is the entire point.",
-  "imageUrl": null,
-  "tags": ["city", "underdark", "ulfgar", "gemcraft"],
+  "summary": "The crown jewel of the upper Underdark â beauty carved from nothing, defended by people who know exactly what beauty costs.",
+  "content": "The first thing the gem-cutters of Ulfgar will tell you is that a flawed stone isn't a failure â it's information. Every inclusion, every fracture plane, every carbon smear is the rock telling you what it is. You listen, or you waste it. The second thing they'll tell you, if you've been around long enough to earn the second thing, is that people work the same way.\n\nUlfgar built itself on a principle its founders called the Bright Seam â the idea that there is always something of value in the deep, if you know how to cut for it. Three centuries later, the Bright Seam is a street, a philosophy, a warning carved above the city gate in six languages, and the name of the guild that controls forty percent of all gem transit in the upper Underdark. The founders would recognize it. They'd also recognize the blood under the polish.\n\n## The Cutters' Council\n\nUlfgar has no king, no viceroy, no war-leader. It has the Cutters' Council â seven seats, one per major trade house, rotated every seven years in a process that is technically democratic and functionally ruthless. Seat changes are announced in advance. Seat holders who lose votes have a habit of leaving the city quietly in the months before the count. Ulfgar is civilized about it. Nobody ever says the word \"exile.\" They say \"seeking new opportunity,\" and everyone understands.\n\n## The Deep Vault\n\nBeneath the market district, behind three locked doors and more politics than most small wars, lies the Deep Vault â Ulfgar's reserve of unmounted stones assessed at enough value to destabilize three Underdark economies simultaneously. The Vault has never been opened in anger. The fact that it *could* be is the entire point.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-ulfgar.jpg",
+  "tags": [
+    "city",
+    "underdark",
+    "ulfgar",
+    "gemcraft"
+  ],
   "region": "underdark",
   "publishedAt": "2026-02-27T00:00:00.000Z",
   "source": "Lore Import",
   "meta": {
     "accentColor": "#5B8BCC",
-    "heroSubtitle": "The Underdark · Gemcraft City",
+    "heroSubtitle": "The Underdark Â· Gemcraft City",
     "heroTagline": "The Underground Jewel",
     "heroMotto": "\"Cut true or don't cut at all.\""
   }
