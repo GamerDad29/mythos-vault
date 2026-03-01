@@ -1,6 +1,22 @@
 {
   "entities": [
     {
+      "id": "monster-vesper-the-concordant-hollow",
+      "slug": "vesper-the-concordant-hollow",
+      "name": "VESPER, THE CONCORDANT HOLLOW",
+      "type": "CREATURE",
+      "category": "Undead (Shadow-Corrupted)",
+      "summary": "Undead (Shadow-Corrupted) — Challenge 9 (5,000 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772325550751-6xl9e3.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-01T00:39:41.244Z",
+      "factionId": "the-shadow"
+    },
+    {
       "id": "monster-the-enumerated-voice-of-mourne",
       "slug": "the-enumerated-voice-of-mourne",
       "name": "The Enumerated Voice Of Mourne",
@@ -950,5 +966,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-01T00:02:02.307Z"
+  "updatedAt": "2026-03-01T00:39:42.388Z"
 }
