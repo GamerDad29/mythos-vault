@@ -1,6 +1,22 @@
 {
   "entities": [
     {
+      "id": "monster-recount-eternal",
+      "slug": "recount-eternal",
+      "name": "Recount Eternal",
+      "type": "CREATURE",
+      "category": "Large Construct",
+      "summary": "Large Construct, Unaligned — Challenge 9 (5,000 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772340423177-ksz77i.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-01T04:51:05.522Z",
+      "factionId": "cogmind-collective"
+    },
+    {
       "id": "monster-mirrorbound-colossus",
       "slug": "mirrorbound-colossus",
       "name": "Mirrorbound Colossus",
@@ -981,5 +997,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-01T04:33:35.722Z"
+  "updatedAt": "2026-03-01T04:51:07.040Z"
 }
