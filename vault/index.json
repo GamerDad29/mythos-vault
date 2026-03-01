@@ -1,6 +1,22 @@
 {
   "entities": [
     {
+      "id": "monster-the-enumerated-voice-of-mourne",
+      "slug": "the-enumerated-voice-of-mourne",
+      "name": "The Enumerated Voice Of Mourne",
+      "type": "CREATURE",
+      "category": "Humanoid (Human",
+      "summary": "Humanoid (Human, Shadow-Corrupted) — Challenge 11 (7,200 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772323287701-boqoa9.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-01T00:02:00.730Z",
+      "factionId": "the-shadow"
+    },
+    {
       "id": "city-ulfgar",
       "slug": "ulfgar",
       "name": "Ulfgar",
@@ -934,5 +950,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-02-28T02:04:04.204Z"
+  "updatedAt": "2026-03-01T00:02:02.307Z"
 }
