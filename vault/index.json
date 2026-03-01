@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "monster-mirrorbound-colossus",
+      "slug": "mirrorbound-colossus",
+      "name": "Mirrorbound Colossus",
+      "type": "CREATURE",
+      "category": "Huge Construct",
+      "summary": "Huge Construct, Neutral Evil — Challenge 13 (10,000 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772339597728-u0vwz7.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-01T04:33:34.576Z"
+    },
+    {
       "id": "monster-vesper-the-concordant-hollow",
       "slug": "vesper-the-concordant-hollow",
       "name": "VESPER, THE CONCORDANT HOLLOW",
@@ -966,5 +981,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-01T00:39:42.388Z"
+  "updatedAt": "2026-03-01T04:33:35.722Z"
 }
