@@ -1,20 +1,19 @@
 {
   "entities": [
     {
-      "id": "monster-recount-eternal",
-      "slug": "recount-eternal",
-      "name": "Recount Eternal",
+      "id": "monster-stonebond-sentinel",
+      "slug": "stonebond-sentinel",
+      "name": "Stonebond Sentinel",
       "type": "CREATURE",
-      "category": "Large Construct",
-      "summary": "Large Construct, Unaligned — Challenge 9 (5,000 XP)",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772340423177-ksz77i.jpg",
+      "category": "Medium Construct",
+      "summary": "Medium Construct, Lawful Neutral — Challenge 5 (1,800 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772340903923-axgo1g.jpg",
       "tags": [
         "monster",
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-03-01T04:51:05.522Z",
-      "factionId": "cogmind-collective"
+      "publishedAt": "2026-03-01T04:55:11.635Z"
     },
     {
       "id": "monster-mirrorbound-colossus",
@@ -997,5 +996,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-01T04:51:07.040Z"
+  "updatedAt": "2026-03-01T04:55:12.533Z"
 }
