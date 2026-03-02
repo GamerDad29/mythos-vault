@@ -1,0 +1,17 @@
+{
+  "id": "npc-mira-cascuel",
+  "slug": "mira-cascuel",
+  "name": "Mira Cascuel",
+  "type": "NPC",
+  "category": "Half-Elf Enforcer-Auditor",
+  "summary": "Half-Elf Enforcer-Auditor — The Verdant Accord (internal affairs division)",
+  "content": "---\n\n> *Half-Elf Enforcer-Auditor — The Verdant Accord (internal affairs division)*\n**Mira Cascuel**\n*She was sent to find corruption inside the Verdant Accord and has since found something considerably worse: the Accord is functioning exactly as designed.*\n\n**Weight of History:** The Cascuel name belongs to a coastal merchant tradition absorbed into the Verdant Accord two generations back through a land-rights consolidation that was described, in official documents, as a \"voluntary integration\" — a phrase that appears in Accord charters seventeen times and has never once meant what it says.\n\n**The System She Exists Within:** Every faction needs someone who watches the watchers — the Verdant Accord calls this role an Auditor-at-Standing, a position that theoretically operates outside factional loyalty and investigates internal misconduct. In practice, the Auditor-at-Standing reports to the Accord's senior directorate, which means the position is structurally incapable of investigating the directorate itself. Mira was appointed because she is meticulous, incorruptible, and — the directorate calculated — too loyal to the Accord's *stated* mission to recognize that the stated mission and the actual mission diverged about forty years ago. They were mostly right. She is still loyal to the stated mission. This has become the directorate's problem.\n\n**Appearance:** Mira presents herself as deliberately unremarkable — medium height, practical clothes in Accord green worn one shade darker than regulation, hair kept back with functional pins. She carries a leather folio of open investigations and a second, unlabeled folio she keeps inside her coat. The only remarkable thing about her appearance is that she is almost never the least-alert person in a room.\n\n**Personality:**\n- *Trait:* She approaches every conversation as though it is a deposition — not hostile, but precise, sequential, and oriented toward establishing what can be *proven.*\n- *Bond:* She believes the Accord's founding charter — not the current leadership, not the current practice, but the *document* — represents something worth protecting, and she has memorized it the way others memorize prayers.\n- *Flaw:* She has an institutional reflex to exhaust every internal remedy before considering external action, which means she is always approximately three steps behind where the situation actually requires her to be.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772416510875-qjavk7.jpg",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-03-02T01:55:17.978Z",
+  "source": "The Forge"
+}
