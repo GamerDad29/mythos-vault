@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "npc-mira-cascuel",
+      "slug": "mira-cascuel",
+      "name": "Mira Cascuel",
+      "type": "NPC",
+      "category": "Half-Elf Enforcer-Auditor",
+      "summary": "Half-Elf Enforcer-Auditor — The Verdant Accord (internal affairs division)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772416510875-qjavk7.jpg",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-02T01:55:17.978Z"
+    },
+    {
       "id": "faction-the-last-congregation-of-the-unremembered",
       "slug": "the-last-congregation-of-the-unremembered",
       "name": "The Last Congregation Of The Unremembered",
@@ -1028,5 +1043,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-02T01:12:24.286Z"
+  "updatedAt": "2026-03-02T01:55:19.479Z"
 }
