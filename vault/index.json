@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "item-sorrow-s-edge",
+      "slug": "sorrow-s-edge",
+      "name": "Sorrow's Edge",
+      "type": "ITEM",
+      "category": "Legendary",
+      "summary": "Legendary, Weapon (dagger), requires attunement",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772418063997-wdzyg1.jpg",
+      "tags": [
+        "item",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-02T02:21:20.021Z"
+    },
+    {
       "id": "npc-mira-cascuel",
       "slug": "mira-cascuel",
       "name": "Mira Cascuel",
@@ -1043,5 +1058,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-02T01:55:19.479Z"
+  "updatedAt": "2026-03-02T02:21:21.299Z"
 }
