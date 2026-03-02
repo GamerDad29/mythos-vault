@@ -1,6 +1,22 @@
 {
   "entities": [
     {
+      "id": "monster-vaultsworn-sentinel",
+      "slug": "vaultsworn-sentinel",
+      "name": "Vaultsworn Sentinel",
+      "type": "CREATURE",
+      "category": "Medium Construct",
+      "summary": "Medium Construct, Lawful Neutral — Challenge 7 (2,900 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772413437787-mqxabi.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-02T01:04:13.616Z",
+      "factionId": "cogmind-collective"
+    },
+    {
       "id": "monster-stonebond-sentinel",
       "slug": "stonebond-sentinel",
       "name": "Stonebond Sentinel",
@@ -996,5 +1012,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-01T04:55:12.533Z"
+  "updatedAt": "2026-03-02T01:04:14.712Z"
 }
