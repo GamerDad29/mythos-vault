@@ -393,8 +393,7 @@
         "zhentarim"
       ],
       "region": "underdark",
-      "publishedAt": "2026-02-27T00:00:00.000Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-the-syndicate-shadows.jpg"
+      "publishedAt": "2026-02-27T00:00:00.000Z"
     },
     {
       "id": "faction-the-crimson-concordat",
@@ -409,7 +408,8 @@
         "wizards",
         "concordat"
       ],
-      "publishedAt": "2026-02-27T00:00:00.000Z"
+      "publishedAt": "2026-02-27T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-the-crimson-concordat.jpg"
     },
     {
       "id": "faction-the-verdant-accord",
@@ -1059,5 +1059,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-02T02:46:24.075Z"
+  "updatedAt": "2026-03-02T02:46:29.173Z"
 }
