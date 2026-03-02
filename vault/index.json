@@ -1,6 +1,22 @@
 {
   "entities": [
     {
+      "id": "faction-the-last-congregation-of-the-unremembered",
+      "slug": "the-last-congregation-of-the-unremembered",
+      "name": "The Last Congregation Of The Unremembered",
+      "type": "FACTION",
+      "category": "Chaotic Neutral Apostatic Cult",
+      "summary": "Chaotic Neutral Apostatic Cult — The Ruins Beneath the Pathways Unseen and the Forgotten Quarters of Occupied Cities",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772413933576-pr7tw2.jpg",
+      "tags": [
+        "faction",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-02T01:12:23.161Z",
+      "factionId": "the-last-congregation-of-the-unremembered"
+    },
+    {
       "id": "monster-vaultsworn-sentinel",
       "slug": "vaultsworn-sentinel",
       "name": "Vaultsworn Sentinel",
@@ -1012,5 +1028,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-02T01:04:14.712Z"
+  "updatedAt": "2026-03-02T01:12:24.286Z"
 }
