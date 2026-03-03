@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "npc-imala-dresh-korvaine",
+      "slug": "imala-dresh-korvaine",
+      "name": "Imala Dresh Korvaine",
+      "type": "NPC",
+      "category": "Half-Elf Quartermaster-General",
+      "summary": "Half-Elf Quartermaster-General — The Sundry Roads Confederation",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772572724154-3dh32e.jpg",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-03T21:19:01.949Z"
+    },
+    {
       "id": "monster-vrommak-the-unfinished",
       "slug": "vrommak-the-unfinished",
       "name": "Vrommak The Unfinished",
@@ -1075,5 +1090,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-03T17:46:23.127Z"
+  "updatedAt": "2026-03-03T21:19:03.332Z"
 }
