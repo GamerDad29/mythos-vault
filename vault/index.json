@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "monster-vrommak-the-unfinished",
+      "slug": "vrommak-the-unfinished",
+      "name": "Vrommak The Unfinished",
+      "type": "CREATURE",
+      "category": "Large Giant",
+      "summary": "Large Giant, Chaotic Neutral — Challenge 6 (2,300 XP)",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772559949812-tg2yjt.jpg",
+      "tags": [
+        "monster",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-03T17:46:21.892Z"
+    },
+    {
       "id": "item-sorrow-s-edge",
       "slug": "sorrow-s-edge",
       "name": "Sorrow's Edge",
@@ -1060,5 +1075,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-02T02:56:13.643Z"
+  "updatedAt": "2026-03-03T17:46:23.127Z"
 }
