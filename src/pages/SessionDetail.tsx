@@ -57,28 +57,41 @@ function renderLines(lines: string[], keyOffset = 0): React.ReactNode[] {
   return nodes;
 }
 
+// ─── Ken Burns variants ───────────────────────────────────────────────────────
+
+const KB_VARIANTS: Array<{ scale: number[]; x: number[]; y: number[]; duration: number }> = [
+  { scale: [1, 1.07], x: [0, -14], y: [0, -6],  duration: 10 },
+  { scale: [1, 1.06], x: [0,  12], y: [0,  8],  duration: 12 },
+  { scale: [1, 1.08], x: [0, -10], y: [0,  7],  duration:  9 },
+  { scale: [1, 1.06], x: [0,  10], y: [0, -8],  duration: 11 },
+];
+
 // ─── Woven image (full-width inline figure) ───────────────────────────────────
 
 function WovenImage({ url, index }: { url: string; index: number }) {
   const [lightbox, setLightbox] = useState(false);
+  const kb = KB_VARIANTS[index % KB_VARIANTS.length];
   return (
     <>
       <div
-        className="my-10 overflow-hidden cursor-pointer"
+        className="my-10 cursor-pointer"
         style={{
           borderRadius: '4px',
           border: '1px solid hsl(15 8% 14%)',
+          overflow: 'hidden',
           transition: 'border-color 0.2s',
         }}
         onClick={() => setLightbox(true)}
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'hsl(25 60% 28%)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'hsl(15 8% 14%)')}
       >
-        <img
+        <motion.img
           src={url}
           alt=""
           className="w-full object-cover"
           style={{ maxHeight: '340px', opacity: 0.88, display: 'block' }}
+          animate={{ scale: kb.scale, x: kb.x, y: kb.y }}
+          transition={{ duration: kb.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
         />
       </div>
       {lightbox && (
@@ -242,11 +255,13 @@ export function SessionDetail() {
       {/* ── Hero ── */}
       <div className="relative" style={{ height: 'clamp(300px, 48vh, 480px)', overflow: 'hidden' }}>
         {session.imageUrl ? (
-          <img
+          <motion.img
             src={session.imageUrl}
             alt={session.title}
             className="w-full h-full object-cover"
             style={{ opacity: 0.5, objectPosition: session.imagePosition ?? 'center center' }}
+            animate={{ scale: [1, 1.04] }}
+            transition={{ duration: 16, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           />
         ) : (
           <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, hsl(15 8% 6%), hsl(25 20% 10%))' }} />

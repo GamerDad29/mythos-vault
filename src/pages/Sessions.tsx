@@ -8,6 +8,7 @@ import type { SessionEntry } from '../types';
 // ─── Session Index Card ────────────────────────────────────────────────────────
 
 function SessionCard({ session, index }: { session: SessionEntry; index: number }) {
+  const [hovered, setHovered] = useState(false);
   const formattedDate = session.date
     ? new Date(session.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : null;
@@ -22,19 +23,14 @@ function SessionCard({ session, index }: { session: SessionEntry; index: number 
         <div
           className="overflow-hidden transition-all duration-200"
           style={{
-            background: 'hsl(15 6% 8%)',
-            border: '1px solid hsl(15 8% 14%)',
+            background: hovered ? 'hsl(15 6% 9%)' : 'hsl(15 6% 8%)',
+            border: `1px solid ${hovered ? 'hsl(25 60% 22%)' : 'hsl(15 8% 14%)'}`,
             borderRadius: '6px',
             cursor: 'pointer',
+            transition: 'border-color 0.2s, background 0.2s',
           }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLDivElement).style.borderColor = 'hsl(25 60% 22%)';
-            (e.currentTarget as HTMLDivElement).style.background = 'hsl(15 6% 9%)';
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLDivElement).style.borderColor = 'hsl(15 8% 14%)';
-            (e.currentTarget as HTMLDivElement).style.background = 'hsl(15 6% 8%)';
-          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
           {/* Hero thumbnail */}
           {session.imageUrl ? (
@@ -43,7 +39,12 @@ function SessionCard({ session, index }: { session: SessionEntry; index: number 
                 src={session.imageUrl}
                 alt={session.title}
                 className="w-full h-full object-cover"
-                style={{ opacity: 0.45, objectPosition: session.imagePosition ?? 'center center' }}
+                style={{
+                  opacity: 0.45,
+                  objectPosition: session.imagePosition ?? 'center center',
+                  transform: hovered ? 'scale(1.05)' : 'scale(1)',
+                  transition: 'transform 0.7s ease',
+                }}
               />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, transparent 55%)' }} />
               {/* Session number badge */}
