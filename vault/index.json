@@ -423,7 +423,8 @@
         "zhentarim"
       ],
       "region": "underdark",
-      "publishedAt": "2026-02-27T00:00:00.000Z"
+      "publishedAt": "2026-02-27T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-the-syndicate-shadows.jpg"
     },
     {
       "id": "faction-the-crimson-concordat",
@@ -495,7 +496,11 @@
       "category": "Human Fighter/Veteran",
       "summary": "Human Fighter/Veteran — Independent Merchant Caravan",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155732191-shq5bc.jpg",
-      "tags": ["npc", "forged", "ai-generated"],
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
       "publishedAt": "2026-02-27T01:29:10.795Z"
     },
     {
@@ -506,7 +511,11 @@
       "category": "Half-Orc Fighter/Mercenary",
       "summary": "Half-Orc Fighter/Mercenary — The Stonepath Merchant Consortium",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155633453-076z7g.jpg",
-      "tags": ["npc", "forged", "ai-generated"],
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
       "publishedAt": "2026-02-27T01:27:57.424Z"
     },
     {
@@ -1112,5 +1121,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-03T21:19:03.332Z"
+  "updatedAt": "2026-03-04T04:04:00.748Z"
 }
