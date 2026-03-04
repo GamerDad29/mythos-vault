@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Home } from './pages/Home';
 import { EntityList } from './pages/EntityList';
 import { LocationList } from './pages/LocationList';
+import { FactionList } from './pages/FactionList';
 import { EntityDetail } from './pages/EntityDetail';
 import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
@@ -23,7 +24,7 @@ export default function App() {
           <Route path="/npcs" component={() => <EntityList type="NPC" groupBy="cityId" />} />
           <Route path="/creatures" component={() => <EntityList type="CREATURE" />} />
           <Route path="/locations" component={LocationList} />
-          <Route path="/factions" component={() => <EntityList type="FACTION" groupBy="cityId" />} />
+          <Route path="/factions" component={FactionList} />
           <Route path="/items" component={() => <EntityList type="ITEM" groupBy="category" />} />
           <Route path="/lore" component={() => <EntityList type="LORE" />} />
           <Route path="/characters" component={() => <EntityList type="PC" />} />
