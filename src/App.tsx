@@ -9,6 +9,7 @@ import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
 import { Journal } from './pages/Journal';
 import { CityView } from './pages/CityView';
+import { Sessions } from './pages/Sessions';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/items" component={() => <EntityList type="ITEM" groupBy="category" />} />
           <Route path="/lore" component={() => <EntityList type="LORE" />} />
           <Route path="/characters" component={() => <EntityList type="PC" />} />
+          <Route path="/sessions" component={Sessions} />
           <Route path="/timeline" component={Timeline} />
           <Route path="/stats" component={Stats} />
           <Route path="/journal" component={Journal} />

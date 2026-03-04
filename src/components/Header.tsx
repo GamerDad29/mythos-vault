@@ -5,13 +5,14 @@ import { BookOpen, Clock, BarChart2, ScrollText, Menu, X, Lock, Unlock } from 'l
 import { useAuth } from '../contexts/AuthContext';
 
 const ENTITY_NAV = [
-  { label: 'NPCs', href: '/npcs' },
-  { label: 'Creatures', href: '/creatures' },
-  { label: 'Locations', href: '/locations' },
-  { label: 'Factions', href: '/factions' },
-  { label: 'Items', href: '/items' },
-  { label: 'Lore', href: '/lore' },
+  { label: 'Locations',  href: '/locations'  },
+  { label: 'Factions',   href: '/factions'   },
+  { label: 'Lore',       href: '/lore'       },
+  { label: 'Items',      href: '/items'      },
+  { label: 'NPCs',       href: '/npcs'       },
+  { label: 'Creatures',  href: '/creatures'  },
   { label: 'Characters', href: '/characters' },
+  { label: 'Sessions',   href: '/sessions'   },
 ];
 
 const TOOL_NAV = [
