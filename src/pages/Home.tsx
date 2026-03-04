@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronRight, User, Swords, MapPin, Shield, Package, Scroll, Users, Clock, BarChart2, ScrollText } from 'lucide-react';
+import { ChevronDown, ChevronRight, User, Swords, MapPin, Shield, Package, Scroll, Users, Clock, BarChart2, ScrollText, BookOpen } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import type { VaultEntityStub } from '../types';
 import { useAuth } from '../contexts/AuthContext';
@@ -32,6 +32,7 @@ const TYPE_GRADIENTS: Record<string, string> = {
   NPC:      'radial-gradient(ellipse at 60% 40%, hsl(175 18% 8%) 0%, hsl(15 6% 5%) 100%)',
   CREATURE: 'radial-gradient(ellipse at 35% 55%, hsl(130 14% 7%) 0%, hsl(15 6% 5%) 100%)',
   PC:       'radial-gradient(ellipse at 55% 45%, hsl(220 22% 9%) 0%, hsl(15 6% 5%) 100%)',
+  SESSION:  'radial-gradient(ellipse at 45% 60%, hsl(25 30% 8%) 0%, hsl(15 6% 5%) 100%)',
 };
 
 const SPARKS = [
@@ -402,7 +403,7 @@ export function Home() {
           ))}
         </div>
 
-        {/* Row 3 — Characters */}
+        {/* Row 3 — Characters + Sessions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-10">
           <div className="lg:col-span-2">
             <SectionCard
@@ -412,36 +413,12 @@ export function Home() {
               delay={0.42}
             />
           </div>
-          {/* Coming soon: Sessions */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.48, duration: 0.55, ease: 'easeOut' }}
-          >
-            <div
-              className="relative overflow-hidden flex flex-col items-center justify-center text-center"
-              style={{
-                height: '230px',
-                borderRadius: '6px',
-                border: '1px dashed hsl(15 8% 14%)',
-                background: 'hsl(15 6% 6%)',
-              }}
-            >
-              <ScrollText size={28} strokeWidth={0.75} style={{ color: 'hsl(15 8% 20%)', marginBottom: '0.75rem' }} />
-              <p
-                className="font-serif uppercase tracking-[0.2em]"
-                style={{ color: 'hsl(15 4% 28%)', fontSize: '11px', marginBottom: '0.4rem' }}
-              >
-                Coming Soon
-              </p>
-              <p
-                className="font-display italic"
-                style={{ color: 'hsl(15 4% 22%)', fontSize: '13px' }}
-              >
-                Sessions
-              </p>
-            </div>
-          </motion.div>
+          <SectionCard
+            section={{ label: 'Sessions', href: '/sessions', desc: 'Chronicle of the Pathways Unseen', Icon: BookOpen, type: 'SESSION' }}
+            imageUrl={undefined}
+            count={0}
+            delay={0.48}
+          />
         </div>
       </section>
 
