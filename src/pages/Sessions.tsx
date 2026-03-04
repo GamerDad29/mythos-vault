@@ -1,198 +1,120 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { Volume2, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
+import { Calendar, Volume2, Image as ImageIcon } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import type { SessionEntry } from '../types';
 
-// ─── Inline markdown renderer ─────────────────────────────────────────────────
-
-function parseInline(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*\*.*?\*\*\*|\*\*.*?\*\*|\*.*?\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('***') && part.endsWith('***')) return <strong key={i}><em>{part.slice(3, -3)}</em></strong>;
-    if (part.startsWith('**') && part.endsWith('**')) return <strong key={i} style={{ color: 'hsl(15 4% 88%)' }}>{part.slice(2, -2)}</strong>;
-    if (part.startsWith('*') && part.endsWith('*')) return <em key={i}>{part.slice(1, -1)}</em>;
-    return part;
-  });
-}
-
-function renderSessionContent(content: string): React.ReactNode[] {
-  const lines = content.split('\n');
-  const nodes: React.ReactNode[] = [];
-  let key = 0;
-
-  for (const line of lines) {
-    if (line.startsWith('## ')) {
-      nodes.push(
-        <h3 key={key++} className="font-serif font-bold mt-8 mb-3 uppercase tracking-wide" style={{ fontSize: '0.85rem', color: 'hsl(25 100% 42%)', letterSpacing: '0.18em' }}>
-          {line.slice(3)}
-        </h3>
-      );
-    } else if (line.startsWith('> ')) {
-      nodes.push(
-        <blockquote key={key++} className="my-4 pl-4 italic" style={{ borderLeft: '2px solid hsl(25 80% 28%)', color: 'hsl(15 4% 55%)' }}>
-          {parseInline(line.slice(2))}
-        </blockquote>
-      );
-    } else if (line.startsWith('- ')) {
-      nodes.push(
-        <div key={key++} className="flex gap-2 my-1" style={{ color: 'hsl(15 4% 68%)' }}>
-          <span style={{ color: 'hsl(25 80% 38%)', flexShrink: 0 }}>·</span>
-          <span>{parseInline(line.slice(2))}</span>
-        </div>
-      );
-    } else if (line.startsWith('---')) {
-      nodes.push(<div key={key++} className="forge-divider my-6" />);
-    } else if (line.trim() === '') {
-      nodes.push(<div key={key++} style={{ height: '0.6rem' }} />);
-    } else {
-      nodes.push(
-        <p key={key++} className="leading-relaxed" style={{ color: 'hsl(15 4% 72%)', marginBottom: '0.15rem' }}>
-          {parseInline(line)}
-        </p>
-      );
-    }
-  }
-
-  return nodes;
-}
-
-// ─── Image Gallery ────────────────────────────────────────────────────────────
-
-function ImageGallery({ images }: { images: string[] }) {
-  const [lightbox, setLightbox] = useState<string | null>(null);
-  if (images.length === 0) return null;
-
-  return (
-    <>
-      <div className="flex gap-3 flex-wrap mt-6">
-        {images.map((url, i) => (
-          <div
-            key={i}
-            className="cursor-pointer overflow-hidden flex-shrink-0"
-            style={{ width: '80px', height: '80px', borderRadius: '4px', border: '1px solid hsl(15 8% 14%)', transition: 'border-color 0.2s' }}
-            onClick={() => setLightbox(url)}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'hsl(25 60% 28%)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'hsl(15 8% 14%)')}
-          >
-            <img src={url} alt="" className="w-full h-full object-cover" />
-          </div>
-        ))}
-      </div>
-
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-8 cursor-pointer"
-          style={{ background: 'rgba(0,0,0,0.92)' }}
-          onClick={() => setLightbox(null)}
-        >
-          <img src={lightbox} alt="" className="max-w-full max-h-full object-contain" style={{ borderRadius: '6px' }} />
-        </div>
-      )}
-    </>
-  );
-}
-
-// ─── Session Card ─────────────────────────────────────────────────────────────
+// ─── Session Index Card ────────────────────────────────────────────────────────
 
 function SessionCard({ session, index }: { session: SessionEntry; index: number }) {
-  const [expanded, setExpanded] = useState(false);
-
   const formattedDate = session.date
     ? new Date(session.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : null;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.06, duration: 0.5, ease: 'easeOut' }}
+      transition={{ delay: index * 0.05, duration: 0.45, ease: 'easeOut' }}
     >
-      <div style={{ background: 'hsl(15 6% 8%)', border: '1px solid hsl(15 8% 14%)', borderRadius: '6px', overflow: 'hidden' }}>
-
-        {/* Hero image */}
-        {session.imageUrl && (
-          <div className="relative" style={{ height: '260px', overflow: 'hidden' }}>
-            <img src={session.imageUrl} alt={session.title} className="w-full h-full object-cover" style={{ opacity: 0.5 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, rgba(0,0,0,0.1) 60%)' }} />
-          </div>
-        )}
-
-        <div className="p-8">
-          {/* Session number */}
-          <div className="flex items-center gap-4 mb-5">
-            <span className="font-display uppercase tracking-[0.3em]" style={{ fontSize: '0.6rem', color: 'hsl(25 80% 38%)' }}>Session</span>
-            <span className="font-serif font-black" style={{ fontSize: '2.8rem', color: 'hsl(25 100% 38%)', lineHeight: 1 }}>{session.number}</span>
-            <div className="flex-1" style={{ height: '1px', background: 'linear-gradient(to right, hsl(25 60% 20%), transparent)' }} />
-          </div>
-
-          {/* Title */}
-          <h2 className="font-serif font-black uppercase tracking-wide mb-4 leading-tight" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.9rem)', color: 'hsl(15 4% 92%)' }}>
-            {session.title}
-          </h2>
-
-          {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-3 mb-5">
-            {formattedDate && (
-              <span className="font-display text-xs uppercase tracking-[0.2em]" style={{ color: 'hsl(15 4% 38%)' }}>
-                {formattedDate}
+      <Link href={`/sessions/${session.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+        <div
+          className="overflow-hidden transition-all duration-200"
+          style={{
+            background: 'hsl(15 6% 8%)',
+            border: '1px solid hsl(15 8% 14%)',
+            borderRadius: '6px',
+            cursor: 'pointer',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLDivElement).style.borderColor = 'hsl(25 60% 22%)';
+            (e.currentTarget as HTMLDivElement).style.background = 'hsl(15 6% 9%)';
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLDivElement).style.borderColor = 'hsl(15 8% 14%)';
+            (e.currentTarget as HTMLDivElement).style.background = 'hsl(15 6% 8%)';
+          }}
+        >
+          {/* Hero thumbnail */}
+          {session.imageUrl ? (
+            <div className="relative" style={{ height: '150px', overflow: 'hidden' }}>
+              <img
+                src={session.imageUrl}
+                alt={session.title}
+                className="w-full h-full object-cover"
+                style={{ opacity: 0.45, objectPosition: session.imagePosition ?? 'center center' }}
+              />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, transparent 55%)' }} />
+              {/* Session number badge */}
+              <div className="absolute" style={{ top: '0.8rem', left: '1rem' }}>
+                <span className="font-display uppercase tracking-[0.3em]" style={{ fontSize: '0.5rem', color: 'hsl(25 80% 48%)', display: 'block', lineHeight: 1 }}>
+                  Session
+                </span>
+                <span className="font-serif font-black" style={{ fontSize: '2.4rem', color: 'hsl(25 100% 44%)', lineHeight: 1, textShadow: '0 0 30px hsl(25 80% 14%)' }}>
+                  {session.number}
+                </span>
+              </div>
+            </div>
+          ) : (
+            /* No hero — dark panel with number */
+            <div className="relative flex items-center" style={{ height: '72px', padding: '0 1.5rem', background: 'hsl(15 6% 7%)' }}>
+              <span className="font-display uppercase tracking-[0.3em]" style={{ fontSize: '0.5rem', color: 'hsl(25 60% 32%)', marginRight: '0.75rem' }}>
+                Session
               </span>
-            )}
-            {session.audioUrl && (
-              <a
-                href={session.audioUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 font-display text-xs uppercase tracking-wider px-3 py-1.5 transition-all duration-200"
-                style={{ background: 'hsl(25 100% 38%)15', border: '1px solid hsl(25 100% 38%)40', borderRadius: '3px', color: 'hsl(25 100% 42%)', textDecoration: 'none' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'hsl(25 100% 38%)28')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'hsl(25 100% 38%)15')}
-              >
-                <Volume2 size={11} />
-                Listen
-              </a>
-            )}
-          </div>
-
-          {/* Summary */}
-          <p className="font-serif italic mb-5" style={{ color: 'hsl(15 4% 52%)', fontSize: '1.05rem', lineHeight: 1.65 }}>
-            {session.summary}
-          </p>
-
-          {/* Expanded content */}
-          {expanded && (
-            <div className="mt-4 mb-6" style={{ fontSize: '0.96rem', lineHeight: 1.85 }}>
-              {renderSessionContent(session.content)}
-              <ImageGallery images={session.images} />
+              <span className="font-serif font-black" style={{ fontSize: '2.6rem', color: 'hsl(25 80% 32%)', lineHeight: 1 }}>
+                {session.number}
+              </span>
+              <div className="flex-1 ml-4" style={{ height: '1px', background: 'linear-gradient(to right, hsl(25 40% 16%), transparent)' }} />
             </div>
           )}
 
-          {/* Toggle */}
-          <button
-            onClick={() => setExpanded(e => !e)}
-            className="flex items-center gap-2 font-display text-xs uppercase tracking-[0.2em] transition-colors duration-200"
-            style={{ color: expanded ? 'hsl(15 4% 38%)' : 'hsl(25 80% 38%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-          >
-            {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-            {expanded ? 'Collapse' : 'Read the Recap'}
-          </button>
+          {/* Content */}
+          <div style={{ padding: '1rem 1.5rem 1.2rem' }}>
+            <h2 className="font-serif font-black uppercase tracking-wide leading-tight mb-2" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: 'hsl(15 4% 90%)' }}>
+              {session.title}
+            </h2>
 
-          {/* Collapsed image count */}
-          {!expanded && session.images.length > 0 && (
-            <div className="flex items-center gap-2 mt-3">
-              <ImageIcon size={11} style={{ color: 'hsl(15 4% 28%)' }} />
-              <span className="font-display text-[10px] uppercase tracking-wider" style={{ color: 'hsl(15 4% 28%)' }}>
-                {session.images.length} image{session.images.length !== 1 ? 's' : ''}
-              </span>
+            {/* Meta badges */}
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              {formattedDate && (
+                <div className="flex items-center gap-1">
+                  <Calendar size={9} style={{ color: 'hsl(15 4% 32%)' }} />
+                  <span className="font-display text-[10px] uppercase tracking-[0.15em]" style={{ color: 'hsl(15 4% 36%)' }}>
+                    {formattedDate}
+                  </span>
+                </div>
+              )}
+              {session.audioUrl && (
+                <span className="flex items-center gap-1 font-display text-[10px] uppercase tracking-wider px-2 py-0.5"
+                  style={{ background: 'hsl(25 100% 38%)10', border: '1px solid hsl(25 100% 38%)30', borderRadius: '3px', color: 'hsl(25 80% 40%)' }}>
+                  <Volume2 size={9} /> Audio
+                </span>
+              )}
+              {session.images.length > 0 && (
+                <span className="flex items-center gap-1 font-display text-[10px] uppercase tracking-wider"
+                  style={{ color: 'hsl(15 4% 30%)' }}>
+                  <ImageIcon size={9} /> {session.images.length}
+                </span>
+              )}
             </div>
-          )}
+
+            <p className="font-serif italic mb-3" style={{ color: 'hsl(15 4% 50%)', fontSize: '0.9rem', lineHeight: 1.6,
+              display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              {session.summary}
+            </p>
+
+            <span className="font-display text-[10px] uppercase tracking-[0.22em]" style={{ color: 'hsl(25 80% 36%)' }}>
+              Read the Recap →
+            </span>
+          </div>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// ─── Sessions Index Page ───────────────────────────────────────────────────────
 
 export function Sessions() {
   const [sessions, setSessions] = useState<SessionEntry[]>([]);
@@ -224,13 +146,13 @@ export function Sessions() {
       {error ? (
         <p className="font-display italic text-center py-20" style={{ color: 'hsl(15 4% 40%)' }}>{error}</p>
       ) : loading ? (
-        <div className="space-y-6">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} style={{ height: '180px', background: 'hsl(15 6% 8%)', borderRadius: '6px', border: '1px solid hsl(15 8% 14%)', opacity: 0.5 }} />
+        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} style={{ height: '240px', background: 'hsl(15 6% 8%)', borderRadius: '6px', border: '1px solid hsl(15 8% 14%)', opacity: 0.4 }} />
           ))}
         </div>
       ) : (
-        <div className="space-y-8">
+        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
           {sessions.map((session, i) => (
             <SessionCard key={session.id} session={session} index={i} />
           ))}

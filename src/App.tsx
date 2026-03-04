@@ -12,6 +12,7 @@ import { Stats } from './pages/Stats';
 import { Journal } from './pages/Journal';
 import { CityView } from './pages/CityView';
 import { Sessions } from './pages/Sessions';
+import { SessionDetail } from './pages/SessionDetail';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/lore" component={LoreList} />
           <Route path="/characters" component={() => <EntityList type="PC" />} />
           <Route path="/sessions" component={Sessions} />
+          <Route path="/sessions/:slug" component={SessionDetail} />
           <Route path="/timeline" component={Timeline} />
           <Route path="/stats" component={Stats} />
           <Route path="/journal" component={Journal} />

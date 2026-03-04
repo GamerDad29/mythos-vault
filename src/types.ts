@@ -38,6 +38,7 @@ export interface SessionEntry {
   summary: string;
   content: string;
   imageUrl: string | null;
+  imagePosition?: string;   // CSS object-position e.g. "50% 20%"
   images: string[];
   audioUrl: string | null;
   tags: string[];
