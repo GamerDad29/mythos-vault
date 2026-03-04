@@ -34,8 +34,8 @@ export function Header() {
     ...TOOL_NAV,
   ];
 
-  function handleLogin() {
-    if (login(password)) {
+  async function handleLogin() {
+    if (await login(password)) {
       setShowLogin(false);
       setPassword('');
       setLoginError(false);
