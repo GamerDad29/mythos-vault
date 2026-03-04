@@ -438,8 +438,7 @@
         "wizards",
         "concordat"
       ],
-      "publishedAt": "2026-02-27T00:00:00.000Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-the-crimson-concordat.jpg"
+      "publishedAt": "2026-02-27T00:00:00.000Z"
     },
     {
       "id": "faction-the-verdant-accord",
@@ -471,7 +470,8 @@
         "brotherhood",
         "covenant"
       ],
-      "publishedAt": "2026-02-27T00:00:00.000Z"
+      "publishedAt": "2026-02-27T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-the-spire-covenant.jpg"
     },
     {
       "id": "monster-the-symposium",
@@ -1121,5 +1121,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-04T04:04:08.958Z"
+  "updatedAt": "2026-03-04T04:04:17.600Z"
 }
