@@ -1,4 +1,4 @@
-import type { VaultIndex, VaultEntity } from './types';
+import type { VaultIndex, VaultEntity, SessionEntry, SessionsIndex } from './types';
 import { TYPE_VAULT_FOLDER } from './types';
 
 // Config — points to the vault folder in the mythos-vault repo
@@ -48,6 +48,12 @@ export const vaultService = {
     return results
       .filter((r): r is PromiseFulfilledResult<VaultEntity> => r.status === 'fulfilled')
       .map(r => r.value);
+  },
+
+  // Fetch all session recaps
+  async getSessions(): Promise<SessionEntry[]> {
+    const index = await fetchJson<SessionsIndex>(`${GITHUB_RAW_BASE}/sessions/index.json`);
+    return index.sessions;
   },
 
   // Clear cache (useful for dev)

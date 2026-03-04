@@ -29,6 +29,24 @@ export interface VaultIndex {
 // Stub is the full entity minus the heavy fields — single source of truth
 export type VaultEntityStub = Omit<VaultEntity, 'content' | 'source'>;
 
+export interface SessionEntry {
+  number: number;
+  id: string;
+  slug: string;
+  title: string;
+  date: string | null;
+  summary: string;
+  content: string;
+  imageUrl: string | null;
+  images: string[];
+  audioUrl: string | null;
+  tags: string[];
+}
+
+export interface SessionsIndex {
+  sessions: SessionEntry[];
+}
+
 // Faction colors from Replitv2 design system
 export const FACTION_COLORS: Record<string, string> = {
   'iron-order': '#ff6600',
