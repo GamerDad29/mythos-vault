@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { EntityList } from './pages/EntityList';
 import { LocationList } from './pages/LocationList';
 import { FactionList } from './pages/FactionList';
+import { LoreList } from './pages/LoreList';
 import { EntityDetail } from './pages/EntityDetail';
 import { Timeline } from './pages/Timeline';
 import { Stats } from './pages/Stats';
@@ -26,7 +27,7 @@ export default function App() {
           <Route path="/locations" component={LocationList} />
           <Route path="/factions" component={FactionList} />
           <Route path="/items" component={() => <EntityList type="ITEM" groupBy="category" />} />
-          <Route path="/lore" component={() => <EntityList type="LORE" />} />
+          <Route path="/lore" component={LoreList} />
           <Route path="/characters" component={() => <EntityList type="PC" />} />
           <Route path="/sessions" component={Sessions} />
           <Route path="/timeline" component={Timeline} />
