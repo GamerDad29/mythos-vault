@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { ChevronRight, User, Swords, MapPin, Shield, Package, Scroll, Users } from 'lucide-react';
@@ -7,6 +7,7 @@ import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
 import type { VaultEntityStub } from '../types';
 import { tokens } from '../tokens';
+import { useAuth } from '../contexts/AuthContext';
 
 const SECTIONS = [
   { label: 'NPCs',       href: '/npcs',       desc: 'Characters encountered in the Underdark', Icon: User },
@@ -35,20 +36,25 @@ const SPARKS = [
 ];
 
 export function Home() {
-  const [recent, setRecent] = useState<VaultEntityStub[]>([]);
+  const [allEntities, setAllEntities] = useState<VaultEntityStub[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { isDM } = useAuth();
+
   useEffect(() => {
     vaultService.getIndex()
-      .then(index => {
-        const sorted = [...index.entities].filter(e => !e.hidden).sort(
-          (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-        );
-        setRecent(sorted.slice(0, 6));
-      })
+      .then(index => setAllEntities(index.entities))
       .catch(() => setError('The Vault is sealed. No entries found.'))
       .finally(() => setLoading(false));
   }, []);
+
+  const recent = useMemo(() =>
+    [...allEntities]
+      .filter(e => isDM || !e.hidden)
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+      .slice(0, 6),
+    [allEntities, isDM],
+  );
 
   return (
     <div className="min-h-screen">

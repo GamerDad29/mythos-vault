@@ -1,3 +1,4 @@
+import { EyeOff } from 'lucide-react';
 import type { VaultEntityStub } from '../types';
 
 function parseInline(text: string): string {
@@ -31,7 +32,7 @@ export function stripHiddenBlocks(text: string): string {
   return text.replace(/\[HIDDEN\][\s\S]*?\[\/HIDDEN\]/gi, '').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-export function renderContent(text: string, accentColor: string, stubs: VaultEntityStub[] = [], currentId: string = ''): React.ReactNode[] {
+export function renderContent(text: string, accentColor: string, stubs: VaultEntityStub[] = [], currentId: string = '', onHideSection?: (title: string) => void): React.ReactNode[] {
   const lines = text.split('\n');
   const nodes: React.ReactNode[] = [];
   let i = 0;
@@ -69,12 +70,54 @@ export function renderContent(text: string, accentColor: string, stubs: VaultEnt
 
     // ## Section header
     if (line.startsWith('## ')) {
+      const title = line.slice(3).trim();
       nodes.push(
-        <div key={k++} className="mt-8 mb-3">
+        <div
+          key={k++}
+          className="mt-8 mb-3"
+          style={{ position: 'relative' }}
+          onMouseEnter={onHideSection ? e => {
+            const btn = (e.currentTarget as HTMLElement).querySelector('.dm-section-btn') as HTMLElement | null;
+            if (btn) btn.style.opacity = '1';
+          } : undefined}
+          onMouseLeave={onHideSection ? e => {
+            const btn = (e.currentTarget as HTMLElement).querySelector('.dm-section-btn') as HTMLElement | null;
+            if (btn) btn.style.opacity = '0';
+          } : undefined}
+        >
           <p className="font-serif text-xs uppercase tracking-[0.25em]" style={{ color: accentColor }}>
-            {line.slice(3).trim()}
+            {title}
           </p>
           <div className="forge-divider mt-1" />
+          {onHideSection && (
+            <button
+              className="dm-section-btn"
+              onClick={() => onHideSection(title)}
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                opacity: 0,
+                transition: 'opacity 0.15s',
+                background: 'rgba(10,8,6,0.9)',
+                border: '1px solid hsl(25 80% 30%)',
+                borderRadius: '3px',
+                color: 'hsl(25 100% 50%)',
+                cursor: 'pointer',
+                padding: '2px 7px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontFamily: 'serif',
+                fontSize: '10px',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+              }}
+            >
+              <EyeOff size={10} />
+              Hide
+            </button>
+          )}
         </div>
       );
       i++;

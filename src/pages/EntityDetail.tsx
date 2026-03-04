@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useRoute, useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Eye, EyeOff } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { SkeletonHero } from '../components/Skeleton';
 import type { VaultEntity, VaultEntityStub } from '../types';
 import { FACTION_COLORS, TYPE_URL_SEGMENT, URL_SEGMENT_TO_TYPE } from '../types';
 import { renderContent, stripHiddenBlocks } from '../utils/renderContent';
+import { useAuth } from '../contexts/AuthContext';
+import { toggleEntityHidden, toggleSectionHidden } from '../services/githubService';
 
 const TYPE_PLURALS: Record<string, string> = {
   npcs: 'NPCs',
@@ -17,6 +19,103 @@ const TYPE_PLURALS: Record<string, string> = {
   lore: 'Lore',
   pcs: 'Characters',
 };
+
+// Parse raw content into visible and [HIDDEN] segments
+function parseContentSegments(content: string): Array<{ type: 'visible' | 'hidden'; text: string }> {
+  const segments: Array<{ type: 'visible' | 'hidden'; text: string }> = [];
+  const regex = /\[HIDDEN\]([\s\S]*?)\[\/HIDDEN\]/gi;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(content)) !== null) {
+    const visText = content.slice(lastIndex, match.index).trim();
+    if (visText) segments.push({ type: 'visible', text: visText });
+    const hidText = match[1].trim();
+    if (hidText) segments.push({ type: 'hidden', text: hidText });
+    lastIndex = match.index + match[0].length;
+  }
+
+  const remaining = content.slice(lastIndex).trim();
+  if (remaining) segments.push({ type: 'visible', text: remaining });
+  return segments;
+}
+
+interface DMHiddenPanelProps {
+  content: string;
+  accentColor: string;
+  stubs: VaultEntityStub[];
+  entityId: string;
+  onReveal: () => void;
+}
+
+function DMHiddenPanel({ content, accentColor, stubs, entityId, onReveal }: DMHiddenPanelProps) {
+  const [expanded, setExpanded] = useState(false);
+  const sectionTitle = content.match(/^## (.+)$/m)?.[1] || 'Hidden Content';
+
+  return (
+    <div
+      style={{
+        border: '1px solid hsl(25 80% 25%)',
+        borderRadius: '4px',
+        background: 'rgba(201,168,76,0.05)',
+        marginBottom: '1rem',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Panel header */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.6rem 1rem',
+          cursor: 'pointer',
+          borderBottom: expanded ? '1px solid hsl(25 80% 18%)' : 'none',
+        }}
+        onClick={() => setExpanded(e => !e)}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Eye size={13} style={{ color: 'hsl(25 100% 50%)' }} />
+          <span
+            className="font-serif uppercase"
+            style={{ color: 'hsl(25 100% 55%)', fontSize: '10px', letterSpacing: '0.2em' }}
+          >
+            DM Only — {sectionTitle}
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
+            onClick={e => { e.stopPropagation(); onReveal(); }}
+            style={{
+              background: 'rgba(201,168,76,0.15)',
+              border: '1px solid hsl(25 100% 38%)',
+              borderRadius: '3px',
+              color: 'hsl(25 100% 55%)',
+              padding: '2px 8px',
+              fontSize: '10px',
+              fontFamily: 'serif',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+            }}
+          >
+            Reveal to Players
+          </button>
+          <span style={{ color: 'hsl(25 80% 40%)', fontSize: '12px' }}>
+            {expanded ? '▲' : '▼'}
+          </span>
+        </div>
+      </div>
+
+      {/* Panel content */}
+      {expanded && (
+        <div style={{ padding: '1rem' }}>
+          {renderContent(content, accentColor, stubs, entityId)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function EntityDetail() {
   const [, params] = useRoute('/:type/:slug');
@@ -29,14 +128,13 @@ export function EntityDetail() {
   const [error, setError] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
   const [indexStubs, setIndexStubs] = useState<VaultEntityStub[]>([]);
+  const { isDM } = useAuth();
 
   useEffect(() => {
     if (!type || !slug) return;
     setLoading(true);
     vaultService.getEntity(type, slug)
-      .then(e => {
-        setEntity(e);
-      })
+      .then(e => setEntity(e))
       .catch(() => setError('This entry has not been revealed.'))
       .finally(() => setLoading(false));
   }, [type, slug]);
@@ -50,6 +148,39 @@ export function EntityDetail() {
 
   const factionColor = entity?.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || (entity?.type === 'PC' ? 'hsl(200 70% 45%)' : 'hsl(25 100% 38%)');
+
+  const pat = import.meta.env.VITE_GITHUB_PAT as string;
+
+  async function handleToggleEntityHidden() {
+    if (!entity) return;
+    const newHidden = !entity.hidden;
+    setEntity(e => e ? { ...e, hidden: newHidden } : null);
+    try {
+      await toggleEntityHidden(entity, newHidden, pat);
+    } catch {
+      setEntity(e => e ? { ...e, hidden: !newHidden } : null);
+    }
+  }
+
+  async function handleHideSection(sectionTitle: string) {
+    if (!entity) return;
+    try {
+      const newContent = await toggleSectionHidden(entity, sectionTitle, true, pat);
+      setEntity(e => e ? { ...e, content: newContent } : null);
+    } catch (err) {
+      console.error('Failed to hide section:', err);
+    }
+  }
+
+  async function handleRevealSection(sectionTitle: string) {
+    if (!entity) return;
+    try {
+      const newContent = await toggleSectionHidden(entity, sectionTitle, false, pat);
+      setEntity(e => e ? { ...e, content: newContent } : null);
+    } catch (err) {
+      console.error('Failed to reveal section:', err);
+    }
+  }
 
   // Related entries — priority: same faction > same location > same city > same type
   const seen = new Set<string>();
@@ -95,7 +226,8 @@ export function EntityDetail() {
     );
   }
 
-  if (entity?.hidden) {
+  // Non-DM locked view
+  if (entity?.hidden && !isDM) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center px-6">
         <div>
@@ -125,7 +257,10 @@ export function EntityDetail() {
     );
   }
 
-  const displayContent = stripHiddenBlocks(entity.content);
+  // Content — DM sees raw (with [HIDDEN] blocks), players see stripped
+  const rawContent = entity.content;
+  const displayContent = isDM ? rawContent : stripHiddenBlocks(rawContent);
+  const contentSegments = isDM ? parseContentSegments(rawContent) : null;
 
   return (
     <div className="min-h-screen">
@@ -164,7 +299,7 @@ export function EntityDetail() {
           transition={{ duration: 0.5 }}
           className="overflow-hidden mb-12"
           style={{
-            border: `1px solid ${accentColor}33`,
+            border: `1px solid ${isDM && entity.hidden ? 'hsl(25 80% 28%)' : accentColor + '33'}`,
             borderRadius: '4px',
             background: `linear-gradient(135deg, rgba(20,16,12,1) 0%, hsl(20 6% 10%) 100%)`,
             boxShadow: `0 0 60px -20px ${accentColor}22`,
@@ -185,17 +320,14 @@ export function EntityDetail() {
                     style={{ minHeight: '280px', display: 'block' }}
                     onError={() => setImgError(true)}
                   />
-                  {/* Right-edge fade into hero content — desktop */}
                   <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{
                     width: '100px',
                     background: 'linear-gradient(to right, transparent, rgba(18,14,10,0.97))',
                   }} />
-                  {/* Bottom fade — mobile */}
                   <div className="absolute inset-x-0 bottom-0 pointer-events-none md:hidden" style={{
                     height: '80px',
                     background: 'linear-gradient(to bottom, transparent, rgba(18,14,10,0.97))',
                   }} />
-                  {/* Corner vignette */}
                   <div className="absolute inset-0 pointer-events-none" style={{
                     background: 'radial-gradient(ellipse at 30% 50%, transparent 40%, rgba(0,0,0,0.4) 100%)',
                   }} />
@@ -271,6 +403,33 @@ export function EntityDetail() {
                   ))}
                 </div>
               )}
+
+              {/* DM: entity-level toggle */}
+              {isDM && (
+                <div className="mt-6">
+                  <button
+                    onClick={handleToggleEntityHidden}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: entity.hidden ? 'rgba(201,168,76,0.15)' : 'transparent',
+                      border: `1px solid hsl(25 100% 38%)`,
+                      borderRadius: '3px',
+                      color: 'hsl(25 100% 55%)',
+                      padding: '4px 12px',
+                      fontFamily: 'serif',
+                      fontSize: '11px',
+                      letterSpacing: '0.2em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {entity.hidden ? <Eye size={12} /> : <EyeOff size={12} />}
+                    {entity.hidden ? 'Show to Players' : 'Hide from Players'}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
@@ -299,7 +458,31 @@ export function EntityDetail() {
                 }
               }}
             >
-              {renderContent(displayContent, accentColor, indexStubs, entity.id)}
+              {isDM && contentSegments ? (
+                /* DM view: segmented content with hidden panels */
+                contentSegments.map((seg, i) =>
+                  seg.type === 'hidden' ? (
+                    <DMHiddenPanel
+                      key={i}
+                      content={seg.text}
+                      accentColor={accentColor}
+                      stubs={indexStubs}
+                      entityId={entity.id}
+                      onReveal={() => {
+                        const title = seg.text.match(/^## (.+)$/m)?.[1] || '';
+                        if (title) handleRevealSection(title);
+                      }}
+                    />
+                  ) : (
+                    <div key={i}>
+                      {renderContent(seg.text, accentColor, indexStubs, entity.id, handleHideSection)}
+                    </div>
+                  )
+                )
+              ) : (
+                /* Player view: stripped content */
+                renderContent(displayContent, accentColor, indexStubs, entity.id)
+              )}
             </div>
           </div>
 
@@ -339,6 +522,14 @@ export function EntityDetail() {
                     {new Date(entity.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                   </p>
                 </div>
+                {isDM && (
+                  <div>
+                    <p className="font-serif text-xs uppercase tracking-wider mb-1" style={{ color: 'hsl(15 4% 40%)' }}>Visibility</p>
+                    <p className="font-sans text-sm" style={{ color: entity.hidden ? 'hsl(25 100% 50%)' : 'hsl(120 40% 45%)', fontSize: '15px' }}>
+                      {entity.hidden ? 'Hidden from players' : 'Visible to players'}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 

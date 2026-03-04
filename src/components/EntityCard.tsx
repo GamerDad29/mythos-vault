@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { User, MapPin, Shield, Package, Scroll, Swords } from 'lucide-react';
+import { User, MapPin, Shield, Package, Scroll, Swords, Eye, EyeOff } from 'lucide-react';
 import type { VaultEntityStub } from '../types';
 import { FACTION_COLORS, TYPE_URL_SEGMENT } from '../types';
 import { vaultService } from '../vaultService';
@@ -19,13 +19,16 @@ const TYPE_ICON: Record<string, React.ReactNode> = {
 interface Props {
   entity: VaultEntityStub;
   index?: number;
+  isDM?: boolean;
+  onToggleHidden?: (hidden: boolean) => void;
 }
 
-export function EntityCard({ entity, index = 0 }: Props) {
+export function EntityCard({ entity, index = 0, isDM, onToggleHidden }: Props) {
   const [imgError, setImgError] = useState(false);
   const factionColor = entity.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || 'hsl(25 100% 40%)';
   const href = `/${TYPE_URL_SEGMENT[entity.type] ?? entity.type.toLowerCase() + 's'}/${entity.slug}`;
+  const isHidden = entity.hidden;
 
   return (
     <motion.div
@@ -39,21 +42,21 @@ export function EntityCard({ entity, index = 0 }: Props) {
           className="group cursor-pointer overflow-hidden"
           style={{
             background: tokens.color.bg.card,
-            border: `1px solid ${tokens.color.border.default}`,
+            border: `1px solid ${isDM && isHidden ? 'hsl(25 80% 22%)' : tokens.color.border.default}`,
             borderRadius: tokens.radius.card,
             transition: tokens.transition.card,
+            opacity: isDM && isHidden ? 0.75 : 1,
           }}
           onMouseEnter={e => {
             const el = e.currentTarget as HTMLElement;
             el.style.borderColor = `${accentColor}55`;
             el.style.transform = 'translateY(-4px)';
             el.style.boxShadow = tokens.shadow.cardHover(accentColor);
-            // Prefetch full entity so navigation is instant
             vaultService.getEntity(entity.type, entity.slug).catch(() => {});
           }}
           onMouseLeave={e => {
             const el = e.currentTarget as HTMLElement;
-            el.style.borderColor = tokens.color.border.default;
+            el.style.borderColor = isDM && isHidden ? 'hsl(25 80% 22%)' : tokens.color.border.default;
             el.style.transform = 'translateY(0)';
             el.style.boxShadow = 'none';
           }}
@@ -103,6 +106,24 @@ export function EntityCard({ entity, index = 0 }: Props) {
             >
               {entity.type}
             </div>
+
+            {/* DM: HIDDEN badge */}
+            {isDM && isHidden && (
+              <div
+                className="absolute top-3 right-3 font-serif uppercase tracking-[0.15em]"
+                style={{
+                  background: 'rgba(201,168,76,0.15)',
+                  border: '1px solid hsl(25 100% 38%)',
+                  color: 'hsl(25 100% 55%)',
+                  borderRadius: '2px',
+                  fontSize: '9px',
+                  padding: '2px 6px',
+                  letterSpacing: '0.2em',
+                }}
+              >
+                Hidden
+              </div>
+            )}
           </div>
 
           {/* Content */}
@@ -152,6 +173,33 @@ export function EntityCard({ entity, index = 0 }: Props) {
         </div>
       </Link>
 
+      {/* DM: visibility toggle button — outside Link so it doesn't navigate */}
+      {isDM && onToggleHidden && (
+        <button
+          onClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            onToggleHidden(!isHidden);
+          }}
+          title={isHidden ? 'Reveal to players' : 'Hide from players'}
+          style={{
+            position: 'absolute',
+            bottom: '14px',
+            right: '14px',
+            background: 'rgba(10,8,6,0.9)',
+            border: `1px solid ${isHidden ? 'hsl(25 100% 40%)' : 'hsl(15 8% 22%)'}`,
+            borderRadius: '4px',
+            color: isHidden ? 'hsl(25 100% 55%)' : 'hsl(15 4% 40%)',
+            cursor: 'pointer',
+            padding: '4px 6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {isHidden ? <Eye size={13} /> : <EyeOff size={13} />}
+        </button>
+      )}
     </motion.div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Search, X, Lock } from 'lucide-react';
 import Fuse from 'fuse.js';
@@ -6,6 +6,8 @@ import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
 import type { VaultEntityStub } from '../types';
+import { useAuth } from '../contexts/AuthContext';
+import { toggleEntityHidden } from '../services/githubService';
 
 function toGroupLabel(key: string | undefined, groupBy: string): string {
   if (!key) return groupBy === 'cityId' ? 'Unaffiliated' : 'Other';
@@ -105,6 +107,7 @@ export function EntityList({ type, groupBy }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
+  const { isDM } = useAuth();
 
   const meta = TYPE_LABELS[type] || { plural: type + 's', desc: '' };
   const accentColor = 'hsl(25 100% 38%)';
@@ -178,6 +181,16 @@ export function EntityList({ type, groupBy }: Props) {
       return next;
     });
   }
+
+  const handleToggleHidden = useCallback((entity: VaultEntityStub, hidden: boolean) => {
+    // Optimistic update
+    setEntities(prev => prev.map(e => e.id === entity.id ? { ...e, hidden } : e));
+    const pat = import.meta.env.VITE_GITHUB_PAT as string;
+    toggleEntityHidden(entity, hidden, pat).catch(() => {
+      // Revert on failure
+      setEntities(prev => prev.map(e => e.id === entity.id ? { ...e, hidden: !hidden } : e));
+    });
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
@@ -324,10 +337,16 @@ export function EntityList({ type, groupBy }: Props) {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {items.map((entity, i) =>
-                  entity.hidden ? (
+                  entity.hidden && !isDM ? (
                     <LockedCard key={entity.id} entity={entity} index={i} />
                   ) : (
-                    <EntityCard key={entity.id} entity={entity} index={i} />
+                    <EntityCard
+                      key={entity.id}
+                      entity={entity}
+                      index={i}
+                      isDM={isDM}
+                      onToggleHidden={isDM ? (hidden) => handleToggleHidden(entity, hidden) : undefined}
+                    />
                   )
                 )}
               </div>
@@ -344,10 +363,16 @@ export function EntityList({ type, groupBy }: Props) {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filtered.map((entity, i) =>
-              entity.hidden ? (
+              entity.hidden && !isDM ? (
                 <LockedCard key={entity.id} entity={entity} index={i} />
               ) : (
-                <EntityCard key={entity.id} entity={entity} index={i} />
+                <EntityCard
+                  key={entity.id}
+                  entity={entity}
+                  index={i}
+                  isDM={isDM}
+                  onToggleHidden={isDM ? (hidden) => handleToggleHidden(entity, hidden) : undefined}
+                />
               )
             )}
           </div>

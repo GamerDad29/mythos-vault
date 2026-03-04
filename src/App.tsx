@@ -1,4 +1,5 @@
 import { Switch, Route } from 'wouter';
+import { AuthProvider } from './contexts/AuthContext';
 import { Header } from './components/Header';
 import { Home } from './pages/Home';
 import { EntityList } from './pages/EntityList';
@@ -12,6 +13,7 @@ import { NotFound } from './pages/NotFound';
 
 export default function App() {
   return (
+    <AuthProvider>
     <div className="min-h-screen" style={{ background: 'hsl(15 6% 8%)' }}>
       <Header />
       <main>
@@ -33,5 +35,6 @@ export default function App() {
         </Switch>
       </main>
     </div>
+    </AuthProvider>
   );
 }
