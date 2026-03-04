@@ -1,6 +1,6 @@
 # Mythos Vault — Backlog
 
-_Last updated: 2026-03-03 (Session 7)_
+_Last updated: 2026-03-04 (Session 9)_
 
 > Phased by dependency and complexity, not by the original request batches.
 > Engineering Workflow applied: inspect → clarify → plan → implement.
@@ -136,28 +136,19 @@ Depends on P1 complete. P2 not required to start.
 
 _Source: Mythos Vault Updates.3.3.26.txt_
 
-### P5-0 — Admin Login + DM Hide/Show (PRIORITY)
-- Add a lock icon / "DM" button at top-right of `Header.tsx`
-- On click: prompt for credentials (hard-coded for now, e.g. env var or constant)
-- Auth state stored in React context or localStorage session flag
-- When logged in as DM:
-  - Each entity card/detail gets a HIDE/SHOW toggle (flips `hidden` field)
-  - Each section within `EntityDetail` gets a per-section hide/show toggle
-  - Toggled state persists (localStorage or pushes to GitHub vault JSON via Architect)
-- Logged-out players never see hidden entities or hidden sections
+### P5-0 — Admin Login + DM Hide/Show ✅
+- Lock icon in `Header.tsx` top-right — prompts for DM password
+- Auth state in `AuthContext.tsx` (React context + sessionStorage)
+- When logged in: HIDE/SHOW toggles on entity cards + per-section toggles in EntityDetail
+- Password stored as SHA-256 hash in `vault/config.json` (GitHub raw) — fetched at login time
+- DM manages password from Architect → Settings → "Vault Configuration" section
+- `proxyService.pushToGitHub()` writes `vault/config.json` on password update
+- Falls back to `VITE_DM_PASSWORD` env var if config.json absent
+- P5-0b fully resolved — no build-time env var required for auth
 
-### P5-0b — DM Login: Env Vars for Build (BLOCKED)
-- `VITE_DM_PASSWORD` and `VITE_GITHUB_PAT` are Vite build-time vars — must be set before `npm run build`
-- `wrangler pages secret put` sets runtime secrets only — does NOT work for Vite VITE_* vars
-- Cloudflare dashboard blocked on current network
-- **Fix when ready:** In PowerShell from mythos-vault dir:
-  ```
-  $env:VITE_DM_PASSWORD = Read-Host "DM Password"
-  $env:VITE_GITHUB_PAT = Read-Host "GitHub PAT"
-  npm run build
-  npx wrangler pages deploy dist --project-name=mythos-vault
-  ```
-- Alternatively: set via Cloudflare dashboard Settings → Environment variables (build vars, not secrets)
+### P5-0b — DM Login: Env Vars for Build ✅ (superseded by config.json approach)
+- Original plan (VITE_* build vars) replaced by runtime `vault/config.json` hash fetch
+- No rebuild required to change DM password
 
 ### P5-1 — Nav Re-order ✅
 - Updated `Header.tsx` ENTITY_NAV + mobile drawer to:
@@ -187,18 +178,22 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 - DM toggle support (Eye/EyeOff per card) + `useAuth()` + `toggleEntityHidden`
 - Fixed `vault/cities/hammerhold.json` + `vault/index.json` stub: region underdark → surface
 
-### P5-4 — Factions: Underdark / Surface / Neutral + Sub-grouping
-- Top-level split: **Underdark | Surface | Neutral**
-- Within each: sub-groups **City | Trade | Unaffiliated**
-- Requires `region` + new `alignment` or `affiliation` field on faction data
-- Karnuk factions already done (cityId populated); wire them to the right bucket
-- Neutral = factions like Order of the Cauterized Saint, Ledger Eternal
+### P5-4 — Factions: Underdark / Surface / Neutral + Sub-grouping ✅
+- `src/pages/FactionList.tsx` created — replaces EntityList for `/factions`
+- Three region anchor panels (Underdark/Surface/Neutral) → scroll-to-section
+- Underdark sub-grouped by cityId: Karnuk (6 factions) + Independent (5)
+- Surface: locked placeholder when no visible surface factions
+- Neutral: flat grid (Order of Cauterized Saint, Ledger Eternal)
+- Search/tag filter collapses to flat view
+- **Data note**: all current factions are `region: "underdark"` or no region. Surface bucket is ready when factions with `region: "surface"` are added.
 
-### P5-5 — Lore: Underdark / Surface / Historical + Sub-categories
-- Top-level split: **Underdark | Surface | Historical**
-- Sub-categories: City Lore, Religion, Historical Lore (others TBD)
-- Requires `region` and `loreCategory` field on lore entity data
-- Current lore entries (karnuk-*) are City Lore, Underdark
+### P5-5 — Lore: Underdark / Surface / Historical + Sub-categories ✅
+- `src/pages/LoreList.tsx` created — replaces EntityList for `/lore`
+- Three region anchor panels (Underdark/Surface/Historical) → scroll-to-section
+- Underdark + Historical both sub-group by existing `category` field (no new fields needed)
+- Surface: locked placeholder when hidden/empty
+- Historical: "nothing yet" empty state
+- Current lore (4 karnuk-* entries) lands in Underdark → "Iron Order Legend" sub-group
 
 ### P5-6 — Characters Page (New)
 - New route `/characters` with full player character showcase
@@ -206,12 +201,18 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 - "Super cool presentation" — think hero card with portrait, stats, backstory panels
 - Design TBD until sheet data is available; build data schema first
 
-### P5-7 — Sessions Page (New)
-- New route `/sessions` — session recap feed
-- User has existing recaps for early sessions
-- Display as a story-driven timeline: session number, title, date, recap text
-- Import recaps as vault entities of type SESSION (new type) or as LORE with category "Recap"
-- Data format TBD; build the page shell first, wire content after
+### P5-7 — Sessions Page ✅
+- `/sessions` → compact grid index; `/sessions/:slug` → individual cinematic session pages
+- `SessionDetail.tsx`: full-bleed hero (smart `object-position` per hero image), session number overlay, title at bottom of hero
+- Embedded Google Drive audio iframe (no external navigation)
+- Images distributed intelligently throughout recap content via section-aware algorithm (max 1 per section break; overflow → thumbnail gallery)
+- Per-image `object-position` via `imagePositions?: string[]` parallel array — faces shown, not waists
+- Ken Burns motion on all woven images (4 unique variants cycling by index, 10–13% zoom + directional drift)
+- Hover zoom on index card thumbnails
+- 10 sessions loaded from `vault/sessions/index.json` (sessions 1, 2, 3, 4, 5, 7, 10, 12, 14, 15)
+- Audio available for sessions 1 and 2 (Google Drive)
+- Hero images + woven images for sessions 1, 2, 3, 4, 5, 12
+- Prev/Next navigation on detail page
 
 ---
 
@@ -227,6 +228,15 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 ---
 
 ## Session Log
+
+### 2026-03-04 (Session 9)
+- **P5-0 / P5-0b:** DM password management via Architect Settings → vault/config.json SHA-256 hash. No rebuild needed to rotate password. `AuthContext` fully async; Header login updated to match.
+- **P5-4:** `FactionList.tsx` — Underdark/Surface/Neutral split with cityId sub-grouping
+- **P5-5:** `LoreList.tsx` — Underdark/Surface/Historical split with category sub-grouping
+- **Bug fixes:** `types.ts` VaultEntityStub drift fix (Omit pattern), CityView `as any` casts removed
+- **P5-7 full implementation:** 10 sessions imported from `Session Recaps.txt`; 28 images committed to `images/sessions/`; `vault/sessions/index.json` built; Sessions.tsx + SessionDetail.tsx + `/sessions/:slug` route
+- **Sessions UX iteration:** Expandable cards → individual pages; embedded audio iframe; woven images via section-aware distribution algorithm; Ken Burns motion (4 variants); per-image `object-position` for all portrait images across sessions 1–5 and 12; `imagePositions[]` parallel array in type + data
+- Audio sessions 1+2 wired to Google Drive; hero focal points set per-session
 
 ### 2026-02-27 (Session 1)
 - Backlog created from user-provided task batches (Batches 1, 2, 3)
