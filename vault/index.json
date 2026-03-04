@@ -6,14 +6,15 @@
       "name": "Imala Dresh Korvaine",
       "type": "NPC",
       "category": "Half-Elf Quartermaster-General",
-      "summary": "Half-Elf Quartermaster-General \u00e2\u20ac\u201d The Sundry Roads Confederation",
+      "summary": "Half-Elf Quartermaster-General â€” The Sundry Roads Confederation",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772572724154-3dh32e.jpg",
       "tags": [
         "npc",
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-03-03T21:19:01.949Z"
+      "publishedAt": "2026-03-03T21:19:01.949Z",
+      "hidden": true
     },
     {
       "id": "monster-vrommak-the-unfinished",
@@ -21,7 +22,7 @@
       "name": "Vrommak The Unfinished",
       "type": "CREATURE",
       "category": "Large Giant",
-      "summary": "Large Giant, Chaotic Neutral \u00e2\u20ac\u201d Challenge 6 (2,300 XP)",
+      "summary": "Large Giant, Chaotic Neutral â€” Challenge 6 (2,300 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772559949812-tg2yjt.jpg",
       "tags": [
         "monster",
@@ -51,7 +52,7 @@
       "name": "Mira Cascuel",
       "type": "NPC",
       "category": "Half-Elf Enforcer-Auditor",
-      "summary": "Half-Elf Enforcer-Auditor \u00e2\u20ac\u201d The Verdant Accord (internal affairs division)",
+      "summary": "Half-Elf Enforcer-Auditor â€” The Verdant Accord (internal affairs division)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772416510875-qjavk7.jpg",
       "tags": [
         "npc",
@@ -66,7 +67,7 @@
       "name": "The Last Congregation Of The Unremembered",
       "type": "FACTION",
       "category": "Chaotic Neutral Apostatic Cult",
-      "summary": "Chaotic Neutral Apostatic Cult \u00e2\u20ac\u201d The Ruins Beneath the Pathways Unseen and the Forgotten Quarters of Occupied Cities",
+      "summary": "Chaotic Neutral Apostatic Cult â€” The Ruins Beneath the Pathways Unseen and the Forgotten Quarters of Occupied Cities",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772413933576-pr7tw2.jpg",
       "tags": [
         "faction",
@@ -82,7 +83,7 @@
       "name": "Vaultsworn Sentinel",
       "type": "CREATURE",
       "category": "Medium Construct",
-      "summary": "Medium Construct, Lawful Neutral \u00e2\u20ac\u201d Challenge 7 (2,900 XP)",
+      "summary": "Medium Construct, Lawful Neutral â€” Challenge 7 (2,900 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772413437787-mqxabi.jpg",
       "tags": [
         "monster",
@@ -98,7 +99,7 @@
       "name": "Stonebond Sentinel",
       "type": "CREATURE",
       "category": "Medium Construct",
-      "summary": "Medium Construct, Lawful Neutral \u00e2\u20ac\u201d Challenge 5 (1,800 XP)",
+      "summary": "Medium Construct, Lawful Neutral â€” Challenge 5 (1,800 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772340903923-axgo1g.jpg",
       "tags": [
         "monster",
@@ -113,7 +114,7 @@
       "name": "Recount Eternal",
       "type": "CREATURE",
       "category": "Large Construct",
-      "summary": "Large Construct, Unaligned \u00e2\u20ac\u201d Challenge 9 (5,000 XP)",
+      "summary": "Large Construct, Unaligned â€” Challenge 9 (5,000 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772340423177-ksz77i.jpg",
       "tags": [
         "monster",
@@ -129,7 +130,7 @@
       "name": "Mirrorbound Colossus",
       "type": "CREATURE",
       "category": "Huge Construct",
-      "summary": "Huge Construct, Neutral Evil \u00e2\u20ac\u201d Challenge 13 (10,000 XP)",
+      "summary": "Huge Construct, Neutral Evil â€” Challenge 13 (10,000 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772339597728-u0vwz7.jpg",
       "tags": [
         "monster",
@@ -144,7 +145,7 @@
       "name": "VESPER, THE CONCORDANT HOLLOW",
       "type": "CREATURE",
       "category": "Undead (Shadow-Corrupted)",
-      "summary": "Undead (Shadow-Corrupted) \u00e2\u20ac\u201d Challenge 9 (5,000 XP)",
+      "summary": "Undead (Shadow-Corrupted) â€” Challenge 9 (5,000 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772325550751-6xl9e3.jpg",
       "tags": [
         "monster",
@@ -160,7 +161,7 @@
       "name": "The Enumerated Voice Of Mourne",
       "type": "CREATURE",
       "category": "Humanoid (Human",
-      "summary": "Humanoid (Human, Shadow-Corrupted) \u00e2\u20ac\u201d Challenge 11 (7,200 XP)",
+      "summary": "Humanoid (Human, Shadow-Corrupted) â€” Challenge 11 (7,200 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772323287701-boqoa9.jpg",
       "tags": [
         "monster",
@@ -176,7 +177,7 @@
       "name": "The Symposium",
       "type": "CREATURE",
       "category": "Aberration",
-      "summary": "Aberration \u00e2\u20ac\u201d Challenge 15 (13,000 XP)",
+      "summary": "Aberration â€” Challenge 15 (13,000 XP)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772161654592-bgtz25.jpg",
       "tags": [
         "monster",
@@ -191,7 +192,7 @@
       "name": "Brekka Stonegut",
       "type": "NPC",
       "category": "Dwarf Ex-Soldier / Reluctant Enforcer",
-      "summary": "Dwarf Ex-Soldier / Reluctant Enforcer \u00e2\u20ac\u201d Blackfire Alchemists (Head of Security & Acquisitions)",
+      "summary": "Dwarf Ex-Soldier / Reluctant Enforcer â€” Blackfire Alchemists (Head of Security & Acquisitions)",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772157957418-6k5mxl.jpg",
       "tags": [
         "npc",
@@ -206,7 +207,7 @@
       "name": "The Order of the Cauterized Saint",
       "type": "FACTION",
       "category": "Religious Brotherhood",
-      "summary": "Religious Brotherhood \u00e2\u20ac\u201d Martial-Theological Order",
+      "summary": "Religious Brotherhood â€” Martial-Theological Order",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155960738-gjlyu1.jpg",
       "tags": [
         "faction",
@@ -221,7 +222,7 @@
       "name": "Maren Ashveil",
       "type": "NPC",
       "category": "Human Fighter/Veteran",
-      "summary": "Human Fighter/Veteran \u00e2\u20ac\u201d Independent Merchant Caravan",
+      "summary": "Human Fighter/Veteran â€” Independent Merchant Caravan",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155732191-shq5bc.jpg",
       "tags": [
         "npc",
@@ -236,7 +237,7 @@
       "name": "Durgan Velk",
       "type": "NPC",
       "category": "Half-Orc Fighter/Mercenary",
-      "summary": "Half-Orc Fighter/Mercenary \u00e2\u20ac\u201d The Stonepath Merchant Consortium",
+      "summary": "Half-Orc Fighter/Mercenary â€” The Stonepath Merchant Consortium",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155633453-076z7g.jpg",
       "tags": [
         "npc",
@@ -269,7 +270,7 @@
       "name": "Ironbeard Bastion",
       "type": "CITY",
       "category": "Military Fortification",
-      "summary": "Less a city than a promise \u00e2\u20ac\u201d carved into the cavern wall as a warning to anything approaching from the deep.",
+      "summary": "Less a city than a promise â€” carved into the cavern wall as a warning to anything approaching from the deep.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-ironbeard-bastion.jpg",
       "tags": [
         "city",
@@ -304,7 +305,7 @@
       "name": "Ulfgar",
       "type": "CITY",
       "category": "Underdark Gemcraft City",
-      "summary": "The crown jewel of the upper Underdark \u00e2\u20ac\u201d beauty carved from nothing, defended by people who know exactly what beauty costs.",
+      "summary": "The crown jewel of the upper Underdark â€” beauty carved from nothing, defended by people who know exactly what beauty costs.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-ulfgar.jpg",
       "tags": [
         "city",
@@ -321,7 +322,7 @@
       "name": "Uttp",
       "type": "CITY",
       "category": "Underdark/Surface Gateway",
-      "summary": "Neither surface nor deep \u00e2\u20ac\u201d a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
+      "summary": "Neither surface nor deep â€” a crossroads where merchants from both worlds pretend they have nothing in common while trading absolutely everything.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-uttp.jpg",
       "tags": [
         "city",
@@ -340,7 +341,7 @@
       "name": "Vragathul",
       "type": "CITY",
       "category": "Underdark Metropolis",
-      "summary": "Half a million souls beneath the stone, and the politics to match \u00e2\u20ac\u201d Vragathul is the Underdark at full scale, with all the beauty and horror that implies.",
+      "summary": "Half a million souls beneath the stone, and the politics to match â€” Vragathul is the Underdark at full scale, with all the beauty and horror that implies.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-vragathul.jpg",
       "tags": [
         "city",
@@ -357,7 +358,7 @@
       "name": "Zarakzul",
       "type": "CITY",
       "category": "Underdark Trade Nexus",
-      "summary": "Where the commerce of three continents meets in a cavern the size of a cathedral \u00e2\u20ac\u201d Zarakzul doesn't have politics. It has prices.",
+      "summary": "Where the commerce of three continents meets in a cavern the size of a cathedral â€” Zarakzul doesn't have politics. It has prices.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-zarakzul.jpg",
       "tags": [
         "city",
@@ -391,7 +392,7 @@
       "name": "The Spire Covenant",
       "type": "FACTION",
       "category": "Arcane Brotherhood",
-      "summary": "Power unbound from any kingdom, answerable to no throne \u00e2\u20ac\u201d the Arcane Brotherhood stripped itself of politics and kept only the part that mattered.",
+      "summary": "Power unbound from any kingdom, answerable to no throne â€” the Arcane Brotherhood stripped itself of politics and kept only the part that mattered.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-the-spire-covenant.jpg",
       "tags": [
         "faction",
@@ -443,7 +444,7 @@
       "name": "Abyssal Spire",
       "type": "LOCATION",
       "category": "Surface Diplomatic Citadel",
-      "summary": "Where the surface world and the Underdark negotiate \u00e2\u20ac\u201d a city of towers above and tunnels below, built on the premise that cooperation is preferable to the alternative.",
+      "summary": "Where the surface world and the Underdark negotiate â€” a city of towers above and tunnels below, built on the premise that cooperation is preferable to the alternative.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-abyssal-spire.jpg",
       "tags": [
         "location",
@@ -461,7 +462,7 @@
       "name": "Daggerport",
       "type": "LOCATION",
       "category": "Surface Trading Port",
-      "summary": "The docks that move more wealth than most kingdoms \u00e2\u20ac\u201d and the merchant houses willing to bleed each other for control of them.",
+      "summary": "The docks that move more wealth than most kingdoms â€” and the merchant houses willing to bleed each other for control of them.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-daggerport.jpg",
       "tags": [
         "location",
@@ -480,7 +481,7 @@
       "name": "Eternal Archive",
       "type": "LOCATION",
       "category": "Surface Fortress-Library",
-      "summary": "A fortress built to protect knowledge and a library built to dispense it \u00e2\u20ac\u201d the monks inside have spent centuries deciding which knowledge qualifies as which.",
+      "summary": "A fortress built to protect knowledge and a library built to dispense it â€” the monks inside have spent centuries deciding which knowledge qualifies as which.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-eternal-archive.jpg",
       "tags": [
         "location",
@@ -499,7 +500,7 @@
       "name": "Luminary Haven",
       "type": "LOCATION",
       "category": "Surface Arcane Citadel",
-      "summary": "The greatest center of magical knowledge in the world \u00e2\u20ac\u201d currently occupied by something ancient, elven, and genocidal.",
+      "summary": "The greatest center of magical knowledge in the world â€” currently occupied by something ancient, elven, and genocidal.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-luminary-haven.jpg",
       "tags": [
         "location",
@@ -519,7 +520,7 @@
       "name": "Phoenix's Respite",
       "type": "LOCATION",
       "category": "Surface Fortified City",
-      "summary": "A city that burned and rebuilt itself into something harder \u00e2\u20ac\u201d now the surface world's primary line of supply for the Underdark's defense.",
+      "summary": "A city that burned and rebuilt itself into something harder â€” now the surface world's primary line of supply for the Underdark's defense.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-phoenixs-respite.jpg",
       "tags": [
         "location",
@@ -538,7 +539,7 @@
       "name": "The Shadowed Flask",
       "type": "LOCATION",
       "category": "Underdark Tavern",
-      "summary": "Murkhold's most important establishment \u00e2\u20ac\u201d where the only rule is that there are no rules that apply to anyone who can afford the drinks.",
+      "summary": "Murkhold's most important establishment â€” where the only rule is that there are no rules that apply to anyone who can afford the drinks.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-shadowed-flask.jpg",
       "tags": [
         "location",
@@ -556,7 +557,7 @@
       "name": "Starhaven",
       "type": "LOCATION",
       "category": "Surface Frontier Town",
-      "summary": "Where the road to the Underdark begins \u00e2\u20ac\u201d and where everyone who's about to do something dangerous stops to reconsider.",
+      "summary": "Where the road to the Underdark begins â€” and where everyone who's about to do something dangerous stops to reconsider.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-starhaven.jpg",
       "tags": [
         "location",
@@ -575,7 +576,7 @@
       "name": "The Ledger Eternal",
       "type": "FACTION",
       "category": "Secret Society",
-      "summary": "Secret Society \u00e2\u20ac\u201d Arcane/Political",
+      "summary": "Secret Society â€” Arcane/Political",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772143446803-brl5fy.jpg",
       "tags": [
         "faction",
@@ -590,7 +591,7 @@
       "name": "The Remembrance Heap",
       "type": "CREATURE",
       "category": "Ooze (Shadow-Corrupted)",
-      "summary": "Ooze (Shadow-Corrupted) \u00e2\u20ac\u201d Challenge 8 (3,900 XP)",
+      "summary": "Ooze (Shadow-Corrupted) â€” Challenge 8 (3,900 XP)",
       "tags": [
         "monster",
         "forged",
@@ -604,7 +605,7 @@
       "name": "Sylvara Dawnmantle",
       "type": "NPC",
       "category": "Wood Elf Paladin",
-      "summary": "Wood Elf Paladin \u00e2\u20ac\u201d Oath of the Ancients / Independent",
+      "summary": "Wood Elf Paladin â€” Oath of the Ancients / Independent",
       "tags": [
         "npc",
         "forged",
@@ -618,7 +619,7 @@
       "name": "Duchess Mira Aurenthal",
       "type": "NPC",
       "category": "Human Noble / Spy",
-      "summary": "Human Noble / Spy \u00e2\u20ac\u201d House Aurenthal (Merchant Aristocracy)",
+      "summary": "Human Noble / Spy â€” House Aurenthal (Merchant Aristocracy)",
       "tags": [
         "npc",
         "forged",
@@ -632,7 +633,7 @@
       "name": "PLAGUE-THRALL FANG BEETLE, ALPHA",
       "type": "CREATURE",
       "category": "Monstrosity (Shadow-Corrupted)",
-      "summary": "Monstrosity (Shadow-Corrupted) \u00e2\u20ac\u201d Challenge 7 (2,900 XP)",
+      "summary": "Monstrosity (Shadow-Corrupted) â€” Challenge 7 (2,900 XP)",
       "tags": [
         "monster",
         "forged",
@@ -646,7 +647,7 @@
       "name": "Karnuk",
       "type": "CITY",
       "category": "Underdark Syndicate City",
-      "summary": "The Iron Syndicate City \u00e2\u20ac\u201d five guild families, forty-three war-mechs, and one viceroy holding it all together through the cold arithmetic of force.",
+      "summary": "The Iron Syndicate City â€” five guild families, forty-three war-mechs, and one viceroy holding it all together through the cold arithmetic of force.",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/city-karnuk.jpg",
       "tags": [
         "city",
@@ -763,8 +764,8 @@
       "slug": "smelters-row",
       "name": "Smelter's Row",
       "type": "LOCATION",
-      "category": "District \u00e2\u20ac\u201d 03",
-      "summary": "Brotherhood of the Forge territory. The Cathedral-Workshop dominates \u00e2\u20ac\u201d equal parts masterwork atelier and fortress.",
+      "category": "District â€” 03",
+      "summary": "Brotherhood of the Forge territory. The Cathedral-Workshop dominates â€” equal parts masterwork atelier and fortress.",
       "tags": [
         "location",
         "karnuk",
@@ -781,7 +782,7 @@
       "slug": "the-anvil-quarter",
       "name": "The Anvil Quarter",
       "type": "LOCATION",
-      "category": "District \u00e2\u20ac\u201d 01",
+      "category": "District â€” 01",
       "summary": "Iron Hammer Clan territory. Ancient dwarven stonework, hand-carved and engraved with twelve generations of master smiths.",
       "tags": [
         "location",
@@ -799,8 +800,8 @@
       "slug": "the-deep-market",
       "name": "The Deep Market",
       "type": "LOCATION",
-      "category": "District \u00e2\u20ac\u201d 02",
-      "summary": "Deepstone Miners territory. The commercial heart of Karnuk \u00e2\u20ac\u201d twenty-three piers, forty-three warehouses, and the Kettle.",
+      "category": "District â€” 02",
+      "summary": "Deepstone Miners territory. The commercial heart of Karnuk â€” twenty-three piers, forty-three warehouses, and the Kettle.",
       "tags": [
         "location",
         "karnuk",
@@ -817,7 +818,7 @@
       "slug": "the-guttered-torch-quarter",
       "name": "The Guttered Torch Quarter",
       "type": "LOCATION",
-      "category": "District \u00e2\u20ac\u201d 05",
+      "category": "District â€” 05",
       "summary": "Steel Syndicate territory. Aggressively, offensively new. Arc-flame lanterns, moving blueprints, Mechworks Plaza running at all hours.",
       "tags": [
         "location",
@@ -835,7 +836,7 @@
       "slug": "the-quiet-district",
       "name": "The Quiet District",
       "type": "LOCATION",
-      "category": "District \u00e2\u20ac\u201d 04",
+      "category": "District â€” 04",
       "summary": "Brotherhood of Iron Mine territory. Nobody talks about what happens here. The Brotherhood prefers it that way.",
       "tags": [
         "location",
@@ -853,8 +854,8 @@
       "slug": "viceroys-terrace",
       "name": "Viceroy's Terrace",
       "type": "LOCATION",
-      "category": "District \u00e2\u20ac\u201d 06",
-      "summary": "Bregan D'aerthe shadow territory. The Neutral Quarter \u00e2\u20ac\u201d where every family comes when they need something they can't officially want.",
+      "category": "District â€” 06",
+      "summary": "Bregan D'aerthe shadow territory. The Neutral Quarter â€” where every family comes when they need something they can't officially want.",
       "tags": [
         "location",
         "karnuk",
@@ -872,7 +873,7 @@
       "name": "Legends of the Iron Order: Becoming",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "What happens to those who join the Order \u00e2\u20ac\u201d or try to take what's theirs.",
+      "summary": "What happens to those who join the Order â€” or try to take what's theirs.",
       "tags": [
         "lore",
         "karnuk",
@@ -888,7 +889,7 @@
       "name": "Legends of the Iron Order: The Masks",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "What the Iron Order's masks are \u00e2\u20ac\u201d and what they do to the men inside them.",
+      "summary": "What the Iron Order's masks are â€” and what they do to the men inside them.",
       "tags": [
         "lore",
         "karnuk",
@@ -904,7 +905,7 @@
       "name": "Legends of the Iron Order: Their Loyalty",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "On the Iron Order's incorruptibility \u00e2\u20ac\u201d and what that cost means in a city built on transaction.",
+      "summary": "On the Iron Order's incorruptibility â€” and what that cost means in a city built on transaction.",
       "tags": [
         "lore",
         "karnuk",
@@ -920,7 +921,7 @@
       "name": "Legends of the Iron Order: Their Power",
       "type": "LORE",
       "category": "Iron Order Legend",
-      "summary": "On what the Iron Order can do \u00e2\u20ac\u201d and what the war-mechs do when the Order walks past.",
+      "summary": "On what the Iron Order can do â€” and what the war-mechs do when the Order walks past.",
       "tags": [
         "lore",
         "karnuk",
@@ -987,7 +988,7 @@
       "name": "Don Thorgar Ironhammer",
       "type": "NPC",
       "category": "Iron Hammer Patriarch",
-      "summary": "487 years old. Missing three fingers from the Thousand Year War. His hammer hasn't been drawn since \u00e2\u20ac\u201d he swore it. He keeps his oaths.",
+      "summary": "487 years old. Missing three fingers from the Thousand Year War. His hammer hasn't been drawn since â€” he swore it. He keeps his oaths.",
       "tags": [
         "npc",
         "karnuk",
@@ -1070,7 +1071,7 @@
       "name": "Osric Thane Gallowfield",
       "type": "NPC",
       "category": "Human Veteran Warden",
-      "summary": "Human Veteran Warden \u00e2\u20ac\u201d The Order of the Amber Threshold",
+      "summary": "Human Veteran Warden â€” The Order of the Amber Threshold",
       "tags": [
         "npc",
         "forged",
@@ -1084,7 +1085,7 @@
       "name": "Corven Ashbrand",
       "type": "NPC",
       "category": "Human Ranger/Rogue",
-      "summary": "Human Ranger/Rogue \u00e2\u20ac\u201d Deep Market Syndicate",
+      "summary": "Human Ranger/Rogue â€” Deep Market Syndicate",
       "tags": [
         "npc",
         "forged",
@@ -1098,7 +1099,7 @@
       "name": "Marta \"Clinker\" Voss",
       "type": "NPC",
       "category": "Half-Orc Fighter/Ranger",
-      "summary": "Half-Orc Fighter/Ranger \u00e2\u20ac\u201d Deep Market Syndicate",
+      "summary": "Half-Orc Fighter/Ranger â€” Deep Market Syndicate",
       "tags": [
         "npc",
         "forged",
@@ -1112,7 +1113,7 @@
       "name": "Stone Dragonling",
       "type": "CREATURE",
       "category": "Dragon",
-      "summary": "Dragon \u00e2\u20ac\u201d Challenge 3 (700 XP)",
+      "summary": "Dragon â€” Challenge 3 (700 XP)",
       "tags": [
         "monster",
         "forged",
@@ -1140,7 +1141,7 @@
       "name": "Vorrak Half-Tongue",
       "type": "NPC",
       "category": "Orc Rogue (Mastermind)",
-      "summary": "Orc Rogue (Mastermind) \u00e2\u20ac\u201d The Open Road Consortium",
+      "summary": "Orc Rogue (Mastermind) â€” The Open Road Consortium",
       "tags": [
         "npc",
         "forged",
