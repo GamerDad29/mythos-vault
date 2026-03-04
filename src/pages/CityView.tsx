@@ -285,7 +285,7 @@ export function CityView() {
       .then(([cityData, index]) => {
         setCity(cityData);
         setAllStubs(index.entities);
-        setCityEntities(index.entities.filter(e => (e as any).cityId === slug));
+        setCityEntities(index.entities.filter(e => e.cityId === slug));
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -297,7 +297,7 @@ export function CityView() {
     if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
   }, [activeTab]);
 
-  const meta = (city as any)?.meta as Record<string, string> ?? {};
+  const meta = city?.meta ?? {};
   const accentColor = meta.accentColor ?? '#C9A84C';
 
   const factions  = cityEntities.filter(e => e.type === 'FACTION');

@@ -18,6 +18,7 @@ export interface VaultEntity {
   publishedAt: string;  // ISO date
   source: string;       // "The Forge" | "Lore Import" | etc.
   hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
+  meta?: Record<string, string>; // arbitrary city/entity metadata (e.g. accentColor)
 }
 
 export interface VaultIndex {
@@ -25,23 +26,8 @@ export interface VaultIndex {
   updatedAt: string;
 }
 
-export interface VaultEntityStub {
-  id: string;
-  slug: string;
-  name: string;
-  type: string;
-  category?: string;
-  summary?: string;
-  imageUrl?: string;
-  tags?: string[];
-  factionId?: string;
-  locationId?: string;
-  cityId?: string;
-  region?: string;
-  parentId?: string;    // slug of parent entity (sub-faction → faction, nested location, etc.)
-  publishedAt: string;
-  hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
-}
+// Stub is the full entity minus the heavy fields — single source of truth
+export type VaultEntityStub = Omit<VaultEntity, 'content' | 'source'>;
 
 // Faction colors from Replitv2 design system
 export const FACTION_COLORS: Record<string, string> = {
