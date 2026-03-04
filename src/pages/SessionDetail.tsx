@@ -60,15 +60,15 @@ function renderLines(lines: string[], keyOffset = 0): React.ReactNode[] {
 // ─── Ken Burns variants ───────────────────────────────────────────────────────
 
 const KB_VARIANTS: Array<{ scale: number[]; x: number[]; y: number[]; duration: number }> = [
-  { scale: [1, 1.07], x: [0, -14], y: [0, -6],  duration: 10 },
-  { scale: [1, 1.06], x: [0,  12], y: [0,  8],  duration: 12 },
-  { scale: [1, 1.08], x: [0, -10], y: [0,  7],  duration:  9 },
-  { scale: [1, 1.06], x: [0,  10], y: [0, -8],  duration: 11 },
+  { scale: [1, 1.11], x: [0, -22], y: [0, -8],  duration: 10 },
+  { scale: [1, 1.10], x: [0,  20], y: [0, 10],  duration: 12 },
+  { scale: [1, 1.13], x: [0, -18], y: [0,  9],  duration:  9 },
+  { scale: [1, 1.10], x: [0,  20], y: [0, -10], duration: 11 },
 ];
 
 // ─── Woven image (full-width inline figure) ───────────────────────────────────
 
-function WovenImage({ url, index }: { url: string; index: number }) {
+function WovenImage({ url, index, position }: { url: string; index: number; position?: string }) {
   const [lightbox, setLightbox] = useState(false);
   const kb = KB_VARIANTS[index % KB_VARIANTS.length];
   return (
@@ -89,7 +89,7 @@ function WovenImage({ url, index }: { url: string; index: number }) {
           src={url}
           alt=""
           className="w-full object-cover"
-          style={{ maxHeight: '340px', opacity: 0.88, display: 'block' }}
+          style={{ maxHeight: '340px', opacity: 0.88, display: 'block', objectPosition: position || 'center center' }}
           animate={{ scale: kb.scale, x: kb.x, y: kb.y }}
           transition={{ duration: kb.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
         />
@@ -163,7 +163,7 @@ function AudioEmbed({ url }: { url: string }) {
 
 // ─── Content renderer with woven images ──────────────────────────────────────
 
-function renderWovenContent(content: string, images: string[]): React.ReactNode[] {
+function renderWovenContent(content: string, images: string[], imagePositions?: string[]): React.ReactNode[] {
   // Split into sections at ## boundaries (includes any preamble before the first ##)
   const rawSections = content.split(/(?=^## )/m).filter(s => s.trim());
   const sectionCount = rawSections.length;
@@ -171,6 +171,7 @@ function renderWovenContent(content: string, images: string[]): React.ReactNode[
   if (images.length === 0 || sectionCount === 0) {
     return renderLines(content.split('\n'));
   }
+
 
   // Cap inline images at 1 per section; overflow goes to gallery
   const inlineMax = Math.min(images.length, sectionCount);
@@ -190,7 +191,7 @@ function renderWovenContent(content: string, images: string[]): React.ReactNode[
     // Inject any images assigned to this section
     imageAfterSection.forEach((targetSection, imgIdx) => {
       if (targetSection === i) {
-        nodes.push(<WovenImage key={`woven-${imgIdx}`} url={images[imgIdx]} index={imgIdx} />);
+        nodes.push(<WovenImage key={`woven-${imgIdx}`} url={images[imgIdx]} index={imgIdx} position={imagePositions?.[imgIdx]} />);
       }
     });
   });
@@ -260,8 +261,8 @@ export function SessionDetail() {
             alt={session.title}
             className="w-full h-full object-cover"
             style={{ opacity: 0.5, objectPosition: session.imagePosition ?? 'center center' }}
-            animate={{ scale: [1, 1.04] }}
-            transition={{ duration: 16, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+            animate={{ scale: [1, 1.07] }}
+            transition={{ duration: 14, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           />
         ) : (
           <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, hsl(15 8% 6%), hsl(25 20% 10%))' }} />
@@ -343,7 +344,7 @@ export function SessionDetail() {
 
         {/* Content with woven images */}
         <div style={{ fontSize: '0.97rem', lineHeight: 1.88 }}>
-          {renderWovenContent(session.content, session.images)}
+          {renderWovenContent(session.content, session.images, session.imagePositions)}
         </div>
 
         {/* ── Prev / Next nav ── */}

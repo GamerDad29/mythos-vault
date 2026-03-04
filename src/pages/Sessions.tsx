@@ -42,7 +42,7 @@ function SessionCard({ session, index }: { session: SessionEntry; index: number 
                 style={{
                   opacity: 0.45,
                   objectPosition: session.imagePosition ?? 'center center',
-                  transform: hovered ? 'scale(1.05)' : 'scale(1)',
+                  transform: hovered ? 'scale(1.08)' : 'scale(1)',
                   transition: 'transform 0.7s ease',
                 }}
               />

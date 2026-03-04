@@ -15,6 +15,7 @@
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S0.Mysterious_Stranger.png",
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S0.Ulfgar.png"
       ],
+      "imagePositions": ["50% 25%", "center center", "center center"],
       "audioUrl": "https://drive.google.com/file/d/187hwLbx6KEyG51h3r_ZfM5fgWixsgut0/view?usp=sharing",
       "tags": ["stonekeep", "drogon", "underdark", "gobgob"]
     },
@@ -36,6 +37,7 @@
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S2.Tortle.Iron_Shell_Merc2.png",
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S2.Skrag.png"
       ],
+      "imagePositions": ["50% 20%", "50% 20%", "50% 15%", "50% 12%", "50% 12%", "50% 20%"],
       "audioUrl": "https://drive.google.com/file/d/1IWIfSM3h4Z4UEgKei74DVHGiPd8oOqFF/view",
       "tags": ["murkhold", "morrighan", "shadowed-flask", "rizalia", "thurl"]
     },
@@ -53,6 +55,7 @@
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S3.Feywild_Ink.png",
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S3.Dwarven_Mining_Pick.png"
       ],
+      "imagePositions": ["center center", "center center"],
       "audioUrl": null,
       "tags": ["dragonlings", "borin", "murkhold", "stash", "thurl"]
     },
@@ -74,6 +77,7 @@
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S4.Tunnel_to_Iron_Hallow_3.png",
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S4.Tunnel_to_Iron_Hallow_4.png"
       ],
+      "imagePositions": ["50% 12%", "50% 15%", "center center", "center center", "center center", "center center"],
       "audioUrl": null,
       "tags": ["warforged", "muggie", "gnomenclature", "the-chain", "iron-hollow"]
     },
@@ -90,6 +94,7 @@
       "images": [
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S5.Cogmind_Collective.png"
       ],
+      "imagePositions": ["center center"],
       "audioUrl": null,
       "tags": ["iron-hallow", "tharok", "cogmind", "feywild", "underdark"]
     },
@@ -134,6 +139,7 @@
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S12.Seraphine_The_Silent_Blade.png",
         "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/sessions/S12.Hrothak_the_Undying.png"
       ],
+      "imagePositions": ["50% 12%", "50% 20%", "50% 18%"],
       "audioUrl": null,
       "tags": ["kala", "jarlaxle", "broker", "veylan", "bregan-daerthe", "uttp"]
     },

@@ -38,8 +38,9 @@ export interface SessionEntry {
   summary: string;
   content: string;
   imageUrl: string | null;
-  imagePosition?: string;   // CSS object-position e.g. "50% 20%"
+  imagePosition?: string;       // CSS object-position for hero image
   images: string[];
+  imagePositions?: string[];    // Per-image object-position, parallel to images[]
   audioUrl: string | null;
   tags: string[];
 }
