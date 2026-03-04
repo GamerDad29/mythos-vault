@@ -206,7 +206,7 @@ export function EntityList({ type, groupBy }: Props) {
       </motion.div>
 
       {/* Search */}
-      <div className="relative mb-4 max-w-md">
+      <div className="relative mb-4 max-w-2xl">
         <Search
           size={15}
           className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"

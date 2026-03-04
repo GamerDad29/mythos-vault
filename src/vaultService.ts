@@ -1,4 +1,5 @@
 import type { VaultIndex, VaultEntity } from './types';
+import { TYPE_VAULT_FOLDER } from './types';
 
 // Config — points to the vault folder in the mythos-vault repo
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/vault';
@@ -28,7 +29,8 @@ export const vaultService = {
 
   // Fetch a single entity by slug
   async getEntity(type: string, slug: string): Promise<VaultEntity> {
-    return fetchJson<VaultEntity>(`${GITHUB_RAW_BASE}/${type.toLowerCase()}s/${slug}.json`);
+    const folder = TYPE_VAULT_FOLDER[type.toUpperCase()] ?? `${type.toLowerCase()}s`;
+    return fetchJson<VaultEntity>(`${GITHUB_RAW_BASE}/${folder}/${slug}.json`);
   },
 
   // Fetch a city entity by slug (lives at vault/cities/{slug}.json)

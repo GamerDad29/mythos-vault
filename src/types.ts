@@ -64,3 +64,23 @@ export const TYPE_ICONS: Record<string, string> = {
   PC: '🛡️',
   CITY: '🏙',
 };
+
+// type → URL path segment (used in link building)
+export const TYPE_URL_SEGMENT: Record<string, string> = {
+  NPC: 'npcs', CREATURE: 'creatures', LOCATION: 'locations',
+  FACTION: 'factions', ITEM: 'items', LORE: 'lore', PC: 'characters', CITY: 'city',
+};
+
+// URL segment → entity type (used in EntityDetail to parse the route param)
+export const URL_SEGMENT_TO_TYPE: Record<string, string> = {
+  npcs: 'NPC', npc: 'NPC', creatures: 'CREATURE', creature: 'CREATURE',
+  locations: 'LOCATION', location: 'LOCATION', factions: 'FACTION', faction: 'FACTION',
+  items: 'ITEM', item: 'ITEM', lore: 'LORE', lores: 'LORE',
+  pcs: 'PC', pc: 'PC', characters: 'PC', character: 'PC',
+};
+
+// type → vault folder (used in vaultService.getEntity)
+export const TYPE_VAULT_FOLDER: Record<string, string> = {
+  NPC: 'npcs', CREATURE: 'creatures', LOCATION: 'locations',
+  FACTION: 'factions', ITEM: 'items', LORE: 'lore', PC: 'pcs', CITY: 'cities',
+};

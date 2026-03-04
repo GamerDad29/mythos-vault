@@ -5,7 +5,7 @@ import { ExternalLink } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { SkeletonHero } from '../components/Skeleton';
 import type { VaultEntity, VaultEntityStub } from '../types';
-import { FACTION_COLORS } from '../types';
+import { FACTION_COLORS, TYPE_URL_SEGMENT, URL_SEGMENT_TO_TYPE } from '../types';
 import { renderContent, stripHiddenBlocks } from '../utils/renderContent';
 
 const TYPE_PLURALS: Record<string, string> = {
@@ -21,7 +21,7 @@ const TYPE_PLURALS: Record<string, string> = {
 export function EntityDetail() {
   const [, params] = useRoute('/:type/:slug');
   const [, navigate] = useLocation();
-  const type = params?.type?.slice(0, -1).toUpperCase() || ''; // strip trailing 's'
+  const type = URL_SEGMENT_TO_TYPE[params?.type || ''] || params?.type?.slice(0, -1).toUpperCase() || '';
   const slug = params?.slug || '';
 
   const [entity, setEntity] = useState<VaultEntity | null>(null);
@@ -396,7 +396,7 @@ export function EntityDetail() {
                       {group.label}
                     </p>
                     {group.items.map((s, idx) => (
-                      <Link key={s.id} href={`/${s.type.toLowerCase()}s/${s.slug}`}>
+                      <Link key={s.id} href={`/${TYPE_URL_SEGMENT[s.type] ?? s.type.toLowerCase() + 's'}/${s.slug}`}>
                         <div
                           className="cursor-pointer py-2.5 transition-colors"
                           style={{

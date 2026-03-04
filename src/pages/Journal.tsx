@@ -91,7 +91,7 @@ export function Journal() {
                 >
                   {month}
                 </p>
-                <div className="flex-1" style={{ height: '1px', background: 'hsl(15 8% 16%)' }} />
+                <div className="flex-1 forge-divider" />
               </div>
 
               {/* Entries */}

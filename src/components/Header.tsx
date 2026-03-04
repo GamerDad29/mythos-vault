@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { BookOpen, Clock, BarChart2, ScrollText } from 'lucide-react';
+import { BookOpen, Clock, BarChart2, ScrollText, Menu, X } from 'lucide-react';
 
 const ENTITY_NAV = [
   { label: 'NPCs', href: '/npcs' },
@@ -19,12 +20,24 @@ const TOOL_NAV = [
 
 export function Header() {
   const [location] = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const allNav = [
+    ...ENTITY_NAV.map(n => ({ ...n, Icon: null })),
+    ...TOOL_NAV,
+  ];
 
   return (
     <header
       style={{
-        borderBottom: '1px solid hsl(15 8% 16%)',
-        background: 'linear-gradient(180deg, hsl(15 8% 7%) 0%, hsl(15 6% 8%) 100%)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+        borderBottom: '1px solid hsl(15 8% 18%)',
+        background: 'rgba(12, 10, 8, 0.85)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        boxShadow: '0 4px 40px rgba(0,0,0,0.6)',
       }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
@@ -53,10 +66,10 @@ export function Header() {
           </div>
         </Link>
 
-        {/* Entity nav + tool nav */}
+        {/* Desktop: Entity nav + tool nav */}
         <div className="hidden md:flex items-center gap-1">
           {ENTITY_NAV.map(({ label, href }) => {
-            const active = location.startsWith(href) || (href === '/characters' && location.startsWith('/pcs'));
+            const active = location.startsWith(href) || (href === '/characters' && location.startsWith('/characters'));
             return (
               <Link key={href} href={href}>
                 <span
@@ -109,7 +122,51 @@ export function Header() {
             );
           })}
         </div>
+
+        {/* Mobile: hamburger button */}
+        <button
+          className="md:hidden flex items-center justify-center"
+          style={{ color: 'hsl(15 4% 60%)', cursor: 'pointer', background: 'none', border: 'none', padding: '4px' }}
+          onClick={() => setMobileOpen(o => !o)}
+          aria-label="Toggle navigation"
+        >
+          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
+
+      {/* Mobile nav drawer */}
+      {mobileOpen && (
+        <div
+          style={{
+            borderTop: '1px solid hsl(15 8% 16%)',
+            background: 'rgba(10, 8, 6, 0.97)',
+            animation: 'mobileMenuIn 0.18s ease forwards',
+          }}
+        >
+          <div className="px-6 py-4 flex flex-col gap-1">
+            {allNav.map(({ label, href, Icon }) => {
+              const active = location.startsWith(href);
+              return (
+                <Link key={href} href={href}>
+                  <div
+                    className="flex items-center gap-3 px-3 py-3 cursor-pointer"
+                    style={{
+                      borderRadius: '4px',
+                      background: active ? 'hsl(20 8% 13%)' : 'transparent',
+                      color: active ? 'hsl(25 100% 45%)' : 'hsl(15 4% 65%)',
+                      transition: 'background 0.15s, color 0.15s',
+                    }}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {Icon && <Icon size={13} />}
+                    <span className="font-serif text-sm uppercase tracking-[0.15em]">{label}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

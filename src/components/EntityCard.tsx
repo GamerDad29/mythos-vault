@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { User, MapPin, Shield, Package, Scroll, Swords } from 'lucide-react';
 import type { VaultEntityStub } from '../types';
-import { FACTION_COLORS } from '../types';
+import { FACTION_COLORS, TYPE_URL_SEGMENT } from '../types';
 import { vaultService } from '../vaultService';
 import { tokens } from '../tokens';
 
@@ -25,7 +25,7 @@ export function EntityCard({ entity, index = 0 }: Props) {
   const [imgError, setImgError] = useState(false);
   const factionColor = entity.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || 'hsl(25 100% 40%)';
-  const href = `/${entity.type.toLowerCase()}s/${entity.slug}`;
+  const href = `/${TYPE_URL_SEGMENT[entity.type] ?? entity.type.toLowerCase() + 's'}/${entity.slug}`;
 
   return (
     <motion.div

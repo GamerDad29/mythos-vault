@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, User, Swords, MapPin, Shield, Package, Scroll, Users } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { EntityCard } from '../components/EntityCard';
 import { SkeletonCard } from '../components/Skeleton';
@@ -9,19 +9,29 @@ import type { VaultEntityStub } from '../types';
 import { tokens } from '../tokens';
 
 const SECTIONS = [
-  { label: 'NPCs', href: '/npcs', desc: 'Characters encountered in the Underdark' },
-  { label: 'Creatures', href: '/creatures', desc: 'Beasts and beings of the deep' },
-  { label: 'Locations', href: '/locations', desc: 'Cities, ruins, and places of power' },
-  { label: 'Factions', href: '/factions', desc: 'Powers that shape the Middledark' },
-  { label: 'Items', href: '/items', desc: 'Artifacts, weapons, and curiosities' },
-  { label: 'Lore', href: '/lore', desc: 'History, legends, and hidden truths' },
-  { label: 'Characters', href: '/characters', desc: 'The party of adventurers' },
+  { label: 'NPCs',       href: '/npcs',       desc: 'Characters encountered in the Underdark', Icon: User },
+  { label: 'Creatures',  href: '/creatures',  desc: 'Beasts and beings of the deep',           Icon: Swords },
+  { label: 'Locations',  href: '/locations',  desc: 'Cities, ruins, and places of power',      Icon: MapPin },
+  { label: 'Factions',   href: '/factions',   desc: 'Powers that shape the Middledark',        Icon: Shield },
+  { label: 'Items',      href: '/items',      desc: 'Artifacts, weapons, and curiosities',     Icon: Package },
+  { label: 'Lore',       href: '/lore',       desc: 'History, legends, and hidden truths',     Icon: Scroll },
+  { label: 'Characters', href: '/characters', desc: 'The party of adventurers',                Icon: Users },
 ];
 
 const TOOLS = [
   { label: 'Timeline', href: '/timeline', desc: 'Chronicle events in order' },
-  { label: 'Stats', href: '/stats', desc: 'Vault contents at a glance' },
-  { label: 'Journal', href: '/journal', desc: 'Recaps and lore chronicles' },
+  { label: 'Stats',    href: '/stats',    desc: 'Vault contents at a glance' },
+  { label: 'Journal',  href: '/journal',  desc: 'Recaps and lore chronicles' },
+];
+
+// Ambient ember sparks
+const SPARKS = [
+  { left: '10%',  delay: 0,    dur: 4.2, size: 3, drift: '8px',  opacity: 0.3 },
+  { left: '25%',  delay: 1.1,  dur: 5.0, size: 2, drift: '-6px', opacity: 0.25 },
+  { left: '45%',  delay: 0.6,  dur: 3.8, size: 4, drift: '12px', opacity: 0.4 },
+  { left: '62%',  delay: 2.0,  dur: 4.6, size: 2, drift: '-9px', opacity: 0.2 },
+  { left: '78%',  delay: 0.3,  dur: 5.2, size: 3, drift: '7px',  opacity: 0.35 },
+  { left: '90%',  delay: 1.7,  dur: 4.0, size: 2, drift: '-5px', opacity: 0.25 },
 ];
 
 export function Home() {
@@ -31,7 +41,7 @@ export function Home() {
   useEffect(() => {
     vaultService.getIndex()
       .then(index => {
-        const sorted = [...index.entities].sort(
+        const sorted = [...index.entities].filter(e => !e.hidden).sort(
           (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
         );
         setRecent(sorted.slice(0, 6));
@@ -51,6 +61,25 @@ export function Home() {
             background: 'radial-gradient(ellipse 60% 40% at 50% 60%, rgba(130,60,10,0.12) 0%, transparent 70%)',
           }}
         />
+
+        {/* Ambient ember sparks */}
+        {SPARKS.map((spark, i) => (
+          <div
+            key={i}
+            className="absolute pointer-events-none"
+            style={{
+              left: spark.left,
+              bottom: '10%',
+              width: `${spark.size}px`,
+              height: `${spark.size}px`,
+              borderRadius: '50%',
+              background: 'hsl(25 100% 50%)',
+              opacity: spark.opacity,
+              animation: `floatUp ${spark.dur}s ${spark.delay}s ease-in infinite`,
+              ['--drift' as string]: spark.drift,
+            }}
+          />
+        ))}
 
         <motion.div
           initial={{ opacity: 0, y: -12 }}
@@ -95,10 +124,10 @@ export function Home() {
       </section>
 
       {/* Section nav */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
+      <section className="max-w-5xl mx-auto px-6 pb-10">
         {/* Entity types */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-4">
-          {SECTIONS.map(({ label, href, desc }, i) => (
+          {SECTIONS.map(({ label, href, desc, Icon }, i) => (
             <motion.div
               key={href}
               initial={{ opacity: 0, y: 12 }}
@@ -107,12 +136,12 @@ export function Home() {
             >
               <Link href={href}>
                 <div
-                  className="cursor-pointer p-4 text-center flex flex-col justify-center"
+                  className="cursor-pointer p-4 text-center flex flex-col items-center justify-center gap-2"
                   style={{
                     background: tokens.color.bg.card,
                     border: `1px solid ${tokens.color.border.default}`,
                     borderRadius: tokens.radius.tile,
-                    minHeight: '72px',
+                    minHeight: '90px',
                     transition: tokens.transition.card,
                   }}
                   onMouseEnter={e => {
@@ -130,14 +159,15 @@ export function Home() {
                     el.style.boxShadow = 'none';
                   }}
                 >
+                  <Icon size={16} strokeWidth={1.5} style={{ color: tokens.color.accent, opacity: 0.7 }} />
                   <p
-                    className="font-serif font-bold uppercase tracking-[0.15em] text-sm mb-1"
-                    style={{ color: tokens.color.text.primary }}
+                    className="font-serif font-bold uppercase tracking-[0.15em]"
+                    style={{ color: tokens.color.text.primary, fontSize: '14px', lineHeight: 1 }}
                   >
                     {label}
                   </p>
                   <p
-                    className="font-sans text-xs leading-snug line-clamp-2 overflow-hidden"
+                    className="font-sans leading-snug line-clamp-2 overflow-hidden"
                     style={{ color: tokens.color.text.muted, fontSize: '11px' }}
                   >
                     {desc}
@@ -149,7 +179,7 @@ export function Home() {
         </div>
 
         {/* Tools row */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-24">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {TOOLS.map(({ label, href, desc }, i) => (
             <motion.div
               key={href}
@@ -198,65 +228,69 @@ export function Home() {
             </motion.div>
           ))}
         </div>
+      </section>
 
-        {/* Recent entries */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h2
-              className="font-serif font-bold uppercase tracking-[0.15em] text-2xl"
-              style={{ color: 'hsl(15 4% 88%)' }}
-            >
-              Recent Entries
-            </h2>
-            <p className="font-display text-sm italic mt-1" style={{ color: 'hsl(15 4% 45%)' }}>
-              Latest discoveries from the Underdark
-            </p>
+      {/* Recent entries — full-bleed band */}
+      <section style={{ background: 'hsl(20 6% 9%)', padding: '4rem 0 5rem' }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h2
+                className="font-serif font-bold uppercase tracking-[0.15em] text-2xl"
+                style={{ color: 'hsl(15 4% 88%)' }}
+              >
+                Recent Entries
+              </h2>
+              <p className="font-display text-sm italic mt-1" style={{ color: 'hsl(15 4% 45%)' }}>
+                Latest discoveries from the Underdark
+              </p>
+            </div>
+            <Link href="/timeline">
+              <span
+                className="font-serif text-xs uppercase tracking-wider flex items-center gap-1 cursor-pointer transition-colors"
+                style={{ color: 'hsl(25 80% 38%)' }}
+                onMouseEnter={e => ((e.target as HTMLElement).style.color = 'hsl(25 100% 50%)')}
+                onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(25 80% 38%)')}
+              >
+                Full Timeline <ChevronRight size={14} />
+              </span>
+            </Link>
           </div>
-          <Link href="/timeline">
-            <span
-              className="font-serif text-xs uppercase tracking-wider flex items-center gap-1 cursor-pointer transition-colors"
-              style={{ color: 'hsl(25 80% 38%)' }}
-              onMouseEnter={e => ((e.target as HTMLElement).style.color = 'hsl(25 100% 50%)')}
-              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(25 80% 38%)')}
+
+          {error ? (
+            <div
+              className="text-center py-20 font-display italic text-lg"
+              style={{ color: 'hsl(15 4% 40%)' }}
             >
-              Full Timeline <ChevronRight size={14} />
-            </span>
-          </Link>
+              {error}
+            </div>
+          ) : loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+            </div>
+          ) : recent.length === 0 ? (
+            <div
+              className="text-center py-20"
+              style={{
+                border: '1px dashed hsl(15 8% 20%)',
+                borderRadius: '4px',
+              }}
+            >
+              <p className="font-display italic text-lg" style={{ color: 'hsl(15 4% 35%)' }}>
+                The Vault awaits its first entries…
+              </p>
+              <p className="font-sans text-sm mt-2" style={{ color: 'hsl(15 4% 28%)', fontSize: '14px' }}>
+                Publish entities from Mythos Architect to populate the chronicle.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {recent.map((entity, i) => (
+                <EntityCard key={entity.id} entity={entity} index={i} />
+              ))}
+            </div>
+          )}
         </div>
-
-        {error ? (
-          <div
-            className="text-center py-20 font-display italic text-lg"
-            style={{ color: 'hsl(15 4% 40%)' }}
-          >
-            {error}
-          </div>
-        ) : loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
-          </div>
-        ) : recent.length === 0 ? (
-          <div
-            className="text-center py-20"
-            style={{
-              border: '1px dashed hsl(15 8% 20%)',
-              borderRadius: '4px',
-            }}
-          >
-            <p className="font-display italic text-lg" style={{ color: 'hsl(15 4% 35%)' }}>
-              The Vault awaits its first entries…
-            </p>
-            <p className="font-sans text-sm mt-2" style={{ color: 'hsl(15 4% 28%)', fontSize: '14px' }}>
-              Publish entities from Mythos Architect to populate the chronicle.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {recent.map((entity, i) => (
-              <EntityCard key={entity.id} entity={entity} index={i} />
-            ))}
-          </div>
-        )}
       </section>
     </div>
   );

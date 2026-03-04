@@ -12,6 +12,7 @@ import { tokens } from '../tokens';
 // ─── City featured card ────────────────────────────────────────────────────────
 
 function CityCard({ city, index }: { city: VaultEntityStub; index: number }) {
+  const [imgError, setImgError] = useState(false);
   const accent = tokens.color.accent;
 
   return (
@@ -43,12 +44,13 @@ function CityCard({ city, index }: { city: VaultEntityStub; index: number }) {
           }}
         >
           {/* Image / placeholder */}
-          {city.imageUrl ? (
+          {city.imageUrl && !imgError ? (
             <div className="relative overflow-hidden" style={{ height: '200px' }}>
               <img
                 src={city.imageUrl}
                 alt={city.name}
                 className="w-full h-full object-cover"
+                onError={() => setImgError(true)}
               />
               <div
                 className="absolute inset-x-0 bottom-0 pointer-events-none"

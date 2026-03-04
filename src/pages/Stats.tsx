@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { vaultService } from '../vaultService';
 import type { VaultEntityStub } from '../types';
-import { TYPE_ICONS } from '../types';
+import { TYPE_ICONS, TYPE_URL_SEGMENT } from '../types';
 
 const TYPE_COLORS: Record<string, string> = {
   NPC:      'hsl(25 100% 42%)',
@@ -125,7 +125,7 @@ export function Stats() {
             />
             <div className="flex flex-wrap gap-x-6 gap-y-3">
               {typeEntries.map(([type, count]) => (
-                <Link key={type} href={`/${type.toLowerCase()}s`}>
+                <Link key={type} href={`/${TYPE_URL_SEGMENT[type] ?? type.toLowerCase() + 's'}`}>
                   <div className="flex items-center gap-2 cursor-pointer group">
                     <span style={{ fontSize: '1rem' }}>{TYPE_ICONS[type] || '◆'}</span>
                     <span
@@ -226,7 +226,7 @@ export function Stats() {
             </h3>
             <div>
               {Object.entries(byTypeRecent).map(([type, entity], i) => {
-                const href = `/${type.toLowerCase()}s/${entity.slug}`;
+                const href = `/${TYPE_URL_SEGMENT[type] ?? type.toLowerCase() + 's'}/${entity.slug}`;
                 return (
                   <motion.div
                     key={type}

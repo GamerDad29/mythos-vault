@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { vaultService } from '../vaultService';
 import type { VaultEntityStub } from '../types';
-import { TYPE_ICONS } from '../types';
+import { TYPE_ICONS, TYPE_URL_SEGMENT } from '../types';
 
 function groupByDate(entities: VaultEntityStub[]): [string, VaultEntityStub[]][] {
   const map = new Map<string, VaultEntityStub[]>();
@@ -25,7 +25,7 @@ export function Timeline() {
   useEffect(() => {
     vaultService.getIndex()
       .then(index => {
-        const sorted = [...index.entities].sort(
+        const sorted = [...index.entities].filter(e => !e.hidden).sort(
           (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
         );
         setEntities(sorted);
@@ -126,7 +126,7 @@ export function Timeline() {
                 {/* Entries for this date */}
                 <div className="space-y-2">
                   {group.map((entity, ei) => {
-                    const href = `/${entity.type.toLowerCase()}s/${entity.slug}`;
+                    const href = `/${TYPE_URL_SEGMENT[entity.type] ?? entity.type.toLowerCase() + 's'}/${entity.slug}`;
                     return (
                       <Link key={entity.id} href={href}>
                         <motion.div

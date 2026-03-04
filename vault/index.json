@@ -488,6 +488,28 @@
       "publishedAt": "2026-02-27T03:07:42.345Z"
     },
     {
+      "id": "npc-maren-ashveil",
+      "slug": "maren-ashveil",
+      "name": "Maren Ashveil",
+      "type": "NPC",
+      "category": "Human Fighter/Veteran",
+      "summary": "Human Fighter/Veteran — Independent Merchant Caravan",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155732191-shq5bc.jpg",
+      "tags": ["npc", "forged", "ai-generated"],
+      "publishedAt": "2026-02-27T01:29:10.795Z"
+    },
+    {
+      "id": "npc-durgan-velk",
+      "slug": "durgan-velk",
+      "name": "Durgan Velk",
+      "type": "NPC",
+      "category": "Half-Orc Fighter/Mercenary",
+      "summary": "Half-Orc Fighter/Mercenary — The Stonepath Merchant Consortium",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772155633453-076z7g.jpg",
+      "tags": ["npc", "forged", "ai-generated"],
+      "publishedAt": "2026-02-27T01:27:57.424Z"
+    },
+    {
       "id": "npc-brekka-stonegut",
       "slug": "brekka-stonegut",
       "name": "Brekka Stonegut",
