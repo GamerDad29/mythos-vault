@@ -1077,8 +1077,7 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-24T19:01:27.382Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-osric-thane-gallowfield.jpg"
+      "publishedAt": "2026-02-24T19:01:27.382Z"
     },
     {
       "id": "npc-corven-ashbrand",
@@ -1092,7 +1091,8 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-24T17:21:53.775Z"
+      "publishedAt": "2026-02-24T17:21:53.775Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-corven-ashbrand.jpg"
     },
     {
       "id": "npc-marta-clinker-voss",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T19:03:22.428Z"
+  "updatedAt": "2026-03-05T19:03:30.159Z"
 }
