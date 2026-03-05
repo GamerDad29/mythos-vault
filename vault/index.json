@@ -1091,8 +1091,7 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-24T17:21:53.775Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-corven-ashbrand.jpg"
+      "publishedAt": "2026-02-24T17:21:53.775Z"
     },
     {
       "id": "npc-marta-clinker-voss",
@@ -1106,7 +1105,8 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-24T16:56:17.082Z"
+      "publishedAt": "2026-02-24T16:56:17.082Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-marta-clinker-voss.jpg"
     },
     {
       "id": "monster-stone-dragonling",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T19:03:30.159Z"
+  "updatedAt": "2026-03-05T19:03:38.196Z"
 }
