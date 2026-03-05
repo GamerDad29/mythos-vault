@@ -597,8 +597,7 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-25T03:48:02.291Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/monster-the-remembrance-heap.jpg"
+      "publishedAt": "2026-02-25T03:48:02.291Z"
     },
     {
       "id": "npc-sylvara-dawnmantle",
@@ -626,7 +625,8 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-25T02:50:32.960Z"
+      "publishedAt": "2026-02-25T02:50:32.960Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-duchess-mira-aurenthal.jpg"
     },
     {
       "id": "monster-plague-thrall-fang-beetle-alpha",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T18:59:03.782Z"
+  "updatedAt": "2026-03-05T18:59:48.489Z"
 }
