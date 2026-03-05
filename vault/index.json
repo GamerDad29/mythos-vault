@@ -639,8 +639,7 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-25T01:48:41.346Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/monster-plague-thrall-fang-beetle-alpha.jpg"
+      "publishedAt": "2026-02-25T01:48:41.346Z"
     },
     {
       "id": "city-karnuk",
@@ -673,7 +672,8 @@
       "factionId": "bregan-daerthe",
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z"
+      "publishedAt": "2026-02-25T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/faction-bregan-daerthe.jpg"
     },
     {
       "id": "faction-brotherhood-of-forge",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T18:59:56.509Z"
+  "updatedAt": "2026-03-05T19:00:03.833Z"
 }
