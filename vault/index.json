@@ -829,8 +829,7 @@
       "factionId": "steel-syndicate",
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-the-guttered-torch-quarter.jpg"
+      "publishedAt": "2026-02-25T00:00:00.000Z"
     },
     {
       "id": "location-the-quiet-district",
@@ -848,7 +847,8 @@
       "factionId": "brotherhood-of-iron-mine",
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z"
+      "publishedAt": "2026-02-25T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/location-the-quiet-district.jpg"
     },
     {
       "id": "location-viceroys-terrace",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T19:01:22.400Z"
+  "updatedAt": "2026-03-05T19:01:32.684Z"
 }
