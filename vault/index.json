@@ -1119,8 +1119,7 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-24T16:49:57.926Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/monster-stone-dragonling.jpg"
+      "publishedAt": "2026-02-24T16:49:57.926Z"
     },
     {
       "id": "item-the-penitent-s-rod",
@@ -1134,7 +1133,8 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-24T16:14:29.013Z"
+      "publishedAt": "2026-02-24T16:14:29.013Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/item-the-penitent-s-rod.jpg"
     },
     {
       "id": "npc-vorrak-half-tongue",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T19:03:45.052Z"
+  "updatedAt": "2026-03-05T19:03:53.136Z"
 }
