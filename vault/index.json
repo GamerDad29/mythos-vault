@@ -997,8 +997,7 @@
       "factionId": "iron-hammer-clan",
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-don-thorgar-ironhammer.jpg"
+      "publishedAt": "2026-02-25T00:00:00.000Z"
     },
     {
       "id": "npc-forgemaster-valdrin-ashmere",
@@ -1015,7 +1014,8 @@
       "factionId": "brotherhood-of-forge",
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z"
+      "publishedAt": "2026-02-25T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-forgemaster-valdrin-ashmere.jpg"
     },
     {
       "id": "npc-lady-zarra-vel-sorith",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T19:02:43.046Z"
+  "updatedAt": "2026-03-05T19:02:51.560Z"
 }
