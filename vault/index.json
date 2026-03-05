@@ -1031,8 +1031,7 @@
       "factionId": "bregan-daerthe",
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-lady-zarra-vel-sorith.jpg"
+      "publishedAt": "2026-02-25T00:00:00.000Z"
     },
     {
       "id": "npc-viceroy-isolde-cravenmoor",
@@ -1048,7 +1047,8 @@
       ],
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z"
+      "publishedAt": "2026-02-25T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-viceroy-isolde-cravenmoor.jpg"
     },
     {
       "id": "npc-whisper",
@@ -1151,5 +1151,5 @@
       "publishedAt": "2026-02-24T05:07:04.682Z"
     }
   ],
-  "updatedAt": "2026-03-05T19:02:58.188Z"
+  "updatedAt": "2026-03-05T19:03:05.142Z"
 }
