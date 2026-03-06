@@ -1,0 +1,80 @@
+{
+  "id": "pc-morrighan-bustlewing",
+  "slug": "morrighan-bustlewing",
+  "name": "Morrighan Bustlewing",
+  "type": "PC",
+  "category": "Fairy · Warlock 5 / Sorcerer 1",
+  "summary": "She arrived in Karnuk carrying the cold breath of the Unseelie Court and left behind a city that had learned death was not the worst thing that could happen to it.",
+  "content": "## Appearance\n\nMorrighan is Small in the technical sense and enormous in every other one. She has the wings of something that died and decided to keep flying anyway — pale iridescent blue at odds with the deep purple of her skin and the absolute darkness of her hair, which falls in loose waves around pointed ears and a face that is, somehow, placidly delighted. She wears armor that seems too serious for something her size. She carries herself like she's already at peace with how this ends.\n\n## Personality\n\nShe is the calmest person in most rooms, and the most unsettling. Morrighan does not perform darkness — she is simply not afraid of what frightens everyone else, and her equanimity in the face of horror reads, to those who don't know her, as either great wisdom or great damage. Her morbid humor arrives with the precision of someone who has thought about death so long that it's become genuinely funny. She is not cruel. She is merely unhurried. She knows where everyone ends up.\n\n## Backstory\n\nShe was raised in the Shadowglade among fairies who worshipped Morrith, the death goddess — who saw passing not as tragedy but as transition. When Lady Malfaria, Queen of the Unseelie Court, appeared in her dreams and offered her a role, Morrighan said yes with both eyes open. She is the Rave'n's Herald. She spreads the Unseelie Court's cold influence through the mortal world not out of malice but because she genuinely believes the chill of death is a gift the living keep refusing.\n\n## Role in the Party\n\nMorrighan is the party's unsettling center of gravity — the one whose agenda is most opaque, whose affect is hardest to read, who has aligned with this group for reasons that may or may not survive the campaign's turning points. She provides power that others can't replicate and a particular brand of social navigation: she can be charming when she chooses to be, terrifying when she doesn't. The tension in her relationships comes from her treating warmth as a tactic rather than a truth.\n\n## Chronicle\n\n*The historians who came after could not agree whether Morrighan Bustlewing was a villain, a herald, or something the existing categories simply failed to contain. She arrived in Karnuk carrying the cold breath of the Unseelie Court and left behind a city that had learned, however briefly, that death was not the worst thing that could happen to it.*",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-morrighan-bustlewing.jpg",
+  "imagePosition": "center center",
+  "tags": ["pc", "warlock", "sorcerer", "fairy", "pathways-unseen"],
+  "publishedAt": "2026-03-06T00:00:00Z",
+  "source": "Pathways Unseen",
+  "player": "Morrighan",
+  "race": "Fairy",
+  "classes": [
+    { "name": "Warlock", "subclass": "The Undead", "level": 5 },
+    { "name": "Sorcerer", "subclass": "Innate Sorcery", "level": 1 }
+  ],
+  "background": "Death Cult of Morrith",
+  "alignment": "Unaligned",
+  "patron": "Lady Malfaria, Queen of the Unseelie Court",
+  "deity": "Morrith, Goddess of Death",
+  "accentColor": "hsl(250 50% 52%)",
+  "stats": { "str": 11, "dex": 16, "con": 17, "int": 14, "wis": 12, "cha": 20 },
+  "hp": 64,
+  "ac": 14,
+  "speed": "30 ft. walking / 30 ft. flying",
+  "initiative": 3,
+  "passivePerception": 11,
+  "proficiencyBonus": 3,
+  "savingThrows": ["Wisdom", "Charisma"],
+  "spellcasting": { "ability": "CHA", "saveDC": 16, "attackBonus": 8 },
+  "skills": [
+    { "name": "Arcana" },
+    { "name": "Deception" },
+    { "name": "History" },
+    { "name": "Intimidation", "expertise": true },
+    { "name": "Investigation" },
+    { "name": "Nature" },
+    { "name": "Performance" },
+    { "name": "Persuasion" }
+  ],
+  "features": [
+    "Form of Dread (3/LR — temp HP, frighten on hit, immune to frightened)",
+    "Innate Sorcery (2/Long Rest)",
+    "Pact of the Chain — Find Familiar",
+    "Agonizing Blast",
+    "Devil's Sight",
+    "Eldritch Mind",
+    "Fiendish Vigor",
+    "Fairy Magic — Faerie Fire / Enlarge·Reduce",
+    "Flight (30 ft.)"
+  ],
+  "spells": [
+    "Eldritch Blast (+8, 1d10+5 × 2 beams)",
+    "Chill Touch (+8, 2d10 necrotic)",
+    "Darkness",
+    "Hold Person",
+    "Suffocate",
+    "Dissonant Whispers",
+    "Misty Step",
+    "Hex",
+    "Arms of Hadar"
+  ],
+  "gear": [
+    "Morthar (thrown weapon, +8, 1d8 piercing)",
+    "Ring of Dual Arcana (Attuned)",
+    "Brooch of Winged Fey Grace (Attuned)",
+    "Insight Charm",
+    "Glimmershade Seedling",
+    "Medium Crystal Shard ×2"
+  ],
+  "personality": {
+    "traits": "Embraces the macabre with genuine serenity. Her dark humor is not performance — it is philosophy.",
+    "ideals": "Death is the truest part of the cycle. She serves it not from nihilism but from a kind of reverence.",
+    "bonds": "She is the Rave'n's Herald. Lady Malfaria chose her for this. That is not an honor — it is an identity.",
+    "flaws": "She views relationships as instruments, people as tools. This is her most dangerous blind spot."
+  }
+}

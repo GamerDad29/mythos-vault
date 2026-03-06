@@ -1,6 +1,84 @@
 {
   "entities": [
     {
+      "id": "pc-cannonball-kar-thul",
+      "slug": "cannonball-kar-thul",
+      "name": "\"Cannonball\" Kar-thul",
+      "type": "PC",
+      "category": "Stout Halfling · Barbarian 6",
+      "summary": "He fell into the Underdark looking for glory and found instead something rarer — a people worth fighting for.",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-cannonball-kar-thul.jpg",
+      "tags": [
+        "pc",
+        "barbarian",
+        "halfling",
+        "pathways-unseen"
+      ],
+      "publishedAt": "2026-03-06T00:00:00Z",
+      "accentColor": "hsl(8 85% 48%)",
+      "player": "Cannonball",
+      "race": "Stout Halfling"
+    },
+    {
+      "id": "pc-bpop",
+      "slug": "bpop",
+      "name": "Bpop",
+      "type": "PC",
+      "category": "Kobold · Artificer 6 — Battle Smith",
+      "summary": "He looked at every fortress the world had built against creatures of his kind and quietly, methodically, found the door.",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-bpop.jpg",
+      "tags": [
+        "pc",
+        "artificer",
+        "kobold",
+        "pathways-unseen"
+      ],
+      "publishedAt": "2026-03-06T00:00:00Z",
+      "accentColor": "hsl(210 75% 50%)",
+      "player": "Bpop",
+      "race": "Kobold"
+    },
+    {
+      "id": "pc-iblith-gorch",
+      "slug": "iblith-gorch",
+      "name": "Iblith Gorch",
+      "type": "PC",
+      "category": "Drow Half-Elf · Monk 6 — Warrior of Shadow",
+      "summary": "He came from nothing — from less than nothing — and made of that nothing a name sharp enough to cut.",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-iblith-gorch.jpg",
+      "tags": [
+        "pc",
+        "monk",
+        "drow",
+        "half-elf",
+        "pathways-unseen"
+      ],
+      "publishedAt": "2026-03-06T00:00:00Z",
+      "accentColor": "hsl(265 55% 50%)",
+      "player": "Iblith",
+      "race": "Drow Half-Elf"
+    },
+    {
+      "id": "pc-morrighan-bustlewing",
+      "slug": "morrighan-bustlewing",
+      "name": "Morrighan Bustlewing",
+      "type": "PC",
+      "category": "Fairy · Warlock 5 / Sorcerer 1",
+      "summary": "She arrived in Karnuk carrying the cold breath of the Unseelie Court and left behind a city that had learned death was not the worst thing that could happen to it.",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-morrighan-bustlewing.jpg",
+      "tags": [
+        "pc",
+        "warlock",
+        "sorcerer",
+        "fairy",
+        "pathways-unseen"
+      ],
+      "publishedAt": "2026-03-06T00:00:00Z",
+      "accentColor": "hsl(250 50% 52%)",
+      "player": "Morrighan",
+      "race": "Fairy"
+    },
+    {
       "id": "npc-thessivane-aurmirith",
       "slug": "thessivane-aurmirith",
       "name": "Thessivane Aurmirith",
@@ -1188,5 +1266,5 @@
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-vorrak-half-tongue.jpg"
     }
   ],
-  "updatedAt": "2026-03-06T03:04:25.314Z"
+  "updatedAt": "2026-03-06T22:25:42.017Z"
 }

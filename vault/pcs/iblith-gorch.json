@@ -1,0 +1,65 @@
+{
+  "id": "pc-iblith-gorch",
+  "slug": "iblith-gorch",
+  "name": "Iblith Gorch",
+  "type": "PC",
+  "category": "Drow Half-Elf · Monk 6 — Warrior of Shadow",
+  "summary": "He came from nothing — from less than nothing — and made of that nothing a name sharp enough to cut.",
+  "content": "## Appearance\n\nIblith is the color of a bruise — dark enough that full-blooded drow see a reminder, light enough that they see a mistake. He is lean and economical in every movement, 5'5\" of coiled tension dressed in shadow-dark cloth and purpose. His violet eyes are the most expressive thing about him, doing work that his face refuses to do. He does not fidget. He does not linger. When he stands in a room he gives the impression of someone who has already mapped every exit and catalogued every threat.\n\n## Personality\n\nHe speaks rarely and precisely, each word a decision. When the Drow sign comes out, it is not a flourish — it is a verdict. Iblith carries himself with the specific dignity of someone who named himself \"shit stain\" and turned it into armor, someone who was saved because his eyes reminded a mercenary of someone else and has spent forty years being more than a resemblance. His self-loathing is not visible. It manifests as aggression toward small provocations, as a hair-trigger that only those who know him learn to read.\n\n## Backstory\n\nHe was an accident the Underdark tried to correct: born to a Bregan D'aerthe woman and an elf who was never named, hidden for years, nearly executed for the crime of existing half-and-half in a world that demands purity. Jarlaxle saved him on a whim and a memory, left him at a monastery door with a Hat of Disguise and no further explanation. He has been earning the right to return to Bregan D'aerthe ever since — not for belonging, but for proof.\n\n## Role in the Party\n\nIblith moves through the group like shadow through a crack — present, useful, and never quite fully illuminated. He is the contingency plan the party didn't know it had, the one who disappears into the dark and reappears behind whatever threatened them. His relational friction is internal: he does not know how to trust easily, does not know how to ask for help, and has a habit of treating connection like a liability. The party may become the closest thing he has to a reason beyond ambition.\n\n## Chronicle\n\n*Iblith Gorch came from nothing — from less than nothing, from the word drow use for something scraped off their boot — and made of that nothing a name sharp enough to cut. He moves through Karnuk's politics the way he moves through its alleys: quietly, precisely, and leaving evidence only when he intends to.*",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-iblith-gorch.jpg",
+  "imagePosition": "center top",
+  "tags": ["pc", "monk", "drow", "half-elf", "pathways-unseen"],
+  "publishedAt": "2026-03-06T00:00:00Z",
+  "source": "Pathways Unseen",
+  "player": "Iblith",
+  "race": "Drow Half-Elf",
+  "classes": [
+    { "name": "Monk", "subclass": "Warrior of Shadow", "level": 6 }
+  ],
+  "background": "Urban Bounty Hunter",
+  "alignment": "Chaotic Neutral",
+  "accentColor": "hsl(265 55% 50%)",
+  "stats": { "str": 12, "dex": 20, "con": 14, "int": 12, "wis": 16, "cha": 14 },
+  "hp": 72,
+  "ac": 21,
+  "speed": "55 ft.",
+  "initiative": 5,
+  "passivePerception": 13,
+  "proficiencyBonus": 3,
+  "savingThrows": ["Strength", "Dexterity"],
+  "skills": [
+    { "name": "Acrobatics", "expertise": true },
+    { "name": "Deception" },
+    { "name": "Insight", "expertise": true },
+    { "name": "Stealth", "expertise": true },
+    { "name": "Survival" },
+    { "name": "Thieves' Tools", "expertise": true }
+  ],
+  "features": [
+    "Shadow Step (60 ft. teleport in dim light)",
+    "Flurry of Blows",
+    "Sentinel",
+    "Shadow Strike Mastery (reroll miss 1/SR)",
+    "Stunning Strike",
+    "Empowered Strikes (Force damage)",
+    "Extra Attack",
+    "Slow Fall",
+    "Drow Magic — Faerie Fire / Darkness (1/LR)",
+    "Focus Points: 6 / Short Rest"
+  ],
+  "gear": [
+    "Hat of Disguise (Attuned — gift from Jarlaxle)",
+    "Whispercoil Mk II: Silencium Crownset (+8, 1d6+5)",
+    "Hand Wraps of Sapping Strikes",
+    "Amulet of Perfect Focus (Attuned)",
+    "Sash of Wind's Grace (Attuned)",
+    "Robe of Central Security",
+    "Bag of Holding"
+  ],
+  "personality": {
+    "traits": "Always has a plan for what to do when things go wrong. Guarded and reserved — uses Drow sign language as insults.",
+    "ideals": "Freedom. Chains are meant to be broken — there is nothing that will hold him down, not even his past.",
+    "bonds": "He will become the greatest rogue leader that ever lived, and Bregan D'aerthe will know his name.",
+    "flaws": "Would rather fight than talk through issues. Self-loathing leads him to pick fights for small reasons."
+  }
+}

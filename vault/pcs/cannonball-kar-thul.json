@@ -1,0 +1,62 @@
+{
+  "id": "pc-cannonball-kar-thul",
+  "slug": "cannonball-kar-thul",
+  "name": "\"Cannonball\" Kar-thul",
+  "type": "PC",
+  "category": "Stout Halfling · Barbarian 6",
+  "summary": "He fell into the Underdark looking for glory and found instead something rarer — a people worth fighting for.",
+  "content": "## Appearance\n\nCannonball stands a proud and indignant three and a half feet — shirtless almost always, his barrel chest mapped with the old scars of a hundred stupid decisions he'd make again without blinking. His curly reddish hair is perpetually disheveled. He carries his tankard like a scepter and his greataxe like an old friend. His reddish skin is weathered and his brown eyes carry the exact expression of someone who has just heard a joke they don't quite understand but will laugh at anyway, loudly, too late.\n\n## Personality\n\nHe is, in the most earnest possible sense, a force of nature that has not yet found the right target. Cannonball doesn't perform confidence — he simply cannot imagine a version of events where he loses, because his mother told him he was descended from giants and that is, to him, empirical fact. He is charismatic in the way a rockslide is charismatic: loud, inevitable, oddly joyful. He will put his arm around you within ten minutes of meeting you. He will also punch a wall if you mention his height. Both things are true.\n\n## Backstory\n\nHe was born in the high peaks to a clan of Goliath warriors who had no idea what to do with him. His mother said he was special. At fifteen he proved it by charging a boy twice his size and sending him over a banister with his whole body — the crowd roared and called him Cannonball and the math was settled: violence works. He was sent into the world at twenty to earn his legend. He fell into the Underdark through a well on a dare and has not, for even one moment, considered that this might be a setback.\n\n## Role in the Party\n\nHe is the party's collision point with the world — the one who charges before anyone's finished the plan, who toasts the victory before it's won, who carries the group's chaos energy like a flag. Tensions arrive with his fuse: make fun of his size, let him go hungry, tell him to be quiet, and you're standing between a halfling and a decision that was already made. He provides the party with heart, spectacle, and the specific kind of trouble that somehow ends in a great story.\n\n## Chronicle\n\n*The histories will argue about whether Cannonball Kar-thul was the mightiest warrior of the age or simply the most committed. What they will not argue is that he was first through every door, loudest in every hall, and that those who laughed at his size did not laugh twice. He fell into the Underdark looking for glory and found instead something rarer — a people worth fighting for.*",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-cannonball-kar-thul.jpg",
+  "imagePosition": "center top",
+  "tags": ["pc", "barbarian", "halfling", "pathways-unseen"],
+  "publishedAt": "2026-03-06T00:00:00Z",
+  "source": "Pathways Unseen",
+  "player": "Cannonball",
+  "race": "Stout Halfling",
+  "classes": [
+    { "name": "Barbarian", "subclass": "Path of the Giant", "level": 6 }
+  ],
+  "background": "Outlander",
+  "alignment": "Chaotic Neutral",
+  "accentColor": "hsl(8 85% 48%)",
+  "stats": { "str": 18, "dex": 16, "con": 18, "int": 5, "wis": 7, "cha": 14 },
+  "hp": 96,
+  "ac": 17,
+  "speed": "40 ft.",
+  "initiative": 3,
+  "passivePerception": 8,
+  "proficiencyBonus": 3,
+  "savingThrows": ["Strength", "Constitution"],
+  "skills": [
+    { "name": "Acrobatics" },
+    { "name": "Athletics", "expertise": true },
+    { "name": "Intimidation" },
+    { "name": "Nature" },
+    { "name": "Sleight of Hand" },
+    { "name": "Stealth" },
+    { "name": "Survival" }
+  ],
+  "features": [
+    "Reckless Attack",
+    "Rage (4/Long Rest)",
+    "Elemental Cleaver",
+    "Giant's Havoc",
+    "Extra Attack",
+    "Danger Sense",
+    "Stonebrand Tattoo"
+  ],
+  "gear": [
+    "Bloodrage Greataxe (+9, 1d12+8)",
+    "Glaive",
+    "Handaxes",
+    "Intact Control Necklace (Command 1/LR)",
+    "Bear Clan Cloak",
+    "Cat's Eye Agate Necklace"
+  ],
+  "personality": {
+    "traits": "Driven by wanderlust. Places no stock in wealth or status — they won't help against a hungry owlbear.",
+    "ideals": "Glory. Must earn glory in battle, for himself and his clan.",
+    "bonds": "Family, clan, and tribe are the most important thing in his life, even when far from them.",
+    "flaws": "Too enamored of ale and intoxicants. Violence is his answer to almost any challenge. Very short fuse about his size."
+  }
+}

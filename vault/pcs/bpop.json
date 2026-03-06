@@ -1,0 +1,70 @@
+{
+  "id": "pc-bpop",
+  "slug": "bpop",
+  "name": "Bpop",
+  "type": "PC",
+  "category": "Kobold · Artificer 6 — Battle Smith",
+  "summary": "He looked at every fortress the world had built against creatures of his kind and quietly, methodically, found the door.",
+  "content": "## Appearance\n\nBpop is small even by kobold standards, a compact little figure of burnt-orange scales and enormous eyes that miss nothing. He moves through the world in a constant state of assessment — scanning surfaces for structural weakness, cataloguing tools, noting who relies on what. His hands are perpetually calloused, his workbench-scorched fingers always fidgeting with some component. He doesn't carry himself with swagger. He carries himself with precision, which is more dangerous.\n\n## Personality\n\nBpop is relentlessly, exhaustingly curious — the kind of curious that takes apart your lock to understand the mechanism and then hands it back improved. His deference to power is practiced and hollow; underneath it lives a meticulous rage he has never fully acknowledged. He respects strength and intelligence in others because those are the only currencies that ever bought him safety. He is genuinely warm once trust is established, and the distance between \"guarded\" and \"loyal\" can close surprisingly fast.\n\n## Backstory\n\nHe served a Red Dragon who taught him nothing on purpose and a clan of Stone Giants who taught him everything by accident. When the cave collapsed, Bpop didn't mourn what was lost — he survived it, rebuilt it in miniature, and walked toward somewhere new. He came to the Underdark with a schematic for a trigger mechanism he hasn't finished, a Steel Defender named Mr. Cogsworth, and the particular hunger of someone who has never once been treated as the most important person in the room but intends to become it.\n\n## Role in the Party\n\nBpop is the party's architecture — the one who makes the plan survivable, who patches the wounded before anyone notices they're bleeding, who figures out the trap before it fires. His tension within the group is quieter: he resents being overlooked and has learned to weaponize usefulness as a form of control. His relationships deepen through gratitude, and he tends to feel most like himself when someone needs something fixed that no one else can fix.\n\n## Chronicle\n\n*The tinker-scholars of Karnuk will debate for a century whether Bpop's genius was born of circumstance or spite, and the honest answer is both. He is the one who held the mechanism together when everything else was breaking; the one who looked at every fortress the world had built against creatures of his kind and quietly, methodically, found the door.*",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/pc-bpop.jpg",
+  "imagePosition": "center center",
+  "tags": ["pc", "artificer", "kobold", "pathways-unseen"],
+  "publishedAt": "2026-03-06T00:00:00Z",
+  "source": "Pathways Unseen",
+  "player": "Bpop",
+  "race": "Kobold",
+  "classes": [
+    { "name": "Artificer", "subclass": "Battle Smith", "level": 6 }
+  ],
+  "background": "Giant Foundling",
+  "alignment": "Neutral",
+  "accentColor": "hsl(210 75% 50%)",
+  "stats": { "str": 12, "dex": 15, "con": 14, "int": 18, "wis": 12, "cha": 10 },
+  "hp": 60,
+  "ac": 13,
+  "speed": "30 ft.",
+  "initiative": 2,
+  "passivePerception": 11,
+  "proficiencyBonus": 3,
+  "savingThrows": ["Constitution", "Intelligence"],
+  "spellcasting": { "ability": "INT", "saveDC": 15, "attackBonus": 7 },
+  "skills": [
+    { "name": "Arcana" },
+    { "name": "History" },
+    { "name": "Investigation", "expertise": true },
+    { "name": "Nature" },
+    { "name": "Survival" }
+  ],
+  "features": [
+    "Steel Defender — Mr. Cogsworth (AC 15)",
+    "Extra Attack",
+    "Battle Ready",
+    "Tool Expertise",
+    "Spell Sniper",
+    "Draconic Cry (3/Long Rest)",
+    "Strike of the Giants (3/Long Rest)"
+  ],
+  "spells": [
+    "Shield (Always Prepared)",
+    "Heroism (Always Prepared)",
+    "Warding Bond",
+    "Branding Smite",
+    "Web",
+    "Vortex Warp",
+    "Fire Bolt (+7, 2d10)",
+    "Homunculus Servant"
+  ],
+  "gear": [
+    "Fire Sword — Flame Tongue Greatsword",
+    "Returning Boomerang",
+    "Heavy Crossbow",
+    "Stone Whisper Axe",
+    "Polished Amulet (Attuned)"
+  ],
+  "personality": {
+    "traits": "Size is just half the story. Every avalanche begins as a single pebble.",
+    "ideals": "Knowledge is power — and power is leverage over those who once underestimated you.",
+    "bonds": "Loyalty runs deep to his kobold clan, even across the distance he's put between them.",
+    "flaws": "Repressed anger toward those with power over him. Outwardly respectful; inwardly cataloguing every slight."
+  }
+}
