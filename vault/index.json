@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "npc-thessivane-aurmirith",
+      "slug": "thessivane-aurmirith",
+      "name": "Thessivane Aurmirith",
+      "type": "NPC",
+      "category": "Dragon Elf Sorcerer-Duelist",
+      "summary": "Dragon Elf Sorcerer-Duelist — The Auric Court of Vaeltharys",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772766234626-mw6ugi.jpg",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-06T03:04:24.245Z"
+    },
+    {
       "id": "npc-imala-dresh-korvaine",
       "slug": "imala-dresh-korvaine",
       "name": "Imala Dresh Korvaine",
@@ -1156,5 +1171,5 @@
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-vorrak-half-tongue.jpg"
     }
   ],
-  "updatedAt": "2026-03-05T20:47:01.980Z"
+  "updatedAt": "2026-03-06T03:04:25.314Z"
 }
