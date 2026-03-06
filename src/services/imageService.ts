@@ -305,4 +305,3 @@ export async function uploadImageToVaultGitHub(
   return `https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/${entityId}.${ext}`;
 }
 
-===== /c/Users/Clyle/Downloads/mythos-vault/src/tokens.ts =====
