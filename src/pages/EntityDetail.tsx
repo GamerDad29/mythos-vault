@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useRoute, useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ExternalLink, Eye, EyeOff } from 'lucide-react';
+import { ExternalLink, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { SkeletonHero } from '../components/Skeleton';
 import type { VaultEntity, VaultEntityStub } from '../types';
 import { FACTION_COLORS, TYPE_URL_SEGMENT, URL_SEGMENT_TO_TYPE } from '../types';
 import { renderContent, stripHiddenBlocks } from '../utils/renderContent';
 import { useAuth } from '../contexts/AuthContext';
-import { toggleEntityHidden, toggleSectionHidden } from '../services/githubService';
+import { toggleEntityHidden, toggleSectionHidden, updateEntityImage } from '../services/githubService';
+import { IMAGE_STYLES, buildVaultImagePrompt, generateVaultImage, uploadImageToVaultGitHub } from '../services/imageService';
+import type { ImageStyleConfig } from '../services/imageService';
 
 const TYPE_PLURALS: Record<string, string> = {
   npcs: 'NPCs',
@@ -128,6 +130,9 @@ export function EntityDetail() {
   const [error, setError] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
   const [indexStubs, setIndexStubs] = useState<VaultEntityStub[]>([]);
+  const [selectedStyle, setSelectedStyle] = useState<ImageStyleConfig>(IMAGE_STYLES[0]);
+  const [regenStatus, setRegenStatus] = useState<'idle' | 'generating' | 'uploading' | 'saving' | 'done' | 'error'>('idle');
+  const [regenError, setRegenError] = useState('');
   const { isDM } = useAuth();
 
   useEffect(() => {
@@ -169,6 +174,27 @@ export function EntityDetail() {
       setEntity(e => e ? { ...e, content: newContent } : null);
     } catch (err) {
       console.error('Failed to hide section:', err);
+    }
+  }
+
+  async function handleRegenImage() {
+    if (!entity) return;
+    setRegenStatus('generating');
+    setRegenError('');
+    try {
+      const prompt = buildVaultImagePrompt(entity, selectedStyle);
+      const { imageBase64, mimeType } = await generateVaultImage(prompt);
+      setRegenStatus('uploading');
+      const rawUrl = await uploadImageToVaultGitHub(entity.id, imageBase64, mimeType);
+      setRegenStatus('saving');
+      await updateEntityImage(entity, rawUrl, pat);
+      setEntity(e => e ? { ...e, imageUrl: rawUrl } : null);
+      setImgError(false);
+      setRegenStatus('done');
+      setTimeout(() => setRegenStatus('idle'), 3000);
+    } catch (err) {
+      setRegenError(err instanceof Error ? err.message : 'Image generation failed');
+      setRegenStatus('error');
     }
   }
 
@@ -311,6 +337,20 @@ export function EntityDetail() {
               className="relative overflow-hidden"
               style={{ minHeight: '280px', background: 'hsl(15 6% 7%)' }}
             >
+              {/* Entity type badge — always visible */}
+              <div
+                className="absolute top-3 left-3 z-10 font-serif text-xs uppercase tracking-widest px-2 py-0.5"
+                style={{
+                  background: 'rgba(13,11,14,0.75)',
+                  border: `1px solid ${accentColor}44`,
+                  color: accentColor,
+                  borderRadius: '2px',
+                  backdropFilter: 'blur(4px)',
+                }}
+              >
+                {entity.type}
+              </div>
+
               {entity.imageUrl && !imgError ? (
                 <>
                   <img
@@ -404,9 +444,9 @@ export function EntityDetail() {
                 </div>
               )}
 
-              {/* DM: entity-level toggle */}
+              {/* DM: entity-level toggle + image regen */}
               {isDM && (
-                <div className="mt-6">
+                <div className="mt-6 space-y-4">
                   <button
                     onClick={handleToggleEntityHidden}
                     style={{
@@ -428,6 +468,84 @@ export function EntityDetail() {
                     {entity.hidden ? <Eye size={12} /> : <EyeOff size={12} />}
                     {entity.hidden ? 'Show to Players' : 'Hide from Players'}
                   </button>
+
+                  {/* Image regen panel */}
+                  <div
+                    style={{
+                      background: 'rgba(13,11,14,0.6)',
+                      border: '1px solid hsl(15 8% 18%)',
+                      borderRadius: '4px',
+                      padding: '12px',
+                    }}
+                  >
+                    <p className="font-serif text-xs uppercase tracking-widest mb-3" style={{ color: 'hsl(15 4% 40%)' }}>
+                      Regenerate Image
+                    </p>
+                    {/* Style picker */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {IMAGE_STYLES.map(s => (
+                        <button
+                          key={s.id}
+                          onClick={() => setSelectedStyle(s)}
+                          style={{
+                            background: selectedStyle.id === s.id ? `${s.accent}22` : 'transparent',
+                            border: `1px solid ${selectedStyle.id === s.id ? s.accent : 'hsl(15 8% 22%)'}`,
+                            borderRadius: '3px',
+                            color: selectedStyle.id === s.id ? s.accent : 'hsl(15 4% 50%)',
+                            padding: '3px 10px',
+                            fontFamily: 'serif',
+                            fontSize: '10px',
+                            letterSpacing: '0.1em',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s',
+                          }}
+                        >
+                          {s.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="font-mono text-xs mb-3" style={{ color: 'hsl(15 4% 35%)' }}>
+                      {selectedStyle.subtitle} · BFL FLUX 1.1 Pro · $0.04
+                    </p>
+                    <button
+                      onClick={handleRegenImage}
+                      disabled={regenStatus !== 'idle' && regenStatus !== 'error' && regenStatus !== 'done'}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: regenStatus === 'done' ? 'rgba(52,211,153,0.15)' : `${selectedStyle.accent}18`,
+                        border: `1px solid ${regenStatus === 'done' ? '#34d399' : selectedStyle.accent}`,
+                        borderRadius: '3px',
+                        color: regenStatus === 'done' ? '#34d399' : selectedStyle.accent,
+                        padding: '5px 14px',
+                        fontFamily: 'serif',
+                        fontSize: '11px',
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                        cursor: regenStatus === 'idle' || regenStatus === 'error' || regenStatus === 'done' ? 'pointer' : 'not-allowed',
+                        opacity: regenStatus !== 'idle' && regenStatus !== 'error' && regenStatus !== 'done' ? 0.6 : 1,
+                      }}
+                    >
+                      <RefreshCw
+                        size={11}
+                        style={{
+                          animation: regenStatus === 'generating' || regenStatus === 'uploading' || regenStatus === 'saving'
+                            ? 'spin 1s linear infinite'
+                            : 'none',
+                        }}
+                      />
+                      {regenStatus === 'idle' && 'Generate Image'}
+                      {regenStatus === 'generating' && 'Generating…'}
+                      {regenStatus === 'uploading' && 'Uploading…'}
+                      {regenStatus === 'saving' && 'Saving…'}
+                      {regenStatus === 'done' && 'Done'}
+                      {regenStatus === 'error' && 'Retry'}
+                    </button>
+                    {regenStatus === 'error' && regenError && (
+                      <p className="font-mono text-xs mt-2" style={{ color: 'hsl(0 70% 55%)' }}>{regenError}</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

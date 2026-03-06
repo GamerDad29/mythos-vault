@@ -54,6 +54,39 @@ export async function pushVaultFile(
   }
 }
 
+export async function updateEntityImage(
+  entity: VaultEntity,
+  imageUrl: string,
+  pat: string,
+): Promise<void> {
+  const folder = TYPE_VAULT_FOLDER[entity.type.toUpperCase()] ?? `${entity.type.toLowerCase()}s`;
+  const entityPath = `vault/${folder}/${entity.slug}.json`;
+  const indexPath = 'vault/index.json';
+
+  const { content: rawEntity } = await getFileContentAndSha(entityPath, pat);
+  const entityData: VaultEntity = JSON.parse(rawEntity);
+  entityData.imageUrl = imageUrl;
+  await pushVaultFile(
+    entityPath,
+    JSON.stringify(entityData, null, 2),
+    `image: regenerate image for ${entity.name}`,
+    pat,
+  );
+
+  const { content: rawIndex } = await getFileContentAndSha(indexPath, pat);
+  const indexData: VaultIndex = JSON.parse(rawIndex);
+  const stub = indexData.entities.find(e => e.id === entity.id);
+  if (stub) stub.imageUrl = imageUrl;
+  await pushVaultFile(
+    indexPath,
+    JSON.stringify(indexData, null, 2),
+    `image: update index imageUrl for ${entity.name}`,
+    pat,
+  );
+
+  vaultService.clearCache();
+}
+
 export async function toggleEntityHidden(
   stub: VaultEntityStub,
   hidden: boolean,
