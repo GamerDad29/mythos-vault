@@ -534,7 +534,7 @@ export function EntityDetail() {
 
                     <div className="flex gap-2 flex-wrap">
                       {/* Generate / Regenerate button */}
-                      {(regenStatus === 'idle' || regenStatus === 'generating' || regenStatus === 'preview' || regenStatus === 'error' || regenStatus === 'done') && (
+                      {(regenStatus === 'idle' || regenStatus === 'generating' || regenStatus === 'preview' || regenStatus === 'committing' || regenStatus === 'error' || regenStatus === 'done') && (
                         <button
                           onClick={handleGenerate}
                           disabled={regenStatus === 'generating' || regenStatus === 'committing'}
