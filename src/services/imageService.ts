@@ -14,13 +14,17 @@ export const IMAGE_STYLES: ImageStyleConfig[] = [
     label: 'Photorealistic',
     subtitle: 'DSLR · Cinematic',
     accent: '#60a5fa',
-    suffix: 'hyperrealistic photography shot on Hasselblad H6D wide angle lens, shallow depth of field with natural bokeh, physically accurate volumetric lighting, deep rich shadows with specular highlights, cinematic color grading with highly saturated tones, high fantasy Dungeons and Dragons style, award-winning fantasy editorial photography, photorealistic, 8K',
+    // Style 1 — Cinematic Photorealistic (DSLR)
+    // Pattern: [subject], high fantasy Dungeons and Dragons style, [mood], shot with Hasselblad H6D wide angle lens, cinematic lighting, photorealistic, 8K
+    suffix: 'high fantasy Dungeons and Dragons style, shot with Hasselblad H6D wide angle lens, cinematic lighting, photorealistic, 8K',
   },
   {
     id: 'illustrated',
-    label: 'D&D Illustrated',
+    label: 'Comic Book',
     subtitle: 'Comic Book · Cel Shaded',
     accent: '#a78bfa',
+    // Style 2 — Comic Book / Cel Shaded
+    // Pattern: [subject], high fantasy Dungeons and Dragons setting, comic book cell shading style
     suffix: 'high fantasy Dungeons and Dragons setting, comic book cell shading style, bold confident outlines, flat color fills with painterly shading, warm atmospheric background, D&D character art quality',
   },
   {
@@ -28,14 +32,28 @@ export const IMAGE_STYLES: ImageStyleConfig[] = [
     label: 'Cel Rotoscope',
     subtitle: 'Telltale · Full Body',
     accent: '#34d399',
-    suffix: 'high fantasy Dungeons and Dragons setting, rim lighting, telltale style rotoscope cel shading art style, wide angle full body composition, bold graphic illustration, thick confident outlines',
+    // Style 3 — Cel Shaded / Rotoscope Full Body
+    // Pattern: wide angle full body shot of [character], [environment], high fantasy Dungeons and Dragons setting, rim lighting, telltale style rotoscope cel shading art style
+    suffix: 'high fantasy Dungeons and Dragons setting, rim lighting, telltale style rotoscope cel shading art style, wide angle full body shot, bold graphic illustration, thick confident outlines',
   },
   {
     id: 'cinematic',
     label: 'Cinematic Scene',
     subtitle: 'Widescreen · Battle Drama',
     accent: '#f59e0b',
-    suffix: 'cinematic widescreen image, dynamic blur background with other figures and environment in motion, bathed in warm dramatic glow of battle fires or torchlight, gritty desaturated color palette with strategic warm highlights emphasizing drama, high-stakes fantasy atmosphere, photorealistic rendering',
+    // Style 4 — Cinematic Widescreen Battle/Scene
+    // Pattern: cinematic widescreen image of [character] [action/moment], [expression], [armor/clothing detail], dynamic blur background, [light source], gritty desaturated color palette with strategic warm highlights
+    suffix: 'dynamic blur background, gritty desaturated color palette with strategic warm highlights emphasizing drama, high-stakes fantasy atmosphere, cinematic widescreen composition, photorealistic rendering',
+  },
+  {
+    id: 'equipment',
+    label: 'Equipment Hero',
+    subtitle: 'Macro · Artifact Detail',
+    accent: '#f97316',
+    // Style 5 — Equipment/Armor Hero Shot
+    // Pattern: [item name] is [description], shot with Canon TS-E 135mm f/4L, black background, macro detail, single dramatic light source
+    // NOTE: This style is only meaningful for items/weapons/armor. For other entity types it falls back to realistic.
+    suffix: 'shot with Canon TS-E 135mm f/4L, black background, macro detail, single dramatic light source, material texture rendered in extreme clarity, product hero shot composition',
   },
 ];
 
@@ -88,13 +106,28 @@ export function buildVaultImagePrompt(entity: VaultEntity, style: ImageStyleConf
     subject = entity.name + (entity.category ? `. ${entity.category}` : '');
     const appearanceMatch = md.match(/\*\*Appearance:\*\*\s*([^\n]+)/);
     if (appearanceMatch) subject += `. ${appearanceMatch[1].replace(/[*]/g, '').trim()}`;
-    framing = 'character portrait showing face and upper body at 3/4 angle, dramatic rim lighting with warm torchlight, expressive facial detail clearly visible, RPG character art composition';
+    // Style-aware framing for characters
+    if (style.id === 'celshade') {
+      // Style 3 forces full body — that's the whole point of the rotoscope style
+      framing = 'wide angle full body shot, dramatic rim lighting, expressive face and confident stance, RPG character art composition';
+    } else if (style.id === 'cinematic') {
+      // Style 4 — action moment, dynamic
+      framing = 'character in a tense decisive moment, dynamic composition, expressive face showing intensity, armor and equipment detail visible, dramatic light source from battle fires or torchlight';
+    } else if (style.id === 'equipment') {
+      // Style 5 makes no sense for NPCs — fall back to realistic portrait framing
+      framing = 'character portrait showing face and upper body at 3/4 angle, dramatic rim lighting with warm torchlight, expressive facial detail clearly visible, RPG character art composition';
+    } else {
+      framing = 'character portrait showing face and upper body at 3/4 angle, dramatic rim lighting with warm torchlight, expressive facial detail clearly visible, RPG character art composition';
+    }
   } else if (typeId === 'creature') {
     subject = extractSubject(md);
     const creatureTypeLine = md.match(/\b(Tiny|Small|Medium|Large|Huge|Gargantuan)\s+(\w+),/i);
     const creatureType = creatureTypeLine ? creatureTypeLine[2].toLowerCase() : '';
     if (['construct', 'warforged'].some(t => creatureType.includes(t) || md.toLowerCase().includes(t))) {
-      framing = 'full body portrait of a constructed humanoid warrior at 3/4 angle, heavy plate armor with arcane rune engravings, rigid mechanical joints and alchemical metalwork, still and watchful stance conveying disciplined readiness, dramatic sidelight catching polished metal surfaces';
+      const constructFraming = 'full body portrait of a constructed humanoid warrior at 3/4 angle, heavy plate armor with arcane rune engravings, rigid mechanical joints and alchemical metalwork, still and watchful stance conveying disciplined readiness, dramatic sidelight catching polished metal surfaces';
+    framing = (style.id === 'cinematic')
+      ? 'constructed humanoid warrior in a combat-ready stance, armor panels catching firelight, watchful and lethal stillness, dynamic widescreen composition'
+      : constructFraming;
     } else if (['humanoid', 'human', 'elf', 'dwarf', 'orc', 'tiefling', 'gnome', 'halfling'].some(t => creatureType.includes(t))) {
       framing = 'full body character portrait at 3/4 angle, dramatic rim lighting with torchlight, equipped with visible weapons and armor appropriate to their role, expressive face and confident stance, RPG character art composition';
     } else if (creatureType.includes('undead')) {
@@ -155,7 +188,13 @@ export function buildVaultImagePrompt(entity: VaultEntity, style: ImageStyleConf
     const flavorMatch = md.match(/\*\*[^*\n]+\*\*\n+\*([^*\n]{20,})\*/);
     subject = flavorMatch ? flavorMatch[1].trim() : extractSubject(md);
     const mdItem = md.toLowerCase();
-    if (mdItem.match(/\b(legendary|artifact|relic|ancient|cursed|sentient|unique)\b/)) {
+    // Style 5 (equipment) is designed for items — use its macro hero shot framing
+    // For other styles, use content-aware framing as normal
+    if (style.id === 'equipment') {
+      // Style 5 — Canon TS-E 135mm macro, black background, single light source
+      // The suffix handles the technical setup; framing just describes the item's presentation
+      framing = 'displayed on a black surface, macro detail revealing every scratch and material texture, single dramatic raking light source from the side';
+    } else if (mdItem.match(/\b(legendary|artifact|relic|ancient|cursed|sentient|unique)\b/)) {
       framing = 'legendary artifact displayed with reverence, dramatic single-source magical glow with caustic light refraction, isolated hero shot with the object as sole focus, sense of immense and dangerous power';
     } else if (mdItem.match(/\b(sword|blade|axe|weapon|dagger|bow|staff|wand|spear|halberd|mace)\b/)) {
       framing = 'fantasy weapon displayed at a dramatic angle, material and craftsmanship clearly rendered, lighting that reveals edge quality and wear, character implied by the design and condition';
