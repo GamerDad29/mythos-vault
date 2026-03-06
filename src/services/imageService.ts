@@ -132,10 +132,14 @@ export function buildVaultImagePrompt(entity: VaultEntity, style: ImageStyleConf
   let framing = '';
 
   if (typeId === 'npc' || typeId === 'pc') {
-    subject = entity.name + (entity.category ? `. ${entity.category}` : '');
-    // Use extractSectionContent — handles both ## Appearance and **Appearance:** formats
+    // Appearance comes BEFORE category — race/physical description must hit FLUX early.
+    // "Steel Syndicate War-Mech Commander" before "bugbear" = FLUX renders a human soldier.
     const appearance = extractSectionContent(md, 'Appearance');
-    if (appearance) subject += `. ${appearance}`;
+    if (appearance) {
+      subject = `${entity.name}. ${appearance}`;
+    } else {
+      subject = entity.name + (entity.category ? `. ${entity.category}` : '');
+    }
     // Style-aware framing for characters
     if (style.id === 'celshade') {
       // Style 3 forces full body — that's the whole point of the rotoscope style
