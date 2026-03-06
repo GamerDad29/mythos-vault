@@ -271,17 +271,44 @@ function workerHeaders() {
   };
 }
 
+// Submit + client-side poll to avoid Cloudflare Worker's 50-subrequest-per-request limit.
+// Each /api/bfl/poll call uses only 1-2 subrequests; the polling loop runs in the browser.
 export async function generateVaultImage(prompt: string): Promise<{ imageBase64: string; mimeType: string }> {
-  const res = await fetch(`${WORKER_URL}/api/bfl/generate`, {
+  // 1. Submit the job
+  const submitRes = await fetch(`${WORKER_URL}/api/bfl/generate`, {
     method: 'POST',
     headers: workerHeaders(),
     body: JSON.stringify({ prompt, aspect_ratio: '1:1' }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({})) as { error?: string };
-    throw new Error(err.error || `Image generation failed: ${res.status}`);
+  if (!submitRes.ok) {
+    const err = await submitRes.json().catch(() => ({})) as { error?: string };
+    throw new Error(err.error || `Image submission failed: ${submitRes.status}`);
   }
-  return res.json() as Promise<{ imageBase64: string; mimeType: string }>;
+  const { pollingUrl } = await submitRes.json() as { pollingUrl: string };
+
+  // 2. Poll from the browser (no subrequest limit here) — max 90s, 2s intervals
+  const maxAttempts = 45;
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise(r => setTimeout(r, 2000));
+
+    const pollRes = await fetch(`${WORKER_URL}/api/bfl/poll`, {
+      method: 'POST',
+      headers: workerHeaders(),
+      body: JSON.stringify({ pollingUrl }),
+    });
+    if (!pollRes.ok) continue;
+
+    const data = await pollRes.json() as
+      | { status: 'pending' }
+      | { status: 'ready'; imageBase64: string; mimeType: string }
+      | { status: 'error'; message: string };
+
+    if (data.status === 'ready') return { imageBase64: data.imageBase64, mimeType: data.mimeType };
+    if (data.status === 'error') throw new Error(data.message);
+    // 'pending' — keep polling
+  }
+
+  throw new Error('Image generation timed out after 90s');
 }
 
 export async function uploadImageToVaultGitHub(
