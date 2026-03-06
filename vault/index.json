@@ -199,7 +199,8 @@
         "forged",
         "ai-generated"
       ],
-      "publishedAt": "2026-02-27T03:07:42.345Z"
+      "publishedAt": "2026-02-27T03:07:42.345Z",
+      "hidden": true
     },
     {
       "id": "npc-brekka-stonegut",
