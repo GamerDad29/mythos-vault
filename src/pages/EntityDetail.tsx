@@ -134,6 +134,8 @@ export function EntityDetail() {
   const [regenStatus, setRegenStatus] = useState<'idle' | 'generating' | 'preview' | 'committing' | 'done' | 'error'>('idle');
   const [regenError, setRegenError] = useState('');
   const [pendingImage, setPendingImage] = useState<{ base64: string; mime: string; url: string } | null>(null);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const [promptOpen, setPromptOpen] = useState(false);
   const { isDM } = useAuth();
 
   useEffect(() => {
@@ -184,7 +186,8 @@ export function EntityDetail() {
     setRegenError('');
     setPendingImage(null);
     try {
-      const prompt = buildVaultImagePrompt(entity, selectedStyle);
+      const prompt = customPrompt.trim() || buildVaultImagePrompt(entity, selectedStyle);
+      if (!customPrompt.trim()) setCustomPrompt(prompt);
       const { imageBase64, mimeType } = await generateVaultImage(prompt);
       const previewUrl = `data:${mimeType};base64,${imageBase64}`;
       setPendingImage({ base64: imageBase64, mime: mimeType, url: previewUrl });
@@ -500,7 +503,7 @@ export function EntityDetail() {
                       {IMAGE_STYLES.map(s => (
                         <button
                           key={s.id}
-                          onClick={() => setSelectedStyle(s)}
+                          onClick={() => { setSelectedStyle(s); setCustomPrompt(''); }}
                           style={{
                             background: selectedStyle.id === s.id ? `${s.accent}22` : 'transparent',
                             border: `1px solid ${selectedStyle.id === s.id ? s.accent : 'hsl(15 8% 22%)'}`,
@@ -521,6 +524,77 @@ export function EntityDetail() {
                     <p className="font-mono text-xs mb-3" style={{ color: 'hsl(15 4% 35%)' }}>
                       {selectedStyle.subtitle} · BFL FLUX 1.1 Pro · $0.04
                     </p>
+
+                    {/* Prompt dropdown */}
+                    <div style={{ marginBottom: '10px' }}>
+                      <button
+                        onClick={() => {
+                          if (!promptOpen && !customPrompt.trim() && entity) {
+                            setCustomPrompt(buildVaultImagePrompt(entity, selectedStyle));
+                          }
+                          setPromptOpen(o => !o);
+                        }}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          background: 'transparent',
+                          border: 'none',
+                          color: customPrompt.trim() ? 'hsl(25 100% 45%)' : 'hsl(15 4% 38%)',
+                          fontFamily: 'serif',
+                          fontSize: '10px',
+                          letterSpacing: '0.15em',
+                          textTransform: 'uppercase',
+                          cursor: 'pointer',
+                          padding: '0',
+                        }}
+                      >
+                        <span style={{ fontSize: '8px' }}>{promptOpen ? '▲' : '▼'}</span>
+                        {customPrompt.trim() ? 'Custom Prompt Active' : 'View / Edit Prompt'}
+                      </button>
+                      {promptOpen && (
+                        <div style={{ marginTop: '8px' }}>
+                          <textarea
+                            value={customPrompt}
+                            onChange={e => setCustomPrompt(e.target.value)}
+                            rows={5}
+                            style={{
+                              width: '100%',
+                              background: 'hsl(15 6% 8%)',
+                              border: `1px solid ${customPrompt.trim() ? 'hsl(25 80% 28%)' : 'hsl(15 8% 20%)'}`,
+                              borderRadius: '3px',
+                              color: 'hsl(15 4% 65%)',
+                              fontFamily: 'monospace',
+                              fontSize: '10px',
+                              lineHeight: '1.6',
+                              padding: '8px',
+                              resize: 'vertical',
+                              outline: 'none',
+                              boxSizing: 'border-box',
+                            }}
+                          />
+                          {customPrompt.trim() && (
+                            <button
+                              onClick={() => setCustomPrompt('')}
+                              style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'hsl(15 4% 32%)',
+                                fontFamily: 'serif',
+                                fontSize: '9px',
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                cursor: 'pointer',
+                                padding: '4px 0 0',
+                              }}
+                            >
+                              ↺ Reset to auto
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                     {/* Preview */}
                     {regenStatus === 'preview' && pendingImage && (
                       <div className="mb-3">
