@@ -57,13 +57,42 @@ export const IMAGE_STYLES: ImageStyleConfig[] = [
   },
 ];
 
-function extractSubject(md: string): string {
-  const nameMatch = md.match(/^##?\s*(.+)|\*\*([A-Z][A-Z\s''\-]{2,})\*\*/m);
-  const entityName = nameMatch ? (nameMatch[1] || nameMatch[2] || '').replace(/[*#]/g, '').trim() : '';
+// Extract the text content beneath a section header.
+// Handles both: "## Appearance\n\ntext" and "**Appearance:** text on same line"
+function extractSectionContent(md: string, sectionName: string): string {
+  // H2 header style: ## Appearance\n\n[content until next ##]
+  const h2Match = md.match(new RegExp(`##\\s+${sectionName}\\s*\\n+([^#]+)`, 'i'));
+  if (h2Match) {
+    return h2Match[1].replace(/[*#>|]/g, '').replace(/\s+/g, ' ').trim().slice(0, 300);
+  }
+  // Bold label style: **Appearance:** text here (same line)
+  const boldMatch = md.match(new RegExp(`\\*\\*${sectionName}:\\*\\*\\s*([^\\n]+)`, 'i'));
+  if (boldMatch) {
+    return boldMatch[1].replace(/[*]/g, '').trim();
+  }
+  return '';
+}
 
-  const appearanceMatch = md.match(/\*\*Appearance:\*\*\s*([^\n]+)/);
-  if (appearanceMatch) {
-    const appearance = appearanceMatch[1].replace(/[*]/g, '').trim();
+function extractSubject(md: string): string {
+  // Entity name: first line that is a bold name (not a section header like Appearance/Personality)
+  // Avoid grabbing ## section headers as the entity name
+  const SECTION_HEADERS = /^(appearance|personality|motivation|background|connections|plot hooks|key connections|secret|overview|leadership|special traits|actions|reactions)$/i;
+  
+  // Try bold all-caps/title names first (e.g. **VAULTSWORN SENTINEL**)
+  const boldNameMatch = md.match(/\*\*([A-Z][A-Za-z\s'"'\-]{2,})\*\*/m);
+  const boldName = boldNameMatch ? boldNameMatch[1].replace(/[*#]/g, '').trim() : '';
+  
+  // Try ## header but skip known section names
+  const h2Matches = [...md.matchAll(/^##\s+(.+)$/gm)];
+  const h2Name = h2Matches
+    .map(m => m[1].trim())
+    .find(n => !SECTION_HEADERS.test(n)) || '';
+
+  const entityName = boldName || h2Name;
+
+  // Appearance content — works for both ## Appearance and **Appearance:** formats
+  const appearance = extractSectionContent(md, 'Appearance');
+  if (appearance) {
     return entityName ? `${entityName}. ${appearance}` : appearance;
   }
 
@@ -104,8 +133,9 @@ export function buildVaultImagePrompt(entity: VaultEntity, style: ImageStyleConf
 
   if (typeId === 'npc' || typeId === 'pc') {
     subject = entity.name + (entity.category ? `. ${entity.category}` : '');
-    const appearanceMatch = md.match(/\*\*Appearance:\*\*\s*([^\n]+)/);
-    if (appearanceMatch) subject += `. ${appearanceMatch[1].replace(/[*]/g, '').trim()}`;
+    // Use extractSectionContent — handles both ## Appearance and **Appearance:** formats
+    const appearance = extractSectionContent(md, 'Appearance');
+    if (appearance) subject += `. ${appearance}`;
     // Style-aware framing for characters
     if (style.id === 'celshade') {
       // Style 3 forces full body — that's the whole point of the rotoscope style
@@ -274,3 +304,5 @@ export async function uploadImageToVaultGitHub(
   const ext = mimeType.includes('png') ? 'png' : 'jpg';
   return `https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/${entityId}.${ext}`;
 }
+
+===== /c/Users/Clyle/Downloads/mythos-vault/src/tokens.ts =====
