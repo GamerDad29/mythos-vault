@@ -131,8 +131,9 @@ export function EntityDetail() {
   const [imgError, setImgError] = useState(false);
   const [indexStubs, setIndexStubs] = useState<VaultEntityStub[]>([]);
   const [selectedStyle, setSelectedStyle] = useState<ImageStyleConfig>(IMAGE_STYLES[0]);
-  const [regenStatus, setRegenStatus] = useState<'idle' | 'generating' | 'uploading' | 'saving' | 'done' | 'error'>('idle');
+  const [regenStatus, setRegenStatus] = useState<'idle' | 'generating' | 'preview' | 'committing' | 'done' | 'error'>('idle');
   const [regenError, setRegenError] = useState('');
+  const [pendingImage, setPendingImage] = useState<{ base64: string; mime: string; url: string } | null>(null);
   const { isDM } = useAuth();
 
   useEffect(() => {
@@ -177,23 +178,36 @@ export function EntityDetail() {
     }
   }
 
-  async function handleRegenImage() {
+  async function handleGenerate() {
     if (!entity) return;
     setRegenStatus('generating');
     setRegenError('');
+    setPendingImage(null);
     try {
       const prompt = buildVaultImagePrompt(entity, selectedStyle);
       const { imageBase64, mimeType } = await generateVaultImage(prompt);
-      setRegenStatus('uploading');
-      const rawUrl = await uploadImageToVaultGitHub(entity.id, imageBase64, mimeType);
-      setRegenStatus('saving');
+      const previewUrl = `data:${mimeType};base64,${imageBase64}`;
+      setPendingImage({ base64: imageBase64, mime: mimeType, url: previewUrl });
+      setRegenStatus('preview');
+    } catch (err) {
+      setRegenError(err instanceof Error ? err.message : 'Image generation failed');
+      setRegenStatus('error');
+    }
+  }
+
+  async function handleCommitImage() {
+    if (!entity || !pendingImage) return;
+    setRegenStatus('committing');
+    try {
+      const rawUrl = await uploadImageToVaultGitHub(entity.id, pendingImage.base64, pendingImage.mime);
       await updateEntityImage(entity, rawUrl, pat);
       setEntity(e => e ? { ...e, imageUrl: rawUrl } : null);
       setImgError(false);
+      setPendingImage(null);
       setRegenStatus('done');
       setTimeout(() => setRegenStatus('idle'), 3000);
     } catch (err) {
-      setRegenError(err instanceof Error ? err.message : 'Image generation failed');
+      setRegenError(err instanceof Error ? err.message : 'Commit failed');
       setRegenStatus('error');
     }
   }
@@ -507,41 +521,77 @@ export function EntityDetail() {
                     <p className="font-mono text-xs mb-3" style={{ color: 'hsl(15 4% 35%)' }}>
                       {selectedStyle.subtitle} · BFL FLUX 1.1 Pro · $0.04
                     </p>
-                    <button
-                      onClick={handleRegenImage}
-                      disabled={regenStatus !== 'idle' && regenStatus !== 'error' && regenStatus !== 'done'}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        background: regenStatus === 'done' ? 'rgba(52,211,153,0.15)' : `${selectedStyle.accent}18`,
-                        border: `1px solid ${regenStatus === 'done' ? '#34d399' : selectedStyle.accent}`,
-                        borderRadius: '3px',
-                        color: regenStatus === 'done' ? '#34d399' : selectedStyle.accent,
-                        padding: '5px 14px',
-                        fontFamily: 'serif',
-                        fontSize: '11px',
-                        letterSpacing: '0.15em',
-                        textTransform: 'uppercase',
-                        cursor: regenStatus === 'idle' || regenStatus === 'error' || regenStatus === 'done' ? 'pointer' : 'not-allowed',
-                        opacity: regenStatus !== 'idle' && regenStatus !== 'error' && regenStatus !== 'done' ? 0.6 : 1,
-                      }}
-                    >
-                      <RefreshCw
-                        size={11}
-                        style={{
-                          animation: regenStatus === 'generating' || regenStatus === 'uploading' || regenStatus === 'saving'
-                            ? 'spin 1s linear infinite'
-                            : 'none',
-                        }}
-                      />
-                      {regenStatus === 'idle' && 'Generate Image'}
-                      {regenStatus === 'generating' && 'Generating…'}
-                      {regenStatus === 'uploading' && 'Uploading…'}
-                      {regenStatus === 'saving' && 'Saving…'}
-                      {regenStatus === 'done' && 'Done'}
-                      {regenStatus === 'error' && 'Retry'}
-                    </button>
+                    {/* Preview */}
+                    {regenStatus === 'preview' && pendingImage && (
+                      <div className="mb-3">
+                        <img
+                          src={pendingImage.url}
+                          alt="Generated preview"
+                          style={{ width: '100%', borderRadius: '3px', border: `1px solid ${selectedStyle.accent}44`, display: 'block' }}
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex gap-2 flex-wrap">
+                      {/* Generate / Regenerate button */}
+                      {(regenStatus === 'idle' || regenStatus === 'generating' || regenStatus === 'preview' || regenStatus === 'error' || regenStatus === 'done') && (
+                        <button
+                          onClick={handleGenerate}
+                          disabled={regenStatus === 'generating' || regenStatus === 'committing'}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            background: `${selectedStyle.accent}18`,
+                            border: `1px solid ${selectedStyle.accent}`,
+                            borderRadius: '3px',
+                            color: selectedStyle.accent,
+                            padding: '5px 14px',
+                            fontFamily: 'serif',
+                            fontSize: '11px',
+                            letterSpacing: '0.15em',
+                            textTransform: 'uppercase',
+                            cursor: regenStatus === 'generating' || regenStatus === 'committing' ? 'not-allowed' : 'pointer',
+                            opacity: regenStatus === 'generating' || regenStatus === 'committing' ? 0.5 : 1,
+                          }}
+                        >
+                          <RefreshCw size={11} style={{ animation: regenStatus === 'generating' ? 'spin 1s linear infinite' : 'none' }} />
+                          {regenStatus === 'generating' ? 'Generating…' : regenStatus === 'preview' ? 'Regenerate' : 'Generate Image'}
+                        </button>
+                      )}
+
+                      {/* Commit button — only after preview */}
+                      {(regenStatus === 'preview' || regenStatus === 'committing') && (
+                        <button
+                          onClick={handleCommitImage}
+                          disabled={regenStatus === 'committing'}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            background: 'rgba(52,211,153,0.15)',
+                            border: '1px solid #34d399',
+                            borderRadius: '3px',
+                            color: '#34d399',
+                            padding: '5px 14px',
+                            fontFamily: 'serif',
+                            fontSize: '11px',
+                            letterSpacing: '0.15em',
+                            textTransform: 'uppercase',
+                            cursor: regenStatus === 'committing' ? 'not-allowed' : 'pointer',
+                            opacity: regenStatus === 'committing' ? 0.5 : 1,
+                          }}
+                        >
+                          <RefreshCw size={11} style={{ animation: regenStatus === 'committing' ? 'spin 1s linear infinite' : 'none' }} />
+                          {regenStatus === 'committing' ? 'Saving…' : 'Commit Image'}
+                        </button>
+                      )}
+
+                      {regenStatus === 'done' && (
+                        <span className="font-serif text-xs uppercase tracking-wider" style={{ color: '#34d399', lineHeight: '28px' }}>✓ Committed</span>
+                      )}
+                    </div>
+
                     {regenStatus === 'error' && regenError && (
                       <p className="font-mono text-xs mt-2" style={{ color: 'hsl(0 70% 55%)' }}>{regenError}</p>
                     )}
