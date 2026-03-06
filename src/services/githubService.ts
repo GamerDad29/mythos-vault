@@ -27,6 +27,22 @@ async function getFileContentAndSha(
   return { content, sha: json.sha };
 }
 
+async function putFile(path: string, content: string, message: string, sha: string, pat: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/${path}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${pat}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message, content: toBase64(content), sha, branch: VAULT_BRANCH }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({})) as { message?: string };
+    throw new Error(`GitHub PUT failed for ${path}: ${res.status} ${err.message || ''}`);
+  }
+}
+
 export async function pushVaultFile(
   path: string,
   content: string,
@@ -63,26 +79,29 @@ export async function updateEntityImage(
   const entityPath = `vault/${folder}/${entity.slug}.json`;
   const indexPath = 'vault/index.json';
 
-  const { content: rawEntity } = await getFileContentAndSha(entityPath, pat);
+  const { content: rawEntity, sha: entitySha } = await getFileContentAndSha(entityPath, pat);
   const entityData: VaultEntity = JSON.parse(rawEntity);
   entityData.imageUrl = imageUrl;
-  await pushVaultFile(
-    entityPath,
-    JSON.stringify(entityData, null, 2),
-    `image: regenerate image for ${entity.name}`,
-    pat,
-  );
+  await putFile(entityPath, JSON.stringify(entityData, null, 2), `image: regenerate image for ${entity.name}`, entitySha, pat);
 
-  const { content: rawIndex } = await getFileContentAndSha(indexPath, pat);
-  const indexData: VaultIndex = JSON.parse(rawIndex);
-  const stub = indexData.entities.find(e => e.id === entity.id);
-  if (stub) stub.imageUrl = imageUrl;
-  await pushVaultFile(
-    indexPath,
-    JSON.stringify(indexData, null, 2),
-    `image: update index imageUrl for ${entity.name}`,
-    pat,
-  );
+  // Retry index.json update up to 3x — SHA can go stale if another commit lands between fetch and put
+  const delays = [0, 1200, 2400];
+  let lastErr: Error | null = null;
+  for (const delay of delays) {
+    if (delay) await new Promise(r => setTimeout(r, delay));
+    try {
+      const { content: rawIndex, sha: indexSha } = await getFileContentAndSha(indexPath, pat);
+      const indexData: VaultIndex = JSON.parse(rawIndex);
+      const stub = indexData.entities.find(e => e.id === entity.id);
+      if (stub) stub.imageUrl = imageUrl;
+      await putFile(indexPath, JSON.stringify(indexData, null, 2), `image: update index imageUrl for ${entity.name}`, indexSha, pat);
+      lastErr = null;
+      break;
+    } catch (err) {
+      lastErr = err instanceof Error ? err : new Error(String(err));
+    }
+  }
+  if (lastErr) throw lastErr;
 
   vaultService.clearCache();
 }
