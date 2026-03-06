@@ -11,79 +11,74 @@ import { updateEntityImage } from '../services/githubService';
 import type { VaultEntity, VaultEntityStub } from '../types';
 import type { ImageStyleConfig } from '../services/imageService';
 
-interface PCClass {
-  name: string;
-  subclass?: string;
-  level: number;
-}
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-interface PCSkill {
-  name: string;
-  expertise?: boolean;
-}
+interface PCClass { name: string; subclass?: string; level: number }
+interface PCSkill { name: string; expertise?: boolean }
+interface PCMoment { session: string; title: string; description: string }
 
 interface PCEntity extends VaultEntity {
-  player?: string;
-  race?: string;
+  player?: string; race?: string;
   classes?: PCClass[];
-  background?: string;
-  alignment?: string;
-  accentColor?: string;
-  imagePosition?: string;
-  patron?: string;
-  deity?: string;
+  background?: string; alignment?: string;
+  accentColor?: string; imagePosition?: string;
+  patron?: string; deity?: string;
   stats?: { str: number; dex: number; con: number; int: number; wis: number; cha: number };
-  hp?: number;
-  ac?: number;
-  speed?: string;
-  initiative?: number;
-  passivePerception?: number;
-  proficiencyBonus?: number;
+  hp?: number; ac?: number; speed?: string;
+  initiative?: number; passivePerception?: number; proficiencyBonus?: number;
   savingThrows?: string[];
   spellcasting?: { ability: string; saveDC: number; attackBonus: number };
   skills?: PCSkill[];
-  features?: string[];
-  spells?: string[];
-  gear?: string[];
+  features?: string[]; spells?: string[]; gear?: string[];
   personality?: { traits: string; ideals: string; bonds: string; flaws: string };
+  moments?: PCMoment[];
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function statMod(score: number): string {
-  const mod = Math.floor((score - 10) / 2);
-  return mod >= 0 ? `+${mod}` : `${mod}`;
+  const m = Math.floor((score - 10) / 2);
+  return m >= 0 ? `+${m}` : `${m}`;
 }
-
 const STAT_LABELS = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
-const STAT_KEYS: (keyof PCEntity['stats'] & string)[] = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+const STAT_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
+
+// ─── Stat Box ─────────────────────────────────────────────────────────────────
 
 function StatBox({ label, score, accent, isHighest }: { label: string; score: number; accent: string; isHighest: boolean }) {
   return (
     <div style={{
       textAlign: 'center',
-      padding: '10px 8px',
-      borderRadius: '4px',
-      background: isHighest ? `${accent}18` : 'hsl(20 6% 10%)',
+      padding: '14px 10px 12px',
+      borderRadius: '5px',
+      flex: 1, minWidth: '54px',
+      background: isHighest
+        ? `linear-gradient(180deg, ${accent}20 0%, ${accent}0a 100%)`
+        : 'linear-gradient(180deg, hsl(20 6% 11%) 0%, hsl(20 6% 9%) 100%)',
       border: `1px solid ${isHighest ? accent + '55' : 'hsl(15 8% 16%)'}`,
-      minWidth: '56px',
-      flex: 1,
+      boxShadow: isHighest ? `0 0 20px -6px ${accent}40, inset 0 1px 0 ${accent}20` : 'inset 0 1px 0 rgba(255,255,255,0.02)',
+      transition: 'all 0.2s ease',
     }}>
       <div className="font-serif" style={{
-        fontSize: '9px', letterSpacing: '0.2em',
-        textTransform: 'uppercase',
-        color: isHighest ? accent : 'hsl(15 4% 38%)',
-        marginBottom: '4px',
+        fontSize: '8px', letterSpacing: '0.22em', textTransform: 'uppercase',
+        color: isHighest ? accent : 'hsl(15 4% 35%)', marginBottom: '6px',
       }}>
         {label}
       </div>
-      <div className="font-serif font-bold" style={{
-        fontSize: '1.5rem', color: 'hsl(15 4% 90%)', lineHeight: 1,
+      <div className="font-serif font-black" style={{
+        fontSize: '1.75rem', lineHeight: 1,
+        color: isHighest ? 'hsl(15 4% 96%)' : 'hsl(15 4% 82%)',
+        textShadow: isHighest ? `0 0 20px ${accent}60` : 'none',
       }}>
         {score}
       </div>
+      <div style={{
+        width: '24px', height: '1px', margin: '6px auto 5px',
+        background: isHighest ? `${accent}60` : 'hsl(15 8% 20%)',
+      }} />
       <div className="font-mono" style={{
-        fontSize: '11px',
-        color: isHighest ? accent : 'hsl(15 4% 55%)',
-        marginTop: '3px',
+        fontSize: '12px', fontWeight: 600,
+        color: isHighest ? accent : 'hsl(15 4% 50%)',
       }}>
         {statMod(score)}
       </div>
@@ -91,43 +86,58 @@ function StatBox({ label, score, accent, isHighest }: { label: string; score: nu
   );
 }
 
+// ─── Sidebar Section ──────────────────────────────────────────────────────────
+
 function SidebarSection({ title, accent, children }: { title: string; accent: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginBottom: '20px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-        <div style={{ width: '3px', height: '14px', background: accent, borderRadius: '2px', flexShrink: 0 }} />
-        <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: accent }}>
+    <div style={{
+      marginBottom: '22px',
+      background: 'linear-gradient(135deg, hsl(20 6% 9%) 0%, hsl(15 6% 10%) 100%)',
+      border: '1px solid hsl(15 8% 14%)',
+      borderRadius: '6px',
+      overflow: 'hidden',
+    }}>
+      {/* Section header */}
+      <div style={{
+        padding: '8px 14px',
+        background: `linear-gradient(90deg, ${accent}15 0%, transparent 100%)`,
+        borderBottom: '1px solid hsl(15 8% 14%)',
+        display: 'flex', alignItems: 'center', gap: '8px',
+      }}>
+        <div style={{ width: '2px', height: '12px', background: accent, borderRadius: '1px', flexShrink: 0 }} />
+        <span className="font-serif uppercase" style={{ fontSize: '8px', letterSpacing: '0.25em', color: accent }}>
           {title}
         </span>
       </div>
-      {children}
+      <div style={{ padding: '12px 14px' }}>{children}</div>
     </div>
   );
 }
 
-function PersonalityInset({ personality, accent }: { personality: NonNullable<PCEntity['personality']>; accent: string }) {
+// ─── Personality Inset ────────────────────────────────────────────────────────
+
+function PersonalityInset({ p, accent }: { p: NonNullable<PCEntity['personality']>; accent: string }) {
   return (
-    <div style={{
-      background: 'rgba(13,11,9,0.7)',
-      border: `1px solid ${accent}22`,
-      borderRadius: '4px',
-      padding: '14px',
-    }}>
+    <div>
       {[
-        { label: 'Traits', value: personality.traits },
-        { label: 'Ideals', value: personality.ideals },
-        { label: 'Bonds', value: personality.bonds },
-        { label: 'Flaws', value: personality.flaws },
-      ].map(({ label, value }) => (
-        <div key={label} style={{ marginBottom: '10px' }}>
+        { label: 'Traits', value: p.traits },
+        { label: 'Ideals', value: p.ideals },
+        { label: 'Bonds', value: p.bonds },
+        { label: 'Flaws', value: p.flaws },
+      ].map(({ label, value }, i) => (
+        <div key={label} style={{
+          marginBottom: i < 3 ? '10px' : 0,
+          paddingBottom: i < 3 ? '10px' : 0,
+          borderBottom: i < 3 ? '1px solid hsl(15 8% 14%)' : 'none',
+        }}>
           <span className="font-serif uppercase" style={{
-            fontSize: '8px', letterSpacing: '0.2em',
+            fontSize: '8px', letterSpacing: '0.18em',
             color: accent, display: 'block', marginBottom: '3px',
           }}>
             {label}
           </span>
           <p className="font-display italic" style={{
-            fontSize: '11px', color: 'hsl(15 4% 58%)', lineHeight: 1.55,
+            fontSize: '11px', color: 'hsl(15 4% 55%)', lineHeight: 1.6,
           }}>
             {value}
           </p>
@@ -136,6 +146,95 @@ function PersonalityInset({ personality, accent }: { personality: NonNullable<PC
     </div>
   );
 }
+
+// ─── Campaign Chronicles ───────────────────────────────────────────────────────
+
+function CampaignChronicles({ moments, accent }: { moments: PCMoment[]; accent: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      style={{
+        marginTop: '32px',
+        background: 'linear-gradient(135deg, hsl(20 6% 8%) 0%, hsl(15 6% 9%) 100%)',
+        border: '1px solid hsl(15 8% 14%)',
+        borderRadius: '8px',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Header */}
+      <div style={{
+        padding: '18px 28px',
+        borderBottom: '1px solid hsl(15 8% 14%)',
+        background: `linear-gradient(90deg, ${accent}10 0%, transparent 60%)`,
+        display: 'flex', alignItems: 'center', gap: '14px',
+      }}>
+        <div style={{ width: '3px', height: '18px', background: accent, borderRadius: '2px' }} />
+        <span className="font-serif font-bold uppercase" style={{
+          fontSize: '10px', letterSpacing: '0.3em', color: accent,
+        }}>
+          Tales from the Campaign
+        </span>
+        <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, hsl(15 8% 18%), transparent)' }} />
+      </div>
+
+      {/* Moments */}
+      <div style={{ padding: '8px 0' }}>
+        {moments.map((m, i) => (
+          <div
+            key={i}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '120px 1fr',
+              gap: '0',
+              padding: '20px 28px',
+              borderBottom: i < moments.length - 1 ? '1px solid hsl(15 8% 11%)' : 'none',
+              alignItems: 'start',
+            }}
+          >
+            {/* Session label */}
+            <div style={{ paddingRight: '20px', paddingTop: '2px' }}>
+              <div style={{
+                display: 'inline-block',
+                background: `${accent}15`,
+                border: `1px solid ${accent}30`,
+                borderRadius: '3px',
+                padding: '2px 8px',
+                marginBottom: '6px',
+              }}>
+                <span className="font-serif uppercase" style={{
+                  fontSize: '8px', letterSpacing: '0.18em', color: accent,
+                }}>
+                  {m.session}
+                </span>
+              </div>
+              <p className="font-display italic" style={{
+                fontSize: '11px', color: 'hsl(15 4% 40%)', lineHeight: 1.4,
+              }}>
+                {m.title}
+              </p>
+            </div>
+
+            {/* Description */}
+            <div style={{
+              borderLeft: `1px solid ${accent}30`,
+              paddingLeft: '20px',
+            }}>
+              <p className="font-display" style={{
+                fontSize: '13px', color: 'hsl(15 4% 64%)', lineHeight: 1.7,
+              }}>
+                {m.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 export function PCDetail() {
   const [, params] = useRoute('/characters/:slug');
@@ -147,11 +246,10 @@ export function PCDetail() {
   const [imgError, setImgError] = useState(false);
   const [indexStubs, setIndexStubs] = useState<VaultEntityStub[]>([]);
 
-  // Image regen state
   const [selectedStyle, setSelectedStyle] = useState<ImageStyleConfig>(IMAGE_STYLES[0]);
-  const [regenStatus, setRegenStatus] = useState<'idle' | 'generating' | 'preview' | 'committing' | 'done' | 'error'>('idle');
+  const [regenStatus, setRegenStatus] = useState<'idle'|'generating'|'preview'|'committing'|'done'|'error'>('idle');
   const [regenError, setRegenError] = useState('');
-  const [pendingImage, setPendingImage] = useState<{ base64: string; mime: string; url: string } | null>(null);
+  const [pendingImage, setPendingImage] = useState<{base64:string;mime:string;url:string}|null>(null);
   const [customPrompt, setCustomPrompt] = useState('');
   const [promptOpen, setPromptOpen] = useState(false);
 
@@ -173,9 +271,7 @@ export function PCDetail() {
 
   async function handleGenerate() {
     if (!entity) return;
-    setRegenStatus('generating');
-    setRegenError('');
-    setPendingImage(null);
+    setRegenStatus('generating'); setRegenError(''); setPendingImage(null);
     try {
       const prompt = customPrompt.trim() || buildVaultImagePrompt(entity, selectedStyle);
       if (!customPrompt.trim()) setCustomPrompt(prompt);
@@ -195,9 +291,7 @@ export function PCDetail() {
       const rawUrl = await uploadImageToVaultGitHub(entity.id, pendingImage.base64, pendingImage.mime);
       await updateEntityImage(entity, rawUrl, pat);
       setEntity(e => e ? { ...e, imageUrl: rawUrl } : null);
-      setImgError(false);
-      setPendingImage(null);
-      setRegenStatus('done');
+      setImgError(false); setPendingImage(null); setRegenStatus('done');
       setTimeout(() => setRegenStatus('idle'), 3000);
     } catch (err) {
       setRegenError(err instanceof Error ? err.message : 'Commit failed');
@@ -205,132 +299,133 @@ export function PCDetail() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        <div style={{ height: '20px', width: '220px', background: 'hsl(20 6% 14%)', borderRadius: '4px', marginBottom: '32px' }} />
-        <SkeletonHero />
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="max-w-5xl mx-auto px-6 py-16">
+      <div style={{ height: '20px', width: '220px', background: 'hsl(20 6% 14%)', borderRadius: '4px', marginBottom: '32px' }} />
+      <SkeletonHero />
+    </div>
+  );
 
-  if (error || !entity) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-center px-6">
-        <div>
-          <p className="font-serif text-5xl mb-6" style={{ color: 'hsl(15 8% 20%)' }}>⟁</p>
-          <h1 className="font-serif font-bold text-3xl uppercase tracking-wide mb-4" style={{ color: 'hsl(15 4% 70%)' }}>
-            Chronicle Not Found
-          </h1>
-          <Link href="/characters">
-            <span className="font-serif text-sm uppercase tracking-wider cursor-pointer" style={{ color: 'hsl(25 100% 38%)' }}>
-              ← Back to Characters
-            </span>
-          </Link>
-        </div>
+  if (error || !entity) return (
+    <div className="min-h-screen flex items-center justify-center text-center px-6">
+      <div>
+        <p className="font-serif text-5xl mb-6" style={{ color: 'hsl(15 8% 20%)' }}>⟁</p>
+        <h1 className="font-serif font-bold text-3xl uppercase tracking-wide mb-4" style={{ color: 'hsl(15 4% 70%)' }}>Chronicle Not Found</h1>
+        <Link href="/characters"><span className="font-serif text-sm uppercase tracking-wider cursor-pointer" style={{ color: 'hsl(25 100% 38%)' }}>← Back to Characters</span></Link>
       </div>
-    );
-  }
+    </div>
+  );
 
   const accent = entity.accentColor || 'hsl(25 100% 38%)';
   const stats = entity.stats;
-  const highestStat = stats ? Math.max(stats.str, stats.dex, stats.con, stats.int, stats.wis, stats.cha) : 0;
-  const totalLevel = (entity.classes || []).reduce((sum, c) => sum + c.level, 0);
+  const highestScore = stats ? Math.max(...Object.values(stats)) : 0;
+  const totalLevel = (entity.classes || []).reduce((s, c) => s + c.level, 0);
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-5xl mx-auto px-6 py-12">
+    <div className="min-h-screen" style={{ background: 'hsl(15 6% 8%)' }}>
+      {/* Ambient page atmosphere */}
+      <div style={{
+        position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: '1000px', height: '500px', pointerEvents: 'none', zIndex: 0,
+        background: `radial-gradient(ellipse at 50% 0%, ${accent}08 0%, transparent 60%)`,
+      }} />
 
-        {/* Breadcrumb */}
+      <div className="max-w-5xl mx-auto px-6 py-12" style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* ── Breadcrumb ── */}
         <nav className="flex items-center gap-2 mb-10 font-serif text-xs uppercase tracking-wider">
-          <Link href="/">
-            <span className="cursor-pointer" style={{ color: 'hsl(15 4% 40%)' }}
-              onMouseEnter={e => ((e.target as HTMLElement).style.color = accent)}
-              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 40%)')}>
-              Chronicle
-            </span>
-          </Link>
-          <span style={{ color: 'hsl(15 8% 22%)' }}>›</span>
-          <Link href="/characters">
-            <span className="cursor-pointer" style={{ color: 'hsl(15 4% 40%)' }}
-              onMouseEnter={e => ((e.target as HTMLElement).style.color = accent)}
-              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 40%)')}>
-              Characters
-            </span>
-          </Link>
-          <span style={{ color: 'hsl(15 8% 22%)' }}>›</span>
-          <span style={{ color: 'hsl(15 4% 65%)' }}>{entity.name}</span>
+          {[['/', 'Chronicle'], ['/characters', 'Characters']].map(([href, label]) => (
+            <>
+              <Link key={href} href={href}>
+                <span className="cursor-pointer transition-colors" style={{ color: 'hsl(15 4% 38%)' }}
+                  onMouseEnter={e => ((e.target as HTMLElement).style.color = accent)}
+                  onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 38%)')}>
+                  {label}
+                </span>
+              </Link>
+              <span key={href+'-sep'} style={{ color: 'hsl(15 8% 22%)' }}>›</span>
+            </>
+          ))}
+          <span style={{ color: 'hsl(15 4% 62%)' }}>{entity.name}</span>
         </nav>
 
         {/* ── HERO ── */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="overflow-hidden mb-8"
+          transition={{ duration: 0.55 }}
           style={{
-            border: `1px solid ${accent}33`,
-            borderRadius: '8px',
-            background: `linear-gradient(135deg, rgba(18,14,10,1) 0%, hsl(20 6% 10%) 100%)`,
-            boxShadow: `0 0 80px -24px ${accent}30`,
+            borderRadius: '10px',
+            overflow: 'hidden',
+            marginBottom: '10px',
+            border: `1px solid ${accent}35`,
+            boxShadow: `0 0 80px -20px ${accent}35, 0 4px 40px -10px rgba(0,0,0,0.7)`,
+            background: `linear-gradient(135deg, hsl(20 6% 8%) 0%, hsl(15 6% 10%) 100%)`,
           }}
         >
-          <div className="grid grid-cols-1 md:grid-cols-3" style={{ minHeight: '380px' }}>
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ minHeight: '400px' }}>
+
             {/* Portrait */}
-            <div className="relative overflow-hidden" style={{ minHeight: '320px', background: 'hsl(15 6% 7%)' }}>
+            <div style={{
+              position: 'relative', minHeight: '340px',
+              background: `radial-gradient(ellipse at 40% 30%, hsl(20 8% 12%) 0%, hsl(15 6% 6%) 100%)`,
+              overflow: 'hidden',
+            }}>
               {entity.imageUrl && !imgError ? (
                 <>
                   <img
-                    src={entity.imageUrl}
-                    alt={entity.name}
+                    src={entity.imageUrl} alt={entity.name}
                     className="w-full h-full object-cover"
-                    style={{ minHeight: '320px', display: 'block', objectPosition: entity.imagePosition || 'center top' }}
+                    style={{ minHeight: '340px', display: 'block', objectPosition: entity.imagePosition || 'center top' }}
                     onError={() => setImgError(true)}
                   />
+                  {/* Accent atmosphere overlay on portrait */}
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: `radial-gradient(ellipse at 50% 90%, ${accent}25 0%, transparent 55%)`,
+                    pointerEvents: 'none',
+                  }} />
                   <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{
-                    width: '80px',
-                    background: `linear-gradient(to right, transparent, rgba(18,14,10,0.98))`,
+                    width: '90px',
+                    background: `linear-gradient(to right, transparent, hsl(20 6% 8%))`,
                   }} />
                   <div className="absolute inset-x-0 bottom-0 pointer-events-none md:hidden" style={{
                     height: '80px',
-                    background: `linear-gradient(to bottom, transparent, rgba(18,14,10,0.98))`,
+                    background: `linear-gradient(to bottom, transparent, hsl(20 6% 8%))`,
                   }} />
                 </>
               ) : (
-                <div className="w-full h-full flex items-center justify-center" style={{ minHeight: '320px', background: `radial-gradient(ellipse at 40% 40%, hsl(20 8% 11%) 0%, hsl(15 6% 6%) 100%)` }}>
-                  <span style={{ fontSize: '5rem', opacity: 0.1, color: accent }}>⟁</span>
+                <div className="w-full h-full flex items-center justify-center" style={{ minHeight: '340px' }}>
+                  <span style={{ fontSize: '6rem', opacity: 0.08, color: accent }}>⟁</span>
                 </div>
               )}
             </div>
 
             {/* Identity panel */}
-            <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-center">
-              {/* Class badges */}
-              <div className="flex flex-wrap gap-2 mb-4">
+            <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-center" style={{
+              background: `linear-gradient(135deg, transparent 0%, ${accent}05 100%)`,
+            }}>
+              {/* Class + Race badges */}
+              <div className="flex flex-wrap gap-2 mb-5">
                 {(entity.classes || []).map(cls => (
-                  <span key={cls.name} className="font-serif" style={{
+                  <span key={cls.name} style={{
                     background: `${accent}18`,
                     border: `1px solid ${accent}44`,
-                    borderRadius: '3px',
-                    color: accent,
-                    fontSize: '9px',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    padding: '3px 9px',
+                    borderRadius: '4px', color: accent,
+                    fontSize: '9px', letterSpacing: '0.18em',
+                    textTransform: 'uppercase', fontFamily: 'serif',
+                    padding: '4px 10px',
+                    boxShadow: `0 0 12px -4px ${accent}40`,
                   }}>
                     {cls.name} {cls.level}{cls.subclass ? ` — ${cls.subclass}` : ''}
                   </span>
                 ))}
                 {entity.race && (
-                  <span className="font-serif" style={{
-                    background: 'hsl(20 6% 13%)',
-                    border: '1px solid hsl(15 8% 20%)',
-                    borderRadius: '3px',
-                    color: 'hsl(15 4% 50%)',
-                    fontSize: '9px',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    padding: '3px 9px',
+                  <span style={{
+                    background: 'hsl(20 6% 12%)', border: '1px solid hsl(15 8% 20%)',
+                    borderRadius: '4px', color: 'hsl(15 4% 48%)',
+                    fontSize: '9px', letterSpacing: '0.18em',
+                    textTransform: 'uppercase', fontFamily: 'serif', padding: '4px 10px',
                   }}>
                     {entity.race}
                   </span>
@@ -338,44 +433,41 @@ export function PCDetail() {
               </div>
 
               {/* Name */}
-              <h1 className="font-serif font-black uppercase leading-tight mb-2" style={{
-                fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+              <h1 className="font-serif font-black uppercase leading-none mb-2" style={{
+                fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
                 letterSpacing: '0.04em',
                 color: 'hsl(15 4% 96%)',
+                textShadow: `0 0 40px ${accent}40, 0 2px 8px rgba(0,0,0,0.6)`,
               }}>
                 {entity.name}
               </h1>
 
               {/* Player */}
               {entity.player && (
-                <p className="font-display mb-4" style={{ fontSize: '12px', color: 'hsl(15 4% 38%)', letterSpacing: '0.06em' }}>
-                  Played by <span style={{ color: 'hsl(15 4% 52%)' }}>{entity.player}</span>
+                <p className="font-display mb-4" style={{ fontSize: '12px', color: 'hsl(15 4% 36%)', letterSpacing: '0.06em' }}>
+                  Played by <span style={{ color: 'hsl(15 4% 50%)' }}>{entity.player}</span>
                 </p>
               )}
 
               {/* Accent line */}
-              <div style={{ height: '2px', width: '48px', background: accent, marginBottom: '16px' }} />
+              <div style={{
+                height: '2px', width: '48px', marginBottom: '16px',
+                background: `linear-gradient(to right, ${accent}, ${accent}40)`,
+                boxShadow: `0 0 12px ${accent}60`,
+              }} />
 
-              {/* Background / alignment / campaign */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1 mb-4">
-                {entity.background && (
-                  <span className="font-display" style={{ fontSize: '12px', color: 'hsl(15 4% 45%)' }}>
-                    {entity.background}
-                  </span>
-                )}
-                {entity.alignment && (
-                  <span className="font-display" style={{ fontSize: '12px', color: 'hsl(15 4% 45%)' }}>
-                    · {entity.alignment}
-                  </span>
-                )}
+              {/* Meta row */}
+              <div className="flex flex-wrap gap-x-3 gap-y-1 mb-3">
+                {entity.background && <span className="font-display" style={{ fontSize: '12px', color: 'hsl(15 4% 44%)' }}>{entity.background}</span>}
+                {entity.alignment && <span className="font-display" style={{ fontSize: '12px', color: 'hsl(15 4% 44%)' }}>· {entity.alignment}</span>}
               </div>
-              <p className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.2em', color: 'hsl(15 4% 32%)' }}>
+
+              <p className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: 'hsl(15 4% 30%)' }}>
                 Pathways Unseen · Level {totalLevel}
               </p>
 
-              {/* Patron / deity if applicable */}
               {(entity as any).patron && (
-                <p className="font-display italic mt-3" style={{ fontSize: '11px', color: 'hsl(15 4% 38%)' }}>
+                <p className="font-display italic mt-3" style={{ fontSize: '11px', color: 'hsl(15 4% 36%)' }}>
                   Patron: {(entity as any).patron}
                 </p>
               )}
@@ -383,45 +475,35 @@ export function PCDetail() {
               {/* DM image regen */}
               {isDM && (
                 <div style={{
-                  marginTop: '20px',
-                  background: 'rgba(13,11,9,0.5)',
-                  border: '1px solid hsl(15 8% 18%)',
-                  borderRadius: '4px',
-                  padding: '12px',
+                  marginTop: '22px', borderRadius: '6px', padding: '14px',
+                  background: 'rgba(10,8,6,0.6)',
+                  border: '1px solid hsl(15 8% 16%)',
                 }}>
-                  <p className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: 'hsl(15 4% 38%)', marginBottom: '10px' }}>
+                  <p className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: 'hsl(15 4% 36%)', marginBottom: '10px' }}>
                     Regenerate Portrait
                   </p>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {IMAGE_STYLES.map(s => (
                       <button key={s.id} onClick={() => { setSelectedStyle(s); setCustomPrompt(''); }}
-                        style={{
-                          background: selectedStyle.id === s.id ? `${s.accent}22` : 'transparent',
-                          border: `1px solid ${selectedStyle.id === s.id ? s.accent : 'hsl(15 8% 22%)'}`,
-                          borderRadius: '3px',
-                          color: selectedStyle.id === s.id ? s.accent : 'hsl(15 4% 48%)',
-                          padding: '3px 9px', fontFamily: 'serif', fontSize: '10px',
-                          letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s',
-                        }}>
+                        style={{ background: selectedStyle.id === s.id ? `${s.accent}22` : 'transparent', border: `1px solid ${selectedStyle.id === s.id ? s.accent : 'hsl(15 8% 22%)'}`, borderRadius: '3px', color: selectedStyle.id === s.id ? s.accent : 'hsl(15 4% 46%)', padding: '3px 9px', fontFamily: 'serif', fontSize: '10px', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}>
                         {s.label}
                       </button>
                     ))}
                   </div>
-                  <p className="font-mono" style={{ fontSize: '10px', color: 'hsl(15 4% 32%)', marginBottom: '8px' }}>
+                  <p className="font-mono" style={{ fontSize: '10px', color: 'hsl(15 4% 30%)', marginBottom: '8px' }}>
                     {selectedStyle.subtitle} · BFL FLUX 1.1 Pro · $0.04
                   </p>
-                  {/* Prompt toggle */}
                   <div style={{ marginBottom: '10px' }}>
                     <button onClick={() => { if (!promptOpen && !customPrompt.trim() && entity) setCustomPrompt(buildVaultImagePrompt(entity, selectedStyle)); setPromptOpen(o => !o); }}
-                      style={{ background: 'transparent', border: 'none', color: customPrompt.trim() ? 'hsl(25 100% 45%)' : 'hsl(15 4% 36%)', fontFamily: 'serif', fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', padding: '0', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                      style={{ background: 'transparent', border: 'none', color: customPrompt.trim() ? 'hsl(25 100% 45%)' : 'hsl(15 4% 34%)', fontFamily: 'serif', fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                       <span style={{ fontSize: '8px' }}>{promptOpen ? '▲' : '▼'}</span>
                       {customPrompt.trim() ? 'Custom Prompt Active' : 'View / Edit Prompt'}
                     </button>
                     {promptOpen && (
                       <div style={{ marginTop: '8px' }}>
                         <textarea value={customPrompt} onChange={e => setCustomPrompt(e.target.value)} rows={4}
-                          style={{ width: '100%', background: 'hsl(15 6% 8%)', border: `1px solid ${customPrompt.trim() ? 'hsl(25 80% 28%)' : 'hsl(15 8% 20%)'}`, borderRadius: '3px', color: 'hsl(15 4% 62%)', fontFamily: 'monospace', fontSize: '10px', lineHeight: '1.6', padding: '8px', resize: 'vertical', outline: 'none', boxSizing: 'border-box' }} />
-                        {customPrompt.trim() && <button onClick={() => setCustomPrompt('')} style={{ background: 'transparent', border: 'none', color: 'hsl(15 4% 32%)', fontFamily: 'serif', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', padding: '4px 0 0' }}>↺ Reset to auto</button>}
+                          style={{ width: '100%', background: 'hsl(15 6% 8%)', border: `1px solid ${customPrompt.trim() ? 'hsl(25 80% 28%)' : 'hsl(15 8% 20%)'}`, borderRadius: '3px', color: 'hsl(15 4% 60%)', fontFamily: 'monospace', fontSize: '10px', lineHeight: '1.6', padding: '8px', resize: 'vertical', outline: 'none', boxSizing: 'border-box' }} />
+                        {customPrompt.trim() && <button onClick={() => setCustomPrompt('')} style={{ background: 'transparent', border: 'none', color: 'hsl(15 4% 30%)', fontFamily: 'serif', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', padding: '4px 0 0' }}>↺ Reset to auto</button>}
                       </div>
                     )}
                   </div>
@@ -457,54 +539,57 @@ export function PCDetail() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
+            transition={{ duration: 0.45, delay: 0.15 }}
             style={{
-              background: 'hsl(20 6% 9%)',
-              border: `1px solid hsl(15 8% 14%)`,
-              borderRadius: '6px',
-              padding: '16px 20px',
-              marginBottom: '8px',
+              background: 'linear-gradient(135deg, hsl(20 6% 8%) 0%, hsl(15 6% 9%) 100%)',
+              border: '1px solid hsl(15 8% 14%)',
+              borderRadius: '8px',
+              padding: '18px 20px 16px',
+              marginBottom: '10px',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
             }}
           >
-            {/* Six stats */}
+            {/* 6 stat boxes */}
             <div className="flex gap-2 mb-4 flex-wrap">
               {STAT_KEYS.map((key, i) => (
                 <StatBox
-                  key={key}
-                  label={STAT_LABELS[i]}
-                  score={stats[key as keyof typeof stats]}
+                  key={key} label={STAT_LABELS[i]}
+                  score={stats[key]}
                   accent={accent}
-                  isHighest={stats[key as keyof typeof stats] === highestStat}
+                  isHighest={stats[key] === highestScore}
                 />
               ))}
             </div>
 
+            {/* Divider */}
+            <div style={{ height: '1px', background: 'hsl(15 8% 14%)', margin: '4px 0 14px' }} />
+
             {/* Combat badges */}
             <div className="flex flex-wrap gap-2">
-              {[
-                { icon: <Shield size={11} />, label: 'HP', value: `${entity.hp}` },
-                { icon: <Shield size={11} />, label: 'AC', value: `${entity.ac}` },
-                { icon: <Wind size={11} />, label: 'Speed', value: entity.speed || '' },
-                { icon: <Zap size={11} />, label: 'Initiative', value: entity.initiative !== undefined ? (entity.initiative >= 0 ? `+${entity.initiative}` : `${entity.initiative}`) : '' },
-                { icon: <Eye size={11} />, label: 'Passive Perception', value: `${entity.passivePerception}` },
-                ...(entity.proficiencyBonus ? [{ icon: <Zap size={11} />, label: 'Prof. Bonus', value: `+${entity.proficiencyBonus}` }] : []),
+              {([
+                { icon: <Shield size={10} />, label: 'HP', value: String(entity.hp) },
+                { icon: <Shield size={10} />, label: 'AC', value: String(entity.ac) },
+                { icon: <Wind size={10} />, label: 'Speed', value: entity.speed || '' },
+                { icon: <Zap size={10} />, label: 'Initiative', value: entity.initiative != null ? (entity.initiative >= 0 ? `+${entity.initiative}` : `${entity.initiative}`) : '' },
+                { icon: <Eye size={10} />, label: 'Passive Perc.', value: String(entity.passivePerception) },
+                ...(entity.proficiencyBonus ? [{ icon: <Zap size={10} />, label: 'Prof. Bonus', value: `+${entity.proficiencyBonus}` }] : []),
                 ...(entity.spellcasting ? [
-                  { icon: <Zap size={11} />, label: 'Spell DC', value: `${entity.spellcasting.saveDC}` },
-                  { icon: <Zap size={11} />, label: 'Spell Atk', value: `+${entity.spellcasting.attackBonus}` },
+                  { icon: <Zap size={10} />, label: `${entity.spellcasting.ability} Spell DC`, value: String(entity.spellcasting.saveDC) },
+                  { icon: <Zap size={10} />, label: 'Spell Atk', value: `+${entity.spellcasting.attackBonus}` },
                 ] : []),
-              ].map(({ icon, label, value }) => value ? (
+              ] as {icon:React.ReactNode;label:string;value:string}[]).filter(b => b.value).map(({ icon, label, value }) => (
                 <div key={label} style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '5px',
-                  background: 'hsl(20 6% 12%)',
-                  border: `1px solid hsl(15 8% 18%)`,
-                  borderRadius: '3px',
-                  padding: '4px 10px',
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  background: 'hsl(20 6% 11%)',
+                  border: '1px solid hsl(15 8% 17%)',
+                  borderRadius: '4px', padding: '5px 11px',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
                 }}>
-                  <span style={{ color: accent, opacity: 0.7 }}>{icon}</span>
-                  <span className="font-serif uppercase" style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'hsl(15 4% 40%)' }}>{label}</span>
-                  <span className="font-mono" style={{ fontSize: '12px', color: 'hsl(15 4% 80%)' }}>{value}</span>
+                  <span style={{ color: accent, opacity: 0.65 }}>{icon}</span>
+                  <span className="font-serif uppercase" style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'hsl(15 4% 38%)' }}>{label}</span>
+                  <span className="font-mono font-bold" style={{ fontSize: '12px', color: 'hsl(15 4% 82%)' }}>{value}</span>
                 </div>
-              ) : null)}
+              ))}
             </div>
           </motion.div>
         )}
@@ -513,54 +598,60 @@ export function PCDetail() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.25 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8"
+          transition={{ duration: 0.45, delay: 0.25 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6"
         >
-          {/* Main — BLM write-up */}
+          {/* Main — BLM write-up + chronicles */}
           <div className="md:col-span-2">
-            <div className="content-panel" style={{ padding: '28px 32px' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, hsl(20 6% 9%) 0%, hsl(15 6% 10%) 100%)',
+              border: '1px solid hsl(15 8% 14%)',
+              borderRadius: '8px',
+              padding: '28px 32px',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
+            }}>
               {renderContent(entity.content, accent, indexStubs, entity.id)}
             </div>
+
+            {/* Campaign Chronicles */}
+            {entity.moments && entity.moments.length > 0 && (
+              <CampaignChronicles moments={entity.moments} accent={accent} />
+            )}
           </div>
 
           {/* Sidebar */}
           <div>
-            {/* Saving Throws */}
             {entity.savingThrows && entity.savingThrows.length > 0 && (
               <SidebarSection title="Saving Throws" accent={accent}>
                 <div className="flex flex-wrap gap-1">
                   {entity.savingThrows.map(s => (
                     <span key={s} style={{
                       background: `${accent}15`, border: `1px solid ${accent}35`,
-                      borderRadius: '3px', color: accent,
-                      fontSize: '9px', letterSpacing: '0.1em',
-                      textTransform: 'uppercase', fontFamily: 'serif',
-                      padding: '2px 7px',
+                      borderRadius: '3px', color: accent, fontSize: '9px',
+                      letterSpacing: '0.1em', textTransform: 'uppercase',
+                      fontFamily: 'serif', padding: '3px 8px',
                     }}>{s}</span>
                   ))}
                 </div>
               </SidebarSection>
             )}
 
-            {/* Skills */}
             {entity.skills && entity.skills.length > 0 && (
               <SidebarSection title="Skills" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {entity.skills.map(s => (
                     <div key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 60%)' }}>
-                        {s.name}
-                      </span>
+                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 58%)' }}>{s.name}</span>
                       {s.expertise ? (
                         <span style={{
                           background: `${accent}22`, border: `1px solid ${accent}55`,
-                          borderRadius: '2px', color: accent,
-                          fontSize: '8px', letterSpacing: '0.12em',
-                          textTransform: 'uppercase', fontFamily: 'serif',
-                          padding: '1px 5px',
+                          borderRadius: '2px', color: accent, fontSize: '8px',
+                          letterSpacing: '0.12em', textTransform: 'uppercase',
+                          fontFamily: 'serif', padding: '1px 6px',
+                          boxShadow: `0 0 8px -2px ${accent}40`,
                         }}>Expertise</span>
                       ) : (
-                        <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: accent, opacity: 0.5, flexShrink: 0 }} />
+                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, opacity: 0.45 }} />
                       )}
                     </div>
                   ))}
@@ -568,67 +659,64 @@ export function PCDetail() {
               </SidebarSection>
             )}
 
-            {/* Notable Features */}
             {entity.features && entity.features.length > 0 && (
               <SidebarSection title="Notable Features" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   {entity.features.map(f => (
-                    <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '7px' }}>
-                      <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: accent, opacity: 0.6, flexShrink: 0, marginTop: '6px' }} />
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 58%)', lineHeight: 1.5 }}>{f}</span>
+                    <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.55, flexShrink: 0, marginTop: '7px' }} />
+                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 56%)', lineHeight: 1.55 }}>{f}</span>
                     </div>
                   ))}
                 </div>
               </SidebarSection>
             )}
 
-            {/* Signature Spells */}
             {entity.spells && entity.spells.length > 0 && (
               <SidebarSection title="Signature Spells" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   {entity.spells.map(s => (
-                    <div key={s} style={{ display: 'flex', alignItems: 'flex-start', gap: '7px' }}>
-                      <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: accent, opacity: 0.5, flexShrink: 0, marginTop: '6px' }} />
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 58%)', lineHeight: 1.5 }}>{s}</span>
+                    <div key={s} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.45, flexShrink: 0, marginTop: '7px' }} />
+                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 54%)', lineHeight: 1.55 }}>{s}</span>
                     </div>
                   ))}
                 </div>
               </SidebarSection>
             )}
 
-            {/* Key Gear */}
             {entity.gear && entity.gear.length > 0 && (
               <SidebarSection title="Key Gear" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   {entity.gear.map(g => (
-                    <div key={g} style={{ display: 'flex', alignItems: 'flex-start', gap: '7px' }}>
-                      <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: accent, opacity: 0.45, flexShrink: 0, marginTop: '6px' }} />
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 55%)', lineHeight: 1.5 }}>{g}</span>
+                    <div key={g} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.4, flexShrink: 0, marginTop: '7px' }} />
+                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 52%)', lineHeight: 1.55 }}>{g}</span>
                     </div>
                   ))}
                 </div>
               </SidebarSection>
             )}
 
-            {/* Personality */}
             {entity.personality && (
               <SidebarSection title="Personality" accent={accent}>
-                <PersonalityInset personality={entity.personality} accent={accent} />
+                <PersonalityInset p={entity.personality} accent={accent} />
               </SidebarSection>
             )}
           </div>
         </motion.div>
 
         {/* Back link */}
-        <div className="mt-12 pt-8" style={{ borderTop: '1px solid hsl(15 8% 14%)' }}>
+        <div className="mt-12 pt-8" style={{ borderTop: '1px solid hsl(15 8% 12%)' }}>
           <Link href="/characters">
-            <span className="font-serif text-sm uppercase tracking-wider cursor-pointer" style={{ color: 'hsl(15 4% 35%)' }}
+            <span className="font-serif text-sm uppercase tracking-wider cursor-pointer" style={{ color: 'hsl(15 4% 32%)' }}
               onMouseEnter={e => ((e.target as HTMLElement).style.color = accent)}
-              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 35%)')}>
+              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'hsl(15 4% 32%)')}>
               ← Back to Characters
             </span>
           </Link>
         </div>
+
       </div>
     </div>
   );
