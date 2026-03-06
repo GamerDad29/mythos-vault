@@ -1,6 +1,6 @@
 # Mythos Vault — Backlog
 
-_Last updated: 2026-03-04 (Session 9)_
+_Last updated: 2026-03-06 (Session 10)_
 
 > Phased by dependency and complexity, not by the original request batches.
 > Engineering Workflow applied: inspect → clarify → plan → implement.
@@ -195,6 +195,16 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 - Historical: "nothing yet" empty state
 - Current lore (4 karnuk-* entries) lands in Underdark → "Iron Order Legend" sub-group
 
+### P5-8 — Image Prompt System Overhaul ✅
+- **5 art styles** replacing original 4: Photorealistic (DSLR), Comic Book (Cel Shaded), Cel Rotoscope (Telltale), Cinematic Scene (Widescreen), Equipment Hero (Macro) — `src/services/imageService.ts`
+- **Style-aware framing**: NPC celshade → forced full body; cinematic → tense decisive moment; equipment → falls back to portrait
+- **Construct/cinematic variants**: warforged/golem gets action-stance framing in cinematic style
+- **`## Appearance` section extraction**: `extractSectionContent()` handles both `## Heading` and `**Bold:**` formats
+- **Race-first subject ordering**: Appearance (containing race) now appears BEFORE category in NPC subject line — fixes FLUX generating humans for non-human NPCs (bugbear, tiefling, etc.)
+- **Skill doc installed**: `skills/dnd-image-prompt-updater/SKILL.md` in both Vault and Architect repos — defines the three-file sync rule, golden rules, and prompt template for future updates
+- **Architect synced**: `utils/imagePromptBuilder.ts` updated with same 5 styles + `VaultImageStyle` type + style-aware framing helpers (`characterFraming`, `constructFraming`, `itemFraming`)
+- **Build fix**: `regenStatus === 'committing'` added to generate button render condition in `EntityDetail.tsx` — was blocking all Cloudflare Pages builds
+
 ### P5-6 — Characters Page (New)
 - New route `/characters` with full player character showcase
 - Import full player sheet data (TBD format — user to provide)
@@ -228,6 +238,12 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 ---
 
 ## Session Log
+
+### 2026-03-06 (Session 10)
+- **Build fix:** `EntityDetail.tsx` — `regenStatus === 'committing'` added to generate button render condition; TS2367 errors were blocking all Cloudflare Pages deployments ("No deployment available")
+- **P5-8:** Image prompt system overhaul — 5 art styles, style-aware framing, `## Appearance` section extraction, race-first NPC subject ordering (fixes human-for-bugbear slop). Both Vault `imageService.ts` and Architect `imagePromptBuilder.ts` updated
+- **Skill doc:** `skills/dnd-image-prompt-updater/SKILL.md` committed to both repos — golden rules, 5 style IDs, creature type routing table, anti-patterns, and prompt template for future updates
+- **Full dumps generated:** `mythos-architect-full-dump.txt` + `mythos-vault-full-dump.txt` in ~/Downloads for Claude web sessions
 
 ### 2026-03-04 (Session 9)
 - **P5-0 / P5-0b:** DM password management via Architect Settings → vault/config.json SHA-256 hash. No rebuild needed to rotate password. `AuthContext` fully async; Header login updated to match.
