@@ -43,6 +43,31 @@ async function putFile(path: string, content: string, message: string, sha: stri
   }
 }
 
+// Re-fetches the SHA immediately before each attempt — handles concurrent commits landing between GET and PUT.
+async function putFileWithRetry(
+  path: string,
+  buildContent: (existing: string) => string,
+  message: string,
+  pat: string,
+  maxAttempts = 4,
+): Promise<void> {
+  let lastErr: Error | null = null;
+  for (let i = 0; i < maxAttempts; i++) {
+    if (i > 0) await new Promise(r => setTimeout(r, 1000 * i));
+    try {
+      const { content: existing, sha } = await getFileContentAndSha(path, pat);
+      const updated = buildContent(existing);
+      await putFile(path, updated, message, sha, pat);
+      return;
+    } catch (err) {
+      lastErr = err instanceof Error ? err : new Error(String(err));
+      // Only retry on 409 conflict — anything else is a real error
+      if (lastErr.message && !lastErr.message.includes('409')) throw lastErr;
+    }
+  }
+  throw lastErr!;
+}
+
 export async function pushVaultFile(
   path: string,
   content: string,
@@ -77,31 +102,29 @@ export async function updateEntityImage(
 ): Promise<void> {
   const folder = TYPE_VAULT_FOLDER[entity.type.toUpperCase()] ?? `${entity.type.toLowerCase()}s`;
   const entityPath = `vault/${folder}/${entity.slug}.json`;
-  const indexPath = 'vault/index.json';
 
-  const { content: rawEntity, sha: entitySha } = await getFileContentAndSha(entityPath, pat);
-  const entityData: VaultEntity = JSON.parse(rawEntity);
-  entityData.imageUrl = imageUrl;
-  await putFile(entityPath, JSON.stringify(entityData, null, 2), `image: regenerate image for ${entity.name}`, entitySha, pat);
+  await putFileWithRetry(
+    entityPath,
+    (raw) => {
+      const data: VaultEntity = JSON.parse(raw);
+      data.imageUrl = imageUrl;
+      return JSON.stringify(data, null, 2);
+    },
+    `image: regenerate image for ${entity.name}`,
+    pat,
+  );
 
-  // Retry index.json update up to 3x — SHA can go stale if another commit lands between fetch and put
-  const delays = [0, 1200, 2400];
-  let lastErr: Error | null = null;
-  for (const delay of delays) {
-    if (delay) await new Promise(r => setTimeout(r, delay));
-    try {
-      const { content: rawIndex, sha: indexSha } = await getFileContentAndSha(indexPath, pat);
-      const indexData: VaultIndex = JSON.parse(rawIndex);
-      const stub = indexData.entities.find(e => e.id === entity.id);
+  await putFileWithRetry(
+    'vault/index.json',
+    (raw) => {
+      const index: VaultIndex = JSON.parse(raw);
+      const stub = index.entities.find(e => e.id === entity.id);
       if (stub) stub.imageUrl = imageUrl;
-      await putFile(indexPath, JSON.stringify(indexData, null, 2), `image: update index imageUrl for ${entity.name}`, indexSha, pat);
-      lastErr = null;
-      break;
-    } catch (err) {
-      lastErr = err instanceof Error ? err : new Error(String(err));
-    }
-  }
-  if (lastErr) throw lastErr;
+      return JSON.stringify(index, null, 2);
+    },
+    `image: update index imageUrl for ${entity.name}`,
+    pat,
+  );
 
   vaultService.clearCache();
 }
@@ -113,28 +136,31 @@ export async function toggleEntityHidden(
 ): Promise<void> {
   const folder = TYPE_VAULT_FOLDER[stub.type.toUpperCase()] ?? `${stub.type.toLowerCase()}s`;
   const entityPath = `vault/${folder}/${stub.slug}.json`;
-  const indexPath = 'vault/index.json';
+  const label = hidden ? 'Hide' : 'Reveal';
 
-  // Update entity file
-  const { content: rawEntity } = await getFileContentAndSha(entityPath, pat);
-  const entityData: VaultEntity = JSON.parse(rawEntity);
-  entityData.hidden = hidden;
-  await pushVaultFile(
+  let entityName = stub.name;
+
+  await putFileWithRetry(
     entityPath,
-    JSON.stringify(entityData, null, 2),
-    `${hidden ? 'Hide' : 'Reveal'} ${entityData.name}`,
+    (raw) => {
+      const data: VaultEntity = JSON.parse(raw);
+      entityName = data.name;
+      data.hidden = hidden;
+      return JSON.stringify(data, null, 2);
+    },
+    `${label} ${entityName}`,
     pat,
   );
 
-  // Update index.json
-  const { content: rawIndex } = await getFileContentAndSha(indexPath, pat);
-  const indexData: VaultIndex = JSON.parse(rawIndex);
-  const stubEntry = indexData.entities.find(e => e.id === stub.id);
-  if (stubEntry) stubEntry.hidden = hidden;
-  await pushVaultFile(
-    indexPath,
-    JSON.stringify(indexData, null, 2),
-    `${hidden ? 'Hide' : 'Reveal'} ${entityData.name} in index`,
+  await putFileWithRetry(
+    'vault/index.json',
+    (raw) => {
+      const index: VaultIndex = JSON.parse(raw);
+      const entry = index.entities.find(e => e.id === stub.id);
+      if (entry) entry.hidden = hidden;
+      return JSON.stringify(index, null, 2);
+    },
+    `${label} ${entityName} in index`,
     pat,
   );
 
