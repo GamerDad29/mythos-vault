@@ -100,3 +100,24 @@
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+
+@keyframes kenBurns {
+  0%   { transform: scale(1)    translate(0%,     0%); }
+  25%  { transform: scale(1.04) translate(-0.8%,  0.4%); }
+  50%  { transform: scale(1.06) translate(0.6%,  -0.6%); }
+  75%  { transform: scale(1.04) translate(0.4%,   0.8%); }
+  100% { transform: scale(1)    translate(0%,     0%); }
+}
+
+@keyframes skillPulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50%       { opacity: 0.85; transform: scale(1.25); }
+}
+
+@keyframes expertisePulse {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  18%      { box-shadow: 0 0 10px -2px currentColor; }
+  36%      { box-shadow: 0 0 0   0  transparent; }
+  52%      { box-shadow: 0 0 10px -2px currentColor; }
+  68%      { box-shadow: 0 0 0   0  transparent; }
+}

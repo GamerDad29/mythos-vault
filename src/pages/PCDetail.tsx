@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useRoute, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { Shield, Zap, Wind, Eye, RefreshCw } from 'lucide-react';
@@ -8,6 +9,7 @@ import { renderContent } from '../utils/renderContent';
 import { useAuth } from '../contexts/AuthContext';
 import { IMAGE_STYLES, buildVaultImagePrompt, generateVaultImage, uploadImageToVaultGitHub } from '../services/imageService';
 import { updateEntityImage } from '../services/githubService';
+import { SKILL_TOOLTIPS, FEATURE_TOOLTIPS, GEAR_TOOLTIPS } from '../data/characterTooltips';
 import type { VaultEntity, VaultEntityStub } from '../types';
 import type { ImageStyleConfig } from '../services/imageService';
 
@@ -16,6 +18,7 @@ import type { ImageStyleConfig } from '../services/imageService';
 interface PCClass { name: string; subclass?: string; level: number }
 interface PCSkill { name: string; expertise?: boolean }
 interface PCMoment { session: string; title: string; description: string }
+interface Resistance { label: string; kind: 'resist' | 'immune' | 'advantage' }
 
 interface PCEntity extends VaultEntity {
   player?: string; race?: string;
@@ -32,6 +35,7 @@ interface PCEntity extends VaultEntity {
   features?: string[]; spells?: string[]; gear?: string[];
   personality?: { traits: string; ideals: string; bonds: string; flaws: string };
   moments?: PCMoment[];
+  resistances?: Resistance[];
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -42,6 +46,183 @@ function statMod(score: number): string {
 }
 const STAT_LABELS = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
 const STAT_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
+
+// ─── Atmosphere Particle Data ─────────────────────────────────────────────────
+
+const CANNONBALL_SPARKS = [
+  { left: '5%',  delay: 0,    dur: 3.8, size: 3, drift: '10px',  opacity: 0.45 },
+  { left: '18%', delay: 0.7,  dur: 4.5, size: 2, drift: '-8px',  opacity: 0.3  },
+  { left: '35%', delay: 1.4,  dur: 3.5, size: 4, drift: '12px',  opacity: 0.5  },
+  { left: '52%', delay: 2.1,  dur: 4.8, size: 2, drift: '-6px',  opacity: 0.25 },
+  { left: '70%', delay: 0.3,  dur: 4.2, size: 3, drift: '8px',   opacity: 0.4  },
+  { left: '85%', delay: 1.8,  dur: 5.0, size: 2, drift: '-10px', opacity: 0.3  },
+];
+const MORRIGHAN_MOTES = [
+  { left: '12%', top: '20%', dur: 9,  driftX: 20,  driftY: -30, size: 4, opacity: 0.16 },
+  { left: '30%', top: '45%', dur: 12, driftX: -15, driftY: -40, size: 3, opacity: 0.11 },
+  { left: '55%', top: '15%', dur: 10, driftX: 10,  driftY: -25, size: 5, opacity: 0.13 },
+  { left: '72%', top: '60%', dur: 14, driftX: -20, driftY: -50, size: 3, opacity: 0.09 },
+  { left: '88%', top: '35%', dur: 11, driftX: 8,   driftY: -35, size: 4, opacity: 0.14 },
+];
+const BPOP_SPARKS = [
+  { left: '8%',  delay: 0,   dur: 3.2, size: 2, drift: '6px',  opacity: 0.4  },
+  { left: '22%', delay: 0.5, dur: 4.0, size: 2, drift: '-4px', opacity: 0.28 },
+  { left: '40%', delay: 1.2, dur: 3.6, size: 3, drift: '8px',  opacity: 0.35 },
+  { left: '65%', delay: 0.8, dur: 4.4, size: 2, drift: '-6px', opacity: 0.3  },
+  { left: '82%', delay: 1.9, dur: 3.8, size: 2, drift: '5px',  opacity: 0.38 },
+];
+
+// ─── Character Atmosphere ─────────────────────────────────────────────────────
+
+function CharacterAtmosphere({ entityId, accent }: { entityId: string; accent: string }) {
+  if (entityId === 'pc-cannonball-kar-thul') {
+    return (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        {CANNONBALL_SPARKS.map((s, i) => (
+          <motion.div key={i}
+            style={{ position: 'absolute', bottom: 0, left: s.left, width: `${s.size}px`, height: `${s.size}px`, borderRadius: '50%', background: 'hsl(15 90% 62%)' }}
+            animate={{ y: [0, -200], x: [0, parseFloat(s.drift)], opacity: [0, s.opacity, 0] }}
+            transition={{ duration: s.dur, delay: s.delay, repeat: Infinity, ease: 'easeOut' }}
+          />
+        ))}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: `radial-gradient(ellipse at 50% 100%, ${accent}07 0%, transparent 65%)` }} />
+      </div>
+    );
+  }
+
+  if (entityId === 'pc-morrighan-bustlewing') {
+    return (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        {MORRIGHAN_MOTES.map((m, i) => (
+          <motion.div key={i}
+            style={{ position: 'absolute', left: m.left, top: m.top, width: `${m.size}px`, height: `${m.size}px`, borderRadius: '50%', background: 'hsl(250 55% 72%)', boxShadow: `0 0 ${m.size * 3}px hsl(250 55% 72%)` }}
+            animate={{ x: [0, m.driftX, 0], y: [0, m.driftY, 0], opacity: [0, m.opacity, m.opacity * 0.3, m.opacity, 0] }}
+            transition={{ duration: m.dur, delay: i * 1.6, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
+          />
+        ))}
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(155,89,182,0.04) 0%, transparent 55%)' }} />
+      </div>
+    );
+  }
+
+  if (entityId === 'pc-iblith-gorch') {
+    return (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(4,3,2,0.4) 0%, transparent 18%, transparent 82%, rgba(4,3,2,0.4) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(4,3,2,0.35) 0%, transparent 20%)' }} />
+        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '600px', height: '280px', background: `radial-gradient(ellipse at 50% 0%, ${accent}04 0%, transparent 60%)` }} />
+      </div>
+    );
+  }
+
+  if (entityId === 'pc-bpop') {
+    return (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        {BPOP_SPARKS.map((s, i) => (
+          <motion.div key={i}
+            style={{ position: 'absolute', bottom: '8%', left: s.left, width: `${s.size}px`, height: `${s.size + 1}px`, borderRadius: '1px', background: '#D4A017' }}
+            animate={{ y: [0, -90], x: [0, parseFloat(s.drift), parseFloat(s.drift) * 1.4], opacity: [0, s.opacity, 0] }}
+            transition={{ duration: s.dur, delay: s.delay, repeat: Infinity, ease: 'easeOut' }}
+          />
+        ))}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '35%', background: `radial-gradient(ellipse at 40% 100%, ${accent}05 0%, transparent 55%)` }} />
+      </div>
+    );
+  }
+
+  // Default
+  return (
+    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '1000px', height: '500px', background: `radial-gradient(ellipse at 50% 0%, ${accent}06 0%, transparent 60%)` }} />
+    </div>
+  );
+}
+
+// ─── Tooltip ──────────────────────────────────────────────────────────────────
+
+interface TooltipProps {
+  children: React.ReactNode;
+  definition: string;
+  flavor?: string;
+  homebrew?: boolean;
+  accent: string;
+}
+
+function Tooltip({ children, definition, flavor, homebrew, accent }: TooltipProps) {
+  const [visible, setVisible] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
+  const triggerRef = useRef<HTMLSpanElement>(null);
+
+  function handleEnter() {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setCoords({ top: rect.top, left: rect.left, width: rect.width });
+      setVisible(true);
+    }
+  }
+
+  const isAboveCenter = coords.top < window.innerHeight / 2;
+
+  return (
+    <>
+      <span
+        ref={triggerRef}
+        onMouseEnter={handleEnter}
+        onMouseLeave={() => setVisible(false)}
+        style={{
+          borderBottom: `1px dashed ${accent}50`,
+          cursor: 'help',
+          transition: 'border-color 0.2s',
+        }}
+        onMouseOver={e => ((e.currentTarget as HTMLElement).style.borderBottomColor = accent)}
+        onMouseOut={e => ((e.currentTarget as HTMLElement).style.borderBottomColor = `${accent}50`)}
+      >
+        {children}
+      </span>
+      {visible && createPortal(
+        <div style={{
+          position: 'fixed',
+          top: isAboveCenter ? coords.top + 28 : coords.top - 8,
+          left: Math.min(coords.left, window.innerWidth - 340),
+          transform: isAboveCenter ? 'none' : 'translateY(-100%)',
+          zIndex: 9999,
+          maxWidth: '320px',
+          minWidth: '200px',
+          background: 'hsl(15 6% 7%)',
+          border: `1px solid ${accent}35`,
+          borderRadius: '6px',
+          padding: '12px 16px',
+          boxShadow: `0 8px 40px -8px rgba(0,0,0,0.85), 0 0 20px -8px ${accent}25`,
+          pointerEvents: 'none',
+        }}>
+          {homebrew && (
+            <span style={{
+              display: 'inline-block',
+              background: `${accent}18`, border: `1px solid ${accent}45`,
+              borderRadius: '3px', padding: '1px 7px', marginBottom: '7px',
+              fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase',
+              fontFamily: 'serif', color: accent,
+            }}>
+              Homebrew
+            </span>
+          )}
+          <p style={{ fontSize: '13px', color: 'hsl(15 4% 72%)', lineHeight: 1.6, marginBottom: flavor ? '8px' : 0 }}>
+            {definition}
+          </p>
+          {flavor && (
+            <p className="font-display italic" style={{
+              fontSize: '12px', color: 'hsl(15 4% 50%)', lineHeight: 1.65,
+              borderTop: '1px solid hsl(15 8% 14%)', paddingTop: '8px',
+            }}>
+              {flavor}
+            </p>
+          )}
+        </div>,
+        document.body
+      )}
+    </>
+  );
+}
 
 // ─── Stat Box ─────────────────────────────────────────────────────────────────
 
@@ -60,7 +241,7 @@ function StatBox({ label, score, accent, isHighest }: { label: string; score: nu
       transition: 'all 0.2s ease',
     }}>
       <div className="font-serif" style={{
-        fontSize: '8px', letterSpacing: '0.22em', textTransform: 'uppercase',
+        fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
         color: isHighest ? accent : 'hsl(15 4% 35%)', marginBottom: '6px',
       }}>
         {label}
@@ -69,17 +250,12 @@ function StatBox({ label, score, accent, isHighest }: { label: string; score: nu
         fontSize: '1.75rem', lineHeight: 1,
         color: isHighest ? 'hsl(15 4% 96%)' : 'hsl(15 4% 82%)',
         textShadow: isHighest ? `0 0 20px ${accent}60` : 'none',
+        animation: isHighest ? `skillPulse 3s ease-in-out infinite` : 'none',
       }}>
         {score}
       </div>
-      <div style={{
-        width: '24px', height: '1px', margin: '6px auto 5px',
-        background: isHighest ? `${accent}60` : 'hsl(15 8% 20%)',
-      }} />
-      <div className="font-mono" style={{
-        fontSize: '12px', fontWeight: 600,
-        color: isHighest ? accent : 'hsl(15 4% 50%)',
-      }}>
+      <div style={{ width: '24px', height: '1px', margin: '6px auto 5px', background: isHighest ? `${accent}60` : 'hsl(15 8% 20%)' }} />
+      <div className="font-mono" style={{ fontSize: '13px', fontWeight: 600, color: isHighest ? accent : 'hsl(15 4% 50%)' }}>
         {statMod(score)}
       </div>
     </div>
@@ -97,15 +273,14 @@ function SidebarSection({ title, accent, children }: { title: string; accent: st
       borderRadius: '6px',
       overflow: 'hidden',
     }}>
-      {/* Section header */}
       <div style={{
         padding: '8px 14px',
         background: `linear-gradient(90deg, ${accent}15 0%, transparent 100%)`,
         borderBottom: '1px solid hsl(15 8% 14%)',
         display: 'flex', alignItems: 'center', gap: '8px',
       }}>
-        <div style={{ width: '2px', height: '12px', background: accent, borderRadius: '1px', flexShrink: 0 }} />
-        <span className="font-serif uppercase" style={{ fontSize: '8px', letterSpacing: '0.25em', color: accent }}>
+        <div style={{ width: '2px', height: '13px', background: accent, borderRadius: '1px', flexShrink: 0 }} />
+        <span className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.25em', color: accent }}>
           {title}
         </span>
       </div>
@@ -131,13 +306,13 @@ function PersonalityInset({ p, accent }: { p: NonNullable<PCEntity['personality'
           borderBottom: i < 3 ? '1px solid hsl(15 8% 14%)' : 'none',
         }}>
           <span className="font-serif uppercase" style={{
-            fontSize: '8px', letterSpacing: '0.18em',
-            color: accent, display: 'block', marginBottom: '3px',
+            fontSize: '10px', letterSpacing: '0.18em',
+            color: accent, display: 'block', marginBottom: '4px',
           }}>
             {label}
           </span>
           <p className="font-display italic" style={{
-            fontSize: '11px', color: 'hsl(15 4% 55%)', lineHeight: 1.6,
+            fontSize: '13px', color: 'hsl(15 4% 55%)', lineHeight: 1.65,
           }}>
             {value}
           </p>
@@ -171,58 +346,70 @@ function CampaignChronicles({ moments, accent }: { moments: PCMoment[]; accent: 
         display: 'flex', alignItems: 'center', gap: '14px',
       }}>
         <div style={{ width: '3px', height: '18px', background: accent, borderRadius: '2px' }} />
-        <span className="font-serif font-bold uppercase" style={{
-          fontSize: '10px', letterSpacing: '0.3em', color: accent,
-        }}>
+        <span className="font-serif font-bold uppercase" style={{ fontSize: '10px', letterSpacing: '0.3em', color: accent }}>
           Tales from the Campaign
         </span>
         <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, hsl(15 8% 18%), transparent)' }} />
       </div>
 
-      {/* Moments */}
-      <div style={{ padding: '8px 0' }}>
+      {/* Timeline */}
+      <div style={{ padding: '24px 28px', position: 'relative' }}>
+        {/* Vertical connecting line */}
+        <div style={{
+          position: 'absolute',
+          left: '44px',
+          top: '28px',
+          bottom: '28px',
+          width: '1px',
+          background: `linear-gradient(to bottom, ${accent}50, ${accent}25, transparent)`,
+          pointerEvents: 'none',
+        }} />
+
         {moments.map((m, i) => (
           <div
             key={i}
             style={{
               display: 'grid',
-              gridTemplateColumns: '120px 1fr',
+              gridTemplateColumns: '72px 1fr',
               gap: '0',
-              padding: '20px 28px',
-              borderBottom: i < moments.length - 1 ? '1px solid hsl(15 8% 11%)' : 'none',
+              marginBottom: i < moments.length - 1 ? '28px' : 0,
               alignItems: 'start',
+              position: 'relative',
             }}
           >
-            {/* Session label */}
-            <div style={{ paddingRight: '20px', paddingTop: '2px' }}>
+            {/* Session node column */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingRight: '20px', paddingTop: '2px' }}>
+              {/* Diamond node */}
               <div style={{
-                display: 'inline-block',
-                background: `${accent}15`,
-                border: `1px solid ${accent}30`,
-                borderRadius: '3px',
-                padding: '2px 8px',
-                marginBottom: '6px',
+                width: '9px', height: '9px',
+                background: accent,
+                borderRadius: '2px',
+                transform: 'rotate(45deg)',
+                boxShadow: `0 0 12px -2px ${accent}80`,
+                marginBottom: '7px',
+                flexShrink: 0,
+              }} />
+              <span className="font-serif uppercase" style={{
+                fontSize: '10px', letterSpacing: '0.12em', color: accent,
+                opacity: 0.7, textAlign: 'center', lineHeight: 1.35,
               }}>
-                <span className="font-serif uppercase" style={{
-                  fontSize: '8px', letterSpacing: '0.18em', color: accent,
-                }}>
-                  {m.session}
-                </span>
-              </div>
+                {m.session}
+              </span>
+            </div>
+
+            {/* Content */}
+            <div style={{
+              borderLeft: `1px solid ${accent}22`,
+              paddingLeft: '20px',
+            }}>
               <p className="font-display italic" style={{
-                fontSize: '11px', color: 'hsl(15 4% 40%)', lineHeight: 1.4,
+                fontSize: '13px', color: accent, opacity: 0.8,
+                marginBottom: '6px', lineHeight: 1.4,
               }}>
                 {m.title}
               </p>
-            </div>
-
-            {/* Description */}
-            <div style={{
-              borderLeft: `1px solid ${accent}30`,
-              paddingLeft: '20px',
-            }}>
               <p className="font-display" style={{
-                fontSize: '13px', color: 'hsl(15 4% 64%)', lineHeight: 1.7,
+                fontSize: '15px', color: 'hsl(15 4% 60%)', lineHeight: 1.7,
               }}>
                 {m.description}
               </p>
@@ -231,6 +418,39 @@ function CampaignChronicles({ moments, accent }: { moments: PCMoment[]; accent: 
         ))}
       </div>
     </motion.div>
+  );
+}
+
+// ─── Resistance Badge ─────────────────────────────────────────────────────────
+
+function ResistanceBadge({ resistance, accent }: { resistance: Resistance; accent: string }) {
+  const kindColors: Record<string, string> = {
+    resist: accent,
+    immune: 'hsl(145 55% 48%)',
+    advantage: 'hsl(210 65% 58%)',
+  };
+  const kindLabels: Record<string, string> = {
+    resist: 'Resist',
+    immune: 'Immune',
+    advantage: '+Adv',
+  };
+  const color = kindColors[resistance.kind] || accent;
+  const prefix = kindLabels[resistance.kind] || '';
+
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', gap: '5px',
+      background: `${color}12`,
+      border: `1px solid ${color}35`,
+      borderRadius: '4px', padding: '4px 10px',
+    }}>
+      <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.12em', color, opacity: 0.75 }}>
+        {prefix}:
+      </span>
+      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 65%)' }}>
+        {resistance.label}
+      </span>
+    </div>
   );
 }
 
@@ -244,6 +464,7 @@ export function PCDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
+  const [imgHovered, setImgHovered] = useState(false);
   const [indexStubs, setIndexStubs] = useState<VaultEntityStub[]>([]);
 
   const [selectedStyle, setSelectedStyle] = useState<ImageStyleConfig>(IMAGE_STYLES[0]);
@@ -320,15 +541,13 @@ export function PCDetail() {
   const stats = entity.stats;
   const highestScore = stats ? Math.max(...Object.values(stats)) : 0;
   const totalLevel = (entity.classes || []).reduce((s, c) => s + c.level, 0);
+  const skillTooltips = SKILL_TOOLTIPS[entity.id] || {};
+  const featureTooltips = FEATURE_TOOLTIPS[entity.id] || {};
+  const gearTooltips = GEAR_TOOLTIPS[entity.id] || {};
 
   return (
     <div className="min-h-screen" style={{ background: 'hsl(15 6% 8%)' }}>
-      {/* Ambient page atmosphere */}
-      <div style={{
-        position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)',
-        width: '1000px', height: '500px', pointerEvents: 'none', zIndex: 0,
-        background: `radial-gradient(ellipse at 50% 0%, ${accent}08 0%, transparent 60%)`,
-      }} />
+      <CharacterAtmosphere entityId={entity.id} accent={accent} />
 
       <div className="max-w-5xl mx-auto px-6 py-12" style={{ position: 'relative', zIndex: 1 }}>
 
@@ -366,33 +585,29 @@ export function PCDetail() {
           <div className="grid grid-cols-1 md:grid-cols-3" style={{ minHeight: '400px' }}>
 
             {/* Portrait */}
-            <div style={{
-              position: 'relative', minHeight: '340px',
-              background: `radial-gradient(ellipse at 40% 30%, hsl(20 8% 12%) 0%, hsl(15 6% 6%) 100%)`,
-              overflow: 'hidden',
-            }}>
+            <div
+              onMouseEnter={() => setImgHovered(true)}
+              onMouseLeave={() => setImgHovered(false)}
+              style={{ position: 'relative', minHeight: '340px', background: `radial-gradient(ellipse at 40% 30%, hsl(20 8% 12%) 0%, hsl(15 6% 6%) 100%)`, overflow: 'hidden' }}
+            >
               {entity.imageUrl && !imgError ? (
                 <>
                   <img
                     src={entity.imageUrl} alt={entity.name}
                     className="w-full h-full object-cover"
-                    style={{ minHeight: '340px', display: 'block', objectPosition: entity.imagePosition || 'center top' }}
+                    style={{
+                      minHeight: '340px', display: 'block',
+                      objectPosition: entity.imagePosition || 'center top',
+                      animation: imgHovered ? 'none' : 'kenBurns 30s ease-in-out infinite',
+                      transform: imgHovered ? 'scale(1.06)' : undefined,
+                      transition: imgHovered ? 'transform 0.6s ease' : undefined,
+                      transformOrigin: 'center center',
+                    }}
                     onError={() => setImgError(true)}
                   />
-                  {/* Accent atmosphere overlay on portrait */}
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    background: `radial-gradient(ellipse at 50% 90%, ${accent}25 0%, transparent 55%)`,
-                    pointerEvents: 'none',
-                  }} />
-                  <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{
-                    width: '90px',
-                    background: `linear-gradient(to right, transparent, hsl(20 6% 8%))`,
-                  }} />
-                  <div className="absolute inset-x-0 bottom-0 pointer-events-none md:hidden" style={{
-                    height: '80px',
-                    background: `linear-gradient(to bottom, transparent, hsl(20 6% 8%))`,
-                  }} />
+                  <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at 50% 90%, ${accent}22 0%, transparent 55%)`, pointerEvents: 'none' }} />
+                  <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{ width: '90px', background: `linear-gradient(to right, transparent, hsl(20 6% 8%))` }} />
+                  <div className="absolute inset-x-0 bottom-0 pointer-events-none md:hidden" style={{ height: '80px', background: `linear-gradient(to bottom, transparent, hsl(20 6% 8%))` }} />
                 </>
               ) : (
                 <div className="w-full h-full flex items-center justify-center" style={{ minHeight: '340px' }}>
@@ -402,20 +617,16 @@ export function PCDetail() {
             </div>
 
             {/* Identity panel */}
-            <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-center" style={{
-              background: `linear-gradient(135deg, transparent 0%, ${accent}05 100%)`,
-            }}>
+            <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-center" style={{ background: `linear-gradient(135deg, transparent 0%, ${accent}05 100%)` }}>
               {/* Class + Race badges */}
               <div className="flex flex-wrap gap-2 mb-5">
                 {(entity.classes || []).map(cls => (
                   <span key={cls.name} style={{
-                    background: `${accent}18`,
-                    border: `1px solid ${accent}44`,
+                    background: `${accent}18`, border: `1px solid ${accent}44`,
                     borderRadius: '4px', color: accent,
-                    fontSize: '9px', letterSpacing: '0.18em',
+                    fontSize: '10px', letterSpacing: '0.18em',
                     textTransform: 'uppercase', fontFamily: 'serif',
-                    padding: '4px 10px',
-                    boxShadow: `0 0 12px -4px ${accent}40`,
+                    padding: '4px 10px', boxShadow: `0 0 12px -4px ${accent}40`,
                   }}>
                     {cls.name} {cls.level}{cls.subclass ? ` — ${cls.subclass}` : ''}
                   </span>
@@ -424,7 +635,7 @@ export function PCDetail() {
                   <span style={{
                     background: 'hsl(20 6% 12%)', border: '1px solid hsl(15 8% 20%)',
                     borderRadius: '4px', color: 'hsl(15 4% 48%)',
-                    fontSize: '9px', letterSpacing: '0.18em',
+                    fontSize: '10px', letterSpacing: '0.18em',
                     textTransform: 'uppercase', fontFamily: 'serif', padding: '4px 10px',
                   }}>
                     {entity.race}
@@ -444,7 +655,7 @@ export function PCDetail() {
 
               {/* Player */}
               {entity.player && (
-                <p className="font-display mb-4" style={{ fontSize: '12px', color: 'hsl(15 4% 36%)', letterSpacing: '0.06em' }}>
+                <p className="font-display mb-4" style={{ fontSize: '13px', color: 'hsl(15 4% 36%)', letterSpacing: '0.06em' }}>
                   Played by <span style={{ color: 'hsl(15 4% 50%)' }}>{entity.player}</span>
                 </p>
               )}
@@ -458,28 +669,24 @@ export function PCDetail() {
 
               {/* Meta row */}
               <div className="flex flex-wrap gap-x-3 gap-y-1 mb-3">
-                {entity.background && <span className="font-display" style={{ fontSize: '12px', color: 'hsl(15 4% 44%)' }}>{entity.background}</span>}
-                {entity.alignment && <span className="font-display" style={{ fontSize: '12px', color: 'hsl(15 4% 44%)' }}>· {entity.alignment}</span>}
+                {entity.background && <span className="font-display" style={{ fontSize: '13px', color: 'hsl(15 4% 44%)' }}>{entity.background}</span>}
+                {entity.alignment && <span className="font-display" style={{ fontSize: '13px', color: 'hsl(15 4% 44%)' }}>· {entity.alignment}</span>}
               </div>
 
-              <p className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: 'hsl(15 4% 30%)' }}>
+              <p className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.22em', color: 'hsl(15 4% 30%)' }}>
                 Pathways Unseen · Level {totalLevel}
               </p>
 
               {(entity as any).patron && (
-                <p className="font-display italic mt-3" style={{ fontSize: '11px', color: 'hsl(15 4% 36%)' }}>
+                <p className="font-display italic mt-3" style={{ fontSize: '12px', color: 'hsl(15 4% 36%)' }}>
                   Patron: {(entity as any).patron}
                 </p>
               )}
 
               {/* DM image regen */}
               {isDM && (
-                <div style={{
-                  marginTop: '22px', borderRadius: '6px', padding: '14px',
-                  background: 'rgba(10,8,6,0.6)',
-                  border: '1px solid hsl(15 8% 16%)',
-                }}>
-                  <p className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: 'hsl(15 4% 36%)', marginBottom: '10px' }}>
+                <div style={{ marginTop: '22px', borderRadius: '6px', padding: '14px', background: 'rgba(10,8,6,0.6)', border: '1px solid hsl(15 8% 16%)' }}>
+                  <p className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.22em', color: 'hsl(15 4% 36%)', marginBottom: '10px' }}>
                     Regenerate Portrait
                   </p>
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -561,21 +768,20 @@ export function PCDetail() {
               ))}
             </div>
 
-            {/* Divider */}
             <div style={{ height: '1px', background: 'hsl(15 8% 14%)', margin: '4px 0 14px' }} />
 
             {/* Combat badges */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mb-3">
               {([
-                { icon: <Shield size={10} />, label: 'HP', value: String(entity.hp) },
-                { icon: <Shield size={10} />, label: 'AC', value: String(entity.ac) },
-                { icon: <Wind size={10} />, label: 'Speed', value: entity.speed || '' },
-                { icon: <Zap size={10} />, label: 'Initiative', value: entity.initiative != null ? (entity.initiative >= 0 ? `+${entity.initiative}` : `${entity.initiative}`) : '' },
-                { icon: <Eye size={10} />, label: 'Passive Perc.', value: String(entity.passivePerception) },
-                ...(entity.proficiencyBonus ? [{ icon: <Zap size={10} />, label: 'Prof. Bonus', value: `+${entity.proficiencyBonus}` }] : []),
+                { icon: <Shield size={11} />, label: 'HP', value: String(entity.hp) },
+                { icon: <Shield size={11} />, label: 'AC', value: String(entity.ac) },
+                { icon: <Wind size={11} />, label: 'Speed', value: entity.speed || '' },
+                { icon: <Zap size={11} />, label: 'Initiative', value: entity.initiative != null ? (entity.initiative >= 0 ? `+${entity.initiative}` : `${entity.initiative}`) : '' },
+                { icon: <Eye size={11} />, label: 'Passive Perc.', value: String(entity.passivePerception) },
+                ...(entity.proficiencyBonus ? [{ icon: <Zap size={11} />, label: 'Prof. Bonus', value: `+${entity.proficiencyBonus}` }] : []),
                 ...(entity.spellcasting ? [
-                  { icon: <Zap size={10} />, label: `${entity.spellcasting.ability} Spell DC`, value: String(entity.spellcasting.saveDC) },
-                  { icon: <Zap size={10} />, label: 'Spell Atk', value: `+${entity.spellcasting.attackBonus}` },
+                  { icon: <Zap size={11} />, label: `${entity.spellcasting.ability} Spell DC`, value: String(entity.spellcasting.saveDC) },
+                  { icon: <Zap size={11} />, label: 'Spell Atk', value: `+${entity.spellcasting.attackBonus}` },
                 ] : []),
               ] as {icon:React.ReactNode;label:string;value:string}[]).filter(b => b.value).map(({ icon, label, value }) => (
                 <div key={label} style={{
@@ -586,11 +792,23 @@ export function PCDetail() {
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
                 }}>
                   <span style={{ color: accent, opacity: 0.65 }}>{icon}</span>
-                  <span className="font-serif uppercase" style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'hsl(15 4% 38%)' }}>{label}</span>
-                  <span className="font-mono font-bold" style={{ fontSize: '12px', color: 'hsl(15 4% 82%)' }}>{value}</span>
+                  <span className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.15em', color: 'hsl(15 4% 38%)' }}>{label}</span>
+                  <span className="font-mono font-bold" style={{ fontSize: '14px', color: 'hsl(15 4% 82%)' }}>{value}</span>
                 </div>
               ))}
             </div>
+
+            {/* Resistance / Immunity badges */}
+            {entity.resistances && entity.resistances.length > 0 && (
+              <>
+                <div style={{ height: '1px', background: 'hsl(15 8% 14%)', margin: '0 0 12px' }} />
+                <div className="flex flex-wrap gap-2">
+                  {entity.resistances.map((r, i) => (
+                    <ResistanceBadge key={i} resistance={r} accent={accent} />
+                  ))}
+                </div>
+              </>
+            )}
           </motion.div>
         )}
 
@@ -601,7 +819,7 @@ export function PCDetail() {
           transition={{ duration: 0.45, delay: 0.25 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6"
         >
-          {/* Main — BLM write-up + chronicles */}
+          {/* Main — narrative write-up + chronicles */}
           <div className="md:col-span-2">
             <div style={{
               background: 'linear-gradient(135deg, hsl(20 6% 9%) 0%, hsl(15 6% 10%) 100%)',
@@ -609,8 +827,16 @@ export function PCDetail() {
               borderRadius: '8px',
               padding: '28px 32px',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)',
+              fontSize: '18px',
+              lineHeight: '1.75',
             }}>
-              {renderContent(entity.content, accent, indexStubs, entity.id)}
+              <style>{`
+                .pc-content p { margin-bottom: 0.75rem; line-height: 1.75; }
+                .pc-content p:last-child { margin-bottom: 0; }
+              `}</style>
+              <div className="pc-content">
+                {renderContent(entity.content, accent, indexStubs, entity.id)}
+              </div>
             </div>
 
             {/* Campaign Chronicles */}
@@ -627,7 +853,7 @@ export function PCDetail() {
                   {entity.savingThrows.map(s => (
                     <span key={s} style={{
                       background: `${accent}15`, border: `1px solid ${accent}35`,
-                      borderRadius: '3px', color: accent, fontSize: '9px',
+                      borderRadius: '3px', color: accent, fontSize: '10px',
                       letterSpacing: '0.1em', textTransform: 'uppercase',
                       fontFamily: 'serif', padding: '3px 8px',
                     }}>{s}</span>
@@ -638,36 +864,54 @@ export function PCDetail() {
 
             {entity.skills && entity.skills.length > 0 && (
               <SidebarSection title="Skills" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {entity.skills.map(s => (
-                    <div key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 58%)' }}>{s.name}</span>
-                      {s.expertise ? (
-                        <span style={{
-                          background: `${accent}22`, border: `1px solid ${accent}55`,
-                          borderRadius: '2px', color: accent, fontSize: '8px',
-                          letterSpacing: '0.12em', textTransform: 'uppercase',
-                          fontFamily: 'serif', padding: '1px 6px',
-                          boxShadow: `0 0 8px -2px ${accent}40`,
-                        }}>Expertise</span>
-                      ) : (
-                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: accent, opacity: 0.45 }} />
-                      )}
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+                  {entity.skills.map(s => {
+                    const tipData = skillTooltips[s.name];
+                    const nameNode = tipData
+                      ? <Tooltip definition={tipData.definition} flavor={tipData.flavor} homebrew={tipData.homebrew} accent={accent}>{s.name}</Tooltip>
+                      : s.name;
+                    return (
+                      <div key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span className="font-display" style={{ fontSize: '13px', color: 'hsl(15 4% 60%)' }}>{nameNode}</span>
+                        {s.expertise ? (
+                          <span style={{
+                            background: `${accent}22`, border: `1px solid ${accent}55`,
+                            borderRadius: '2px', color: accent, fontSize: '9px',
+                            letterSpacing: '0.12em', textTransform: 'uppercase',
+                            fontFamily: 'serif', padding: '1px 6px',
+                            boxShadow: `0 0 8px -2px ${accent}40`,
+                            animation: 'expertisePulse 3.5s ease-in-out infinite',
+                          }}>Expertise</span>
+                        ) : (
+                          <div style={{
+                            width: '7px', height: '7px', borderRadius: '50%',
+                            background: accent, opacity: 0.45,
+                            animation: 'skillPulse 2.8s ease-in-out infinite',
+                          }} />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </SidebarSection>
             )}
 
             {entity.features && entity.features.length > 0 && (
               <SidebarSection title="Notable Features" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  {entity.features.map(f => (
-                    <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.55, flexShrink: 0, marginTop: '7px' }} />
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 56%)', lineHeight: 1.55 }}>{f}</span>
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {entity.features.map(f => {
+                    const tipData = featureTooltips[f];
+                    return (
+                      <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                        <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.55, flexShrink: 0, marginTop: '9px' }} />
+                        <span className="font-display" style={{ fontSize: '13px', color: 'hsl(15 4% 58%)', lineHeight: 1.55 }}>
+                          {tipData
+                            ? <Tooltip definition={tipData.definition} flavor={tipData.flavor} homebrew={tipData.homebrew} accent={accent}>{f}</Tooltip>
+                            : f}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </SidebarSection>
             )}
@@ -677,8 +921,8 @@ export function PCDetail() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   {entity.spells.map(s => (
                     <div key={s} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.45, flexShrink: 0, marginTop: '7px' }} />
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 54%)', lineHeight: 1.55 }}>{s}</span>
+                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.45, flexShrink: 0, marginTop: '9px' }} />
+                      <span className="font-display" style={{ fontSize: '13px', color: 'hsl(15 4% 56%)', lineHeight: 1.55 }}>{s}</span>
                     </div>
                   ))}
                 </div>
@@ -687,13 +931,20 @@ export function PCDetail() {
 
             {entity.gear && entity.gear.length > 0 && (
               <SidebarSection title="Key Gear" accent={accent}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  {entity.gear.map(g => (
-                    <div key={g} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.4, flexShrink: 0, marginTop: '7px' }} />
-                      <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 52%)', lineHeight: 1.55 }}>{g}</span>
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {entity.gear.map(g => {
+                    const tipData = gearTooltips[g];
+                    return (
+                      <div key={g} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                        <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: accent, opacity: 0.4, flexShrink: 0, marginTop: '9px' }} />
+                        <span className="font-display" style={{ fontSize: '13px', color: 'hsl(15 4% 54%)', lineHeight: 1.55 }}>
+                          {tipData
+                            ? <Tooltip definition={tipData.definition} flavor={tipData.flavor} homebrew={tipData.homebrew} accent={accent}>{g}</Tooltip>
+                            : g}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </SidebarSection>
             )}
