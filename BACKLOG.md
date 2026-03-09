@@ -1,6 +1,6 @@
 # Mythos Vault — Backlog
 
-_Last updated: 2026-03-06 (Session 10)_
+_Last updated: 2026-03-08 (Session 11)_
 
 > Phased by dependency and complexity, not by the original request batches.
 > Engineering Workflow applied: inspect → clarify → plan → implement.
@@ -132,6 +132,39 @@ Depends on P1 complete. P2 not required to start.
 
 ---
 
+## 🔴 HIGH PRIORITY — Admin: Hero Image Picker
+
+### A1 — Session Hero Image Drag-to-Primary (Admin Only)
+
+**What it does:**
+When logged in as DM, session detail pages get an interactive image management mode.
+The DM can click any woven (inline) image and promote it to the hero — replacing `imageUrl`
+in `vault/sessions/index.json` via a GitHub push, no manual JSON editing required.
+
+**User story:**
+> "I log into Mythos Vault with my admin password → open a session → click an existing
+> woven image → drag it into the primary hero frame → hit Save → hero updates live."
+
+**Scope:**
+- DM-only UI: only visible when `useAuth()` returns `isAuthenticated === true`
+- Works on `/sessions/:slug` (SessionDetail page)
+- Woven images get a visible "Set as Hero" affordance in DM mode (click or drag)
+- A preview frame at the top of the edit panel shows the current hero + proposed replacement
+- On confirm → `imageUrl` field patched in `vault/sessions/index.json` via `proxyService.pushToGitHub()`
+- Optional: also allow adjusting `imagePosition` (the CSS `object-position` value) from a preset grid (top/center/bottom × left/center/right)
+
+**Dependencies:**
+- `proxyService.pushToGitHub()` already exists and works (used by Architect)
+- `vault/sessions/index.json` is the single source of truth for sessions
+- `useAuth()` context already wired in app
+
+**Out of scope (first pass):**
+- Reordering woven images (separate feature)
+- Changing hero for entity pages (not sessions)
+- Drag-and-drop file upload (that's a separate upload flow)
+
+---
+
 ## Phase 5 — Navigation, Home Overhaul & New Sections
 
 _Source: Mythos Vault Updates.3.3.26.txt_
@@ -238,6 +271,13 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 ---
 
 ## Session Log
+
+### 2026-03-08 (Session 11)
+- **Session 24 "The Tunnel Dock" added:** 7-section recap, 7 woven images (Soren.gif, Scampers, etc.), inline MP4 video (Brindle Nacklewitt), `videoUrl` field added to `SessionEntry` type
+- **Sessions page re-ordered:** Most recent session featured full-width at top (`FeaturedSessionCard`), rest in grid newest → oldest
+- **SessionDetail.tsx overhaul:** Taller hero (clamp 360–600px), amber section headings (3px bar + fade rule), monologue speech blocks (amber left border), GIF-aware WovenImage, `VideoEmbed` component, diamond divider, video badge in meta
+- **Image fix:** Replaced tiny 18KB dwarf worker PNGs with Soren.gif + Scampers.png in session 24 image list
+- **Backlog:** Added 🔴 HIGH PRIORITY item A1 — Admin Hero Image Picker (DM clicks woven image → promotes to hero → pushes to GitHub)
 
 ### 2026-03-06 (Session 10)
 - **Build fix:** `EntityDetail.tsx` — `regenStatus === 'committing'` added to generate button render condition; TS2367 errors were blocking all Cloudflare Pages deployments ("No deployment available")
