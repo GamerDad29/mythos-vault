@@ -42,6 +42,7 @@ export interface SessionEntry {
   images: string[];
   imagePositions?: string[];    // Per-image object-position, parallel to images[]
   audioUrl: string | null;
+  videoUrl?: string | null;     // Direct MP4 URL for inline video player
   tags: string[];
 }
 

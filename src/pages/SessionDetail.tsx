@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar, Video } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import type { SessionEntry } from '../types';
 
@@ -11,7 +11,7 @@ function parseInline(text: string): React.ReactNode {
   const parts = text.split(/(\*\*\*.*?\*\*\*|\*\*.*?\*\*|\*.*?\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith('***') && part.endsWith('***')) return <strong key={i}><em>{part.slice(3, -3)}</em></strong>;
-    if (part.startsWith('**') && part.endsWith('**')) return <strong key={i} style={{ color: 'hsl(15 4% 88%)' }}>{part.slice(2, -2)}</strong>;
+    if (part.startsWith('**') && part.endsWith('**')) return <strong key={i} style={{ color: 'hsl(15 4% 90%)', fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
     if (part.startsWith('*') && part.endsWith('*')) return <em key={i}>{part.slice(1, -1)}</em>;
     return part;
   });
@@ -20,36 +20,74 @@ function parseInline(text: string): React.ReactNode {
 function renderLines(lines: string[], keyOffset = 0): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
   let key = keyOffset;
+
   for (const line of lines) {
-    if (line.startsWith('## ')) {
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith('## ')) {
+      // ── Section heading with amber bar + rule ──
       nodes.push(
-        <h3 key={key++} className="font-serif font-bold mt-10 mb-3 uppercase tracking-wide"
-          style={{ fontSize: '0.85rem', color: 'hsl(25 100% 42%)', letterSpacing: '0.18em' }}>
-          {line.slice(3)}
-        </h3>
+        <div key={key++} style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginTop: '3rem', marginBottom: '1.25rem' }}>
+          <div style={{ width: '3px', height: '1.1rem', background: 'hsl(25 90% 42%)', borderRadius: '2px', flexShrink: 0 }} />
+          <h3
+            className="font-serif font-bold uppercase"
+            style={{ fontSize: '0.88rem', color: 'hsl(25 100% 48%)', letterSpacing: '0.22em', lineHeight: 1, margin: 0 }}
+          >
+            {trimmed.slice(3)}
+          </h3>
+          <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, hsl(25 50% 18%), transparent)' }} />
+        </div>
       );
-    } else if (line.startsWith('> ')) {
+
+    } else if (trimmed.startsWith('> ')) {
+      // ── Blockquote ──
       nodes.push(
-        <blockquote key={key++} className="my-4 pl-4 italic"
-          style={{ borderLeft: '2px solid hsl(25 80% 28%)', color: 'hsl(15 4% 55%)' }}>
-          {parseInline(line.slice(2))}
+        <blockquote key={key++} style={{ margin: '1.2rem 0', paddingLeft: '1.1rem', borderLeft: '2px solid hsl(25 70% 24%)', color: 'hsl(15 4% 56%)', fontStyle: 'italic' }}>
+          {parseInline(trimmed.slice(2))}
         </blockquote>
       );
-    } else if (line.startsWith('- ')) {
+
+    } else if (trimmed.startsWith('- ')) {
+      // ── List item ──
       nodes.push(
         <div key={key++} className="flex gap-2 my-1" style={{ color: 'hsl(15 4% 68%)' }}>
           <span style={{ color: 'hsl(25 80% 38%)', flexShrink: 0 }}>·</span>
-          <span>{parseInline(line.slice(2))}</span>
+          <span>{parseInline(trimmed.slice(2))}</span>
         </div>
       );
-    } else if (line.startsWith('---')) {
+
+    } else if (trimmed.startsWith('---')) {
       nodes.push(<div key={key++} className="forge-divider my-6" />);
-    } else if (line.trim() === '') {
-      nodes.push(<div key={key++} style={{ height: '0.6rem' }} />);
-    } else {
+
+    } else if (trimmed === '') {
+      nodes.push(<div key={key++} style={{ height: '0.55rem' }} />);
+
+    } else if (/^\*[^*].+\*$/.test(trimmed) || /^\*[^*]\*$/.test(trimmed)) {
+      // ── Entirely italic line: speech / monologue ──
+      const inner = trimmed.slice(1, -1);
+      const isLong = inner.length > 45;
       nodes.push(
-        <p key={key++} className="leading-relaxed" style={{ color: 'hsl(15 4% 72%)', marginBottom: '0.15rem' }}>
-          {parseInline(line)}
+        <div
+          key={key++}
+          style={{
+            margin: isLong ? '1.4rem 0' : '0.5rem 0 0.5rem 1rem',
+            padding: isLong ? '0.85rem 1.25rem' : '0.15rem 0 0.15rem 1rem',
+            borderLeft: `2px solid hsl(25 70% ${isLong ? '28' : '22'}%)`,
+            background: isLong ? 'hsl(25 20% 5%)' : 'transparent',
+            borderRadius: isLong ? '0 4px 4px 0' : '0',
+          }}
+        >
+          <em style={{ color: `hsl(15 4% ${isLong ? '64' : '52'}%)`, fontSize: isLong ? '1.03rem' : '0.95rem', lineHeight: 1.75 }}>
+            {parseInline(inner)}
+          </em>
+        </div>
+      );
+
+    } else {
+      // ── Normal paragraph ──
+      nodes.push(
+        <p key={key++} style={{ color: 'hsl(15 4% 73%)', marginBottom: '0.2rem', lineHeight: 1.9 }}>
+          {parseInline(trimmed)}
         </p>
       );
     }
@@ -71,33 +109,51 @@ const KB_VARIANTS: Array<{ scale: number[]; x: number[]; y: number[]; duration: 
 function WovenImage({ url, index, position }: { url: string; index: number; position?: string }) {
   const [lightbox, setLightbox] = useState(false);
   const kb = KB_VARIANTS[index % KB_VARIANTS.length];
+  const isGif = url.toLowerCase().endsWith('.gif');
+
   return (
     <>
       <div
         className="my-10 cursor-pointer"
         style={{
-          borderRadius: '4px',
+          borderRadius: '5px',
           border: '1px solid hsl(15 8% 14%)',
           overflow: 'hidden',
-          transition: 'border-color 0.2s',
+          transition: 'border-color 0.25s, box-shadow 0.25s',
         }}
         onClick={() => setLightbox(true)}
-        onMouseEnter={e => (e.currentTarget.style.borderColor = 'hsl(25 60% 28%)')}
-        onMouseLeave={e => (e.currentTarget.style.borderColor = 'hsl(15 8% 14%)')}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 28%)';
+          (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px hsl(25 60% 10%)';
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 14%)';
+          (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+        }}
       >
-        <motion.img
-          src={url}
-          alt=""
-          className="w-full object-cover"
-          style={{ maxHeight: '340px', opacity: 0.88, display: 'block', objectPosition: position || 'center center' }}
-          animate={{ scale: kb.scale, x: kb.x, y: kb.y }}
-          transition={{ duration: kb.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-        />
+        {isGif ? (
+          // GIFs: no Ken Burns (they animate themselves), just render directly
+          <img
+            src={url}
+            alt=""
+            className="w-full object-cover"
+            style={{ maxHeight: '380px', opacity: 0.9, display: 'block', objectPosition: position || 'center center' }}
+          />
+        ) : (
+          <motion.img
+            src={url}
+            alt=""
+            className="w-full object-cover"
+            style={{ maxHeight: '360px', opacity: 0.88, display: 'block', objectPosition: position || 'center center' }}
+            animate={{ scale: kb.scale, x: kb.x, y: kb.y }}
+            transition={{ duration: kb.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+          />
+        )}
       </div>
       {lightbox && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-8 cursor-pointer"
-          style={{ background: 'rgba(0,0,0,0.92)' }}
+          style={{ background: 'rgba(0,0,0,0.94)' }}
           onClick={() => setLightbox(false)}
         >
           <img src={url} alt="" className="max-w-full max-h-full object-contain" style={{ borderRadius: '6px' }} />
@@ -131,7 +187,7 @@ function OverflowGallery({ images }: { images: string[] }) {
       {lightbox && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-8 cursor-pointer"
-          style={{ background: 'rgba(0,0,0,0.92)' }}
+          style={{ background: 'rgba(0,0,0,0.94)' }}
           onClick={() => setLightbox(null)}
         >
           <img src={lightbox} alt="" className="max-w-full max-h-full object-contain" style={{ borderRadius: '6px' }} />
@@ -141,7 +197,7 @@ function OverflowGallery({ images }: { images: string[] }) {
   );
 }
 
-// ─── Audio embed ──────────────────────────────────────────────────────────────
+// ─── Audio embed (Google Drive) ───────────────────────────────────────────────
 
 function AudioEmbed({ url }: { url: string }) {
   const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
@@ -161,10 +217,25 @@ function AudioEmbed({ url }: { url: string }) {
   );
 }
 
+// ─── Inline video player (MP4) ────────────────────────────────────────────────
+
+function VideoEmbed({ url }: { url: string }) {
+  return (
+    <div style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid hsl(15 8% 18%)', background: 'hsl(15 6% 6%)' }}>
+      <video
+        src={url}
+        controls
+        playsInline
+        preload="metadata"
+        style={{ display: 'block', width: '100%', maxHeight: '480px', background: '#000' }}
+      />
+    </div>
+  );
+}
+
 // ─── Content renderer with woven images ──────────────────────────────────────
 
 function renderWovenContent(content: string, images: string[], imagePositions?: string[]): React.ReactNode[] {
-  // Split into sections at ## boundaries (includes any preamble before the first ##)
   const rawSections = content.split(/(?=^## )/m).filter(s => s.trim());
   const sectionCount = rawSections.length;
 
@@ -172,13 +243,9 @@ function renderWovenContent(content: string, images: string[], imagePositions?: 
     return renderLines(content.split('\n'));
   }
 
-
-  // Cap inline images at 1 per section; overflow goes to gallery
   const inlineMax = Math.min(images.length, sectionCount);
   const galleryImages = images.slice(inlineMax);
 
-  // Distribute inline images evenly across section breaks
-  // Image j appears after section: clamp(round((j+0.5) * sections / inlineMax) - 1, 0, sections-1)
   const imageAfterSection: number[] = [];
   for (let j = 0; j < inlineMax; j++) {
     const raw = Math.round((j + 0.5) * sectionCount / inlineMax) - 1;
@@ -188,7 +255,6 @@ function renderWovenContent(content: string, images: string[], imagePositions?: 
   const nodes: React.ReactNode[] = [];
   rawSections.forEach((section, i) => {
     nodes.push(...renderLines(section.split('\n'), i * 1000));
-    // Inject any images assigned to this section
     imageAfterSection.forEach((targetSection, imgIdx) => {
       if (targetSection === i) {
         nodes.push(<WovenImage key={`woven-${imgIdx}`} url={images[imgIdx]} index={imgIdx} position={imagePositions?.[imgIdx]} />);
@@ -220,10 +286,12 @@ export function SessionDetail() {
       .finally(() => setLoading(false));
   }, []);
 
-  const session = sessions.find(s => s.slug === slug);
-  const currentIdx = sessions.findIndex(s => s.slug === slug);
-  const prevSession = currentIdx > 0 ? sessions[currentIdx - 1] : null;
-  const nextSession = currentIdx < sessions.length - 1 ? sessions[currentIdx + 1] : null;
+  // Sorted ascending for prev/next nav (session 1 → 24)
+  const sorted = [...sessions].sort((a, b) => a.number - b.number);
+  const session = sorted.find(s => s.slug === slug);
+  const currentIdx = sorted.findIndex(s => s.slug === slug);
+  const prevSession = currentIdx > 0 ? sorted[currentIdx - 1] : null;
+  const nextSession = currentIdx < sorted.length - 1 ? sorted[currentIdx + 1] : null;
 
   const formattedDate = session?.date
     ? new Date(session.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -232,7 +300,7 @@ export function SessionDetail() {
   if (loading) {
     return (
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-        <div style={{ height: '420px', background: 'hsl(15 6% 8%)', borderRadius: '6px', opacity: 0.5 }} />
+        <div style={{ height: '520px', background: 'hsl(15 6% 8%)', borderRadius: '6px', opacity: 0.5 }} />
       </div>
     );
   }
@@ -254,37 +322,42 @@ export function SessionDetail() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
 
       {/* ── Hero ── */}
-      <div className="relative" style={{ height: 'clamp(300px, 48vh, 480px)', overflow: 'hidden' }}>
+      <div className="relative" style={{ height: 'clamp(360px, 60vh, 600px)', overflow: 'hidden' }}>
         {session.imageUrl ? (
           <motion.img
             src={session.imageUrl}
             alt={session.title}
             className="w-full h-full object-cover"
-            style={{ opacity: 0.5, objectPosition: session.imagePosition ?? 'center center' }}
+            style={{ opacity: 0.52, objectPosition: session.imagePosition ?? 'center center' }}
             animate={{ scale: [1, 1.07] }}
-            transition={{ duration: 14, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+            transition={{ duration: 16, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           />
         ) : (
           <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, hsl(15 8% 6%), hsl(25 20% 10%))' }} />
         )}
-        {/* Gradient overlay: heavy at bottom so text is readable */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, rgba(10,8,7,0.55) 40%, transparent 70%)' }} />
+
+        {/* Multi-layer gradient: rich at bottom, lighter in middle */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, hsl(15 6% 8%)cc 15%, rgba(10,8,7,0.4) 50%, transparent 75%)'
+        }} />
 
         {/* Session number — top left */}
         <div className="absolute" style={{ top: '2rem', left: '2rem' }}>
-          <span className="font-display uppercase tracking-[0.35em]" style={{ fontSize: '0.55rem', color: 'hsl(25 80% 48%)', display: 'block', marginBottom: '0.2rem' }}>
+          <span className="font-display uppercase tracking-[0.35em]" style={{ fontSize: '0.55rem', color: 'hsl(25 80% 52%)', display: 'block', marginBottom: '0.25rem' }}>
             Session
           </span>
-          <span className="font-serif font-black" style={{ fontSize: '4.5rem', color: 'hsl(25 100% 44%)', lineHeight: 1, textShadow: '0 0 60px hsl(25 80% 18%)' }}>
+          <span className="font-serif font-black" style={{ fontSize: '5rem', color: 'hsl(25 100% 44%)', lineHeight: 1, textShadow: '0 0 80px hsl(25 90% 20%), 0 0 20px hsl(25 80% 10%)' }}>
             {session.number}
           </span>
         </div>
 
-        {/* Title — bottom */}
-        <div className="absolute" style={{ bottom: '2rem', left: '2rem', right: '2rem' }}>
+        {/* Title — bottom left */}
+        <div className="absolute" style={{ bottom: '2.5rem', left: '2rem', right: '2rem' }}>
+          {/* Thin amber sweep line above title */}
+          <div style={{ width: '48px', height: '2px', background: 'hsl(25 80% 42%)', marginBottom: '1rem', borderRadius: '1px' }} />
           <h1
             className="font-serif font-black uppercase tracking-wide leading-tight"
-            style={{ fontSize: 'clamp(1.5rem, 4vw, 2.8rem)', color: 'hsl(15 4% 96%)', textShadow: '0 2px 24px rgba(0,0,0,0.9)' }}
+            style={{ fontSize: 'clamp(1.6rem, 4.5vw, 3rem)', color: 'hsl(15 4% 97%)', textShadow: '0 2px 32px rgba(0,0,0,0.95)' }}
           >
             {session.title}
           </h1>
@@ -298,7 +371,9 @@ export function SessionDetail() {
         <Link
           href="/sessions"
           className="inline-flex items-center gap-2 font-display text-xs uppercase tracking-[0.22em] mb-8 transition-colors duration-200"
-          style={{ color: 'hsl(15 4% 36%)', textDecoration: 'none' }}
+          style={{ color: 'hsl(15 4% 32%)', textDecoration: 'none' }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'hsl(25 80% 42%)'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'hsl(15 4% 32%)'}
         >
           <ChevronLeft size={12} />
           Campaign Journal
@@ -308,17 +383,23 @@ export function SessionDetail() {
         <div className="flex flex-wrap items-center gap-3 mb-7">
           {formattedDate && (
             <div className="flex items-center gap-1.5">
-              <Calendar size={11} style={{ color: 'hsl(15 4% 35%)' }} />
+              <Calendar size={11} style={{ color: 'hsl(15 4% 32%)' }} />
               <span className="font-display text-xs uppercase tracking-[0.18em]" style={{ color: 'hsl(15 4% 38%)' }}>
                 {formattedDate}
               </span>
             </div>
           )}
+          {session.videoUrl && (
+            <span className="flex items-center gap-1 font-display text-[10px] uppercase tracking-wider px-2 py-0.5"
+              style={{ background: 'hsl(25 80% 12%)', border: '1px solid hsl(25 80% 24%)', borderRadius: '3px', color: 'hsl(25 80% 48%)' }}>
+              <Video size={9} /> Video
+            </span>
+          )}
           {session.tags.map(tag => (
             <span
               key={tag}
               className="font-display text-[10px] uppercase tracking-wider px-2 py-0.5"
-              style={{ background: 'hsl(15 6% 11%)', border: '1px solid hsl(15 8% 16%)', borderRadius: '3px', color: 'hsl(15 4% 38%)' }}
+              style={{ background: 'hsl(15 6% 11%)', border: '1px solid hsl(15 8% 16%)', borderRadius: '3px', color: 'hsl(15 4% 36%)' }}
             >
               {tag}
             </span>
@@ -335,12 +416,27 @@ export function SessionDetail() {
           </div>
         )}
 
+        {/* Video embed */}
+        {session.videoUrl && (
+          <div className="mb-8">
+            <p className="font-display text-[10px] uppercase tracking-[0.25em] mb-2" style={{ color: 'hsl(25 60% 32%)' }}>
+              Session Clip
+            </p>
+            <VideoEmbed url={session.videoUrl} />
+          </div>
+        )}
+
         {/* Summary */}
-        <p className="font-serif italic mb-7" style={{ color: 'hsl(15 4% 56%)', fontSize: '1.08rem', lineHeight: 1.72 }}>
+        <p className="font-serif italic mb-7" style={{ color: 'hsl(15 4% 56%)', fontSize: '1.08rem', lineHeight: 1.78 }}>
           {session.summary}
         </p>
 
-        <div className="forge-divider mb-10" />
+        {/* Amber divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2.5rem' }}>
+          <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, hsl(25 50% 18%))' }} />
+          <div style={{ width: '6px', height: '6px', background: 'hsl(25 80% 38%)', transform: 'rotate(45deg)', flexShrink: 0 }} />
+          <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, hsl(25 50% 18%))' }} />
+        </div>
 
         {/* Content with woven images */}
         <div style={{ fontSize: '0.97rem', lineHeight: 1.88 }}>
@@ -348,7 +444,12 @@ export function SessionDetail() {
         </div>
 
         {/* ── Prev / Next nav ── */}
-        <div className="forge-divider mt-14 mb-8" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '3.5rem 0 2rem' }}>
+          <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, hsl(25 50% 18%))' }} />
+          <div style={{ width: '6px', height: '6px', background: 'hsl(25 80% 38%)', transform: 'rotate(45deg)', flexShrink: 0 }} />
+          <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, hsl(25 50% 18%))' }} />
+        </div>
+
         <div className="flex justify-between items-start gap-4">
           {prevSession ? (
             <Link
@@ -358,10 +459,10 @@ export function SessionDetail() {
             >
               <ChevronLeft size={14} style={{ color: 'hsl(25 80% 36%)', flexShrink: 0 }} />
               <div>
-                <div className="font-display text-[9px] uppercase tracking-[0.25em] mb-0.5" style={{ color: 'hsl(15 4% 32%)' }}>
+                <div className="font-display text-[9px] uppercase tracking-[0.25em] mb-0.5" style={{ color: 'hsl(15 4% 28%)' }}>
                   Session {prevSession.number}
                 </div>
-                <div className="font-serif text-sm leading-snug" style={{ color: 'hsl(15 4% 60%)' }}>
+                <div className="font-serif text-sm leading-snug" style={{ color: 'hsl(15 4% 56%)' }}>
                   {prevSession.title}
                 </div>
               </div>
@@ -375,10 +476,10 @@ export function SessionDetail() {
               style={{ textDecoration: 'none' }}
             >
               <div>
-                <div className="font-display text-[9px] uppercase tracking-[0.25em] mb-0.5" style={{ color: 'hsl(15 4% 32%)' }}>
+                <div className="font-display text-[9px] uppercase tracking-[0.25em] mb-0.5" style={{ color: 'hsl(15 4% 28%)' }}>
                   Session {nextSession.number}
                 </div>
-                <div className="font-serif text-sm leading-snug" style={{ color: 'hsl(15 4% 60%)' }}>
+                <div className="font-serif text-sm leading-snug" style={{ color: 'hsl(15 4% 56%)' }}>
                   {nextSession.title}
                 </div>
               </div>
