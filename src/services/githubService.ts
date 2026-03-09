@@ -129,6 +129,40 @@ export async function updateEntityImage(
   vaultService.clearCache();
 }
 
+export async function updateImagePosition(
+  entity: VaultEntity,
+  imagePosition: string,
+  pat: string,
+): Promise<void> {
+  const folder = TYPE_VAULT_FOLDER[entity.type.toUpperCase()] ?? `${entity.type.toLowerCase()}s`;
+  const entityPath = `vault/${folder}/${entity.slug}.json`;
+
+  await putFileWithRetry(
+    entityPath,
+    (raw) => {
+      const data: VaultEntity = JSON.parse(raw);
+      data.imagePosition = imagePosition;
+      return JSON.stringify(data, null, 2);
+    },
+    `frame: update portrait position for ${entity.name}`,
+    pat,
+  );
+
+  await putFileWithRetry(
+    'vault/index.json',
+    (raw) => {
+      const index: VaultIndex = JSON.parse(raw);
+      const stub = index.entities.find(e => e.id === entity.id);
+      if (stub) stub.imagePosition = imagePosition;
+      return JSON.stringify(index, null, 2);
+    },
+    `frame: update index imagePosition for ${entity.name}`,
+    pat,
+  );
+
+  vaultService.clearCache();
+}
+
 export async function toggleEntityHidden(
   stub: VaultEntityStub,
   hidden: boolean,

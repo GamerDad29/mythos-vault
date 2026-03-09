@@ -8,6 +8,7 @@ interface PCStub extends VaultEntityStub {
   accentColor?: string;
   player?: string;
   race?: string;
+  imagePosition?: string;
 }
 
 // Per-character session quotes for the cards — pulled from actual session recaps
@@ -59,7 +60,7 @@ function PCCard({ pc, index }: { pc: PCStub; index: number }) {
                 position: 'absolute', inset: 0,
                 width: '100%', height: '68%',
                 objectFit: 'cover',
-                objectPosition: 'center top',
+                objectPosition: pc.imagePosition || 'center top',
                 transform: hovered ? 'scale(1.07)' : 'scale(1)',
                 transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                 display: 'block',

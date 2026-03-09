@@ -8,7 +8,7 @@ import { SkeletonHero } from '../components/Skeleton';
 import { renderContent } from '../utils/renderContent';
 import { useAuth } from '../contexts/AuthContext';
 import { IMAGE_STYLES, buildVaultImagePrompt, generateVaultImage, uploadImageToVaultGitHub } from '../services/imageService';
-import { updateEntityImage } from '../services/githubService';
+import { updateEntityImage, updateImagePosition } from '../services/githubService';
 import { SKILL_TOOLTIPS, FEATURE_TOOLTIPS, GEAR_TOOLTIPS } from '../data/characterTooltips';
 import type { VaultEntity, VaultEntityStub } from '../types';
 import type { ImageStyleConfig } from '../services/imageService';
@@ -474,6 +474,12 @@ export function PCDetail() {
   const [customPrompt, setCustomPrompt] = useState('');
   const [promptOpen, setPromptOpen] = useState(false);
 
+  // ── Portrait framing ──
+  const [isFraming, setIsFraming] = useState(false);
+  const [framingPos, setFramingPos] = useState({ x: 50, y: 50 });
+  const [frameSaveStatus, setFrameSaveStatus] = useState<'idle'|'saving'|'done'|'error'>('idle');
+  const portraitRef = useRef<HTMLDivElement>(null);
+
   const { isDM } = useAuth();
   const pat = import.meta.env.VITE_GITHUB_PAT as string;
 
@@ -517,6 +523,46 @@ export function PCDetail() {
     } catch (err) {
       setRegenError(err instanceof Error ? err.message : 'Commit failed');
       setRegenStatus('error');
+    }
+  }
+
+  function handleFramingStart() {
+    if (!entity) return;
+    const current = entity.imagePosition || 'center top';
+    // Parse existing objectPosition into x/y percentages
+    const parts = current.split(' ');
+    const parseVal = (v: string, fallback: number) => {
+      if (v === 'center') return 50;
+      if (v === 'left') return 0;
+      if (v === 'right') return 100;
+      if (v === 'top') return 0;
+      if (v === 'bottom') return 100;
+      return parseFloat(v) || fallback;
+    };
+    setFramingPos({ x: parseVal(parts[0], 50), y: parseVal(parts[1] || parts[0], 50) });
+    setIsFraming(true);
+    setFrameSaveStatus('idle');
+  }
+
+  function handleFramingMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isFraming || !portraitRef.current) return;
+    const rect = portraitRef.current.getBoundingClientRect();
+    const x = Math.round(Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100)));
+    const y = Math.round(Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100)));
+    setFramingPos({ x, y });
+  }
+
+  async function handleFramingAccept() {
+    if (!entity) return;
+    const posStr = `${framingPos.x}% ${framingPos.y}%`;
+    setFrameSaveStatus('saving');
+    try {
+      await updateImagePosition(entity, posStr, pat);
+      setEntity(e => e ? { ...e, imagePosition: posStr } : null);
+      setFrameSaveStatus('done');
+      setTimeout(() => { setIsFraming(false); setFrameSaveStatus('idle'); }, 1200);
+    } catch {
+      setFrameSaveStatus('error');
     }
   }
 
@@ -586,9 +632,17 @@ export function PCDetail() {
 
             {/* Portrait */}
             <div
-              onMouseEnter={() => setImgHovered(true)}
-              onMouseLeave={() => setImgHovered(false)}
-              style={{ position: 'relative', minHeight: '340px', background: `radial-gradient(ellipse at 40% 30%, hsl(20 8% 12%) 0%, hsl(15 6% 6%) 100%)`, overflow: 'hidden' }}
+              ref={portraitRef}
+              onMouseEnter={() => { if (!isFraming) setImgHovered(true); }}
+              onMouseLeave={() => { if (!isFraming) setImgHovered(false); }}
+              onMouseMove={handleFramingMouseMove}
+              style={{
+                position: 'relative', minHeight: '340px',
+                background: `radial-gradient(ellipse at 40% 30%, hsl(20 8% 12%) 0%, hsl(15 6% 6%) 100%)`,
+                overflow: 'hidden',
+                cursor: isFraming ? 'crosshair' : 'default',
+                outline: isFraming ? `2px solid ${accent}80` : 'none',
+              }}
             >
               {entity.imageUrl && !imgError ? (
                 <>
@@ -597,10 +651,10 @@ export function PCDetail() {
                     className="w-full h-full object-cover"
                     style={{
                       minHeight: '340px', display: 'block',
-                      objectPosition: entity.imagePosition || 'center top',
-                      animation: imgHovered ? 'none' : 'kenBurns 30s ease-in-out infinite',
-                      transform: imgHovered ? 'scale(1.06)' : undefined,
-                      transition: imgHovered ? 'transform 0.6s ease' : undefined,
+                      objectPosition: isFraming ? `${framingPos.x}% ${framingPos.y}%` : (entity.imagePosition || 'center top'),
+                      animation: (imgHovered || isFraming) ? 'none' : 'kenBurns 30s ease-in-out infinite',
+                      transform: imgHovered && !isFraming ? 'scale(1.06)' : undefined,
+                      transition: (imgHovered && !isFraming) ? 'transform 0.6s ease' : 'object-position 0.05s linear',
                       transformOrigin: 'center center',
                     }}
                     onError={() => setImgError(true)}
@@ -608,6 +662,68 @@ export function PCDetail() {
                   <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at 50% 90%, ${accent}22 0%, transparent 55%)`, pointerEvents: 'none' }} />
                   <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{ width: '90px', background: `linear-gradient(to right, transparent, hsl(20 6% 8%))` }} />
                   <div className="absolute inset-x-0 bottom-0 pointer-events-none md:hidden" style={{ height: '80px', background: `linear-gradient(to bottom, transparent, hsl(20 6% 8%))` }} />
+
+                  {/* ── Framing overlay (DM mode) ── */}
+                  {isFraming && (
+                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                      {/* Crosshair */}
+                      <div style={{
+                        position: 'absolute',
+                        left: `${framingPos.x}%`, top: `${framingPos.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                        width: '40px', height: '40px',
+                        pointerEvents: 'none',
+                      }}>
+                        <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1px', background: `${accent}cc`, transform: 'translateY(-50%)' }} />
+                        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: `${accent}cc`, transform: 'translateX(-50%)' }} />
+                        <div style={{
+                          position: 'absolute', top: '50%', left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          width: '8px', height: '8px',
+                          borderRadius: '50%',
+                          background: accent,
+                          boxShadow: `0 0 10px ${accent}`,
+                        }} />
+                      </div>
+                      {/* Mode label */}
+                      <div style={{
+                        position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)',
+                        background: 'rgba(8,6,4,0.85)',
+                        border: `1px solid ${accent}50`,
+                        borderRadius: '4px',
+                        padding: '4px 10px',
+                      }}>
+                        <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.2em', color: accent }}>
+                          Drag to Frame · {framingPos.x}% {framingPos.y}%
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── DM: Adjust Frame button (shown when not framing) ── */}
+                  {isDM && entity.imageUrl && !isFraming && (
+                    <button
+                      onClick={handleFramingStart}
+                      style={{
+                        position: 'absolute', bottom: '10px', left: '10px',
+                        background: 'rgba(8,6,4,0.82)',
+                        border: `1px solid ${accent}40`,
+                        borderRadius: '4px',
+                        padding: '5px 10px',
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', gap: '5px',
+                        opacity: imgHovered ? 1 : 0,
+                        transition: 'opacity 0.2s ease',
+                      }}
+                    >
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                      </svg>
+                      <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: accent }}>
+                        Adjust Frame
+                      </span>
+                    </button>
+                  )}
                 </>
               ) : (
                 <div className="w-full h-full flex items-center justify-center" style={{ minHeight: '340px' }}>
@@ -681,6 +797,55 @@ export function PCDetail() {
                 <p className="font-display italic mt-3" style={{ fontSize: '12px', color: 'hsl(15 4% 36%)' }}>
                   Patron: {(entity as any).patron}
                 </p>
+              )}
+
+              {/* DM framing accept/cancel */}
+              {isDM && isFraming && (
+                <div style={{ marginTop: '16px', borderRadius: '6px', padding: '12px 14px', background: 'rgba(10,8,6,0.6)', border: `1px solid ${accent}35`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                  <div>
+                    <p className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.22em', color: accent, marginBottom: '2px' }}>
+                      Portrait Frame
+                    </p>
+                    <p className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 40%)' }}>
+                      Drag the portrait to reposition · {framingPos.x}% {framingPos.y}%
+                    </p>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                    <button
+                      onClick={() => { setIsFraming(false); setFrameSaveStatus('idle'); }}
+                      style={{
+                        background: 'transparent',
+                        border: '1px solid hsl(15 8% 22%)',
+                        borderRadius: '4px', padding: '6px 14px',
+                        cursor: 'pointer', color: 'hsl(15 4% 42%)',
+                        fontSize: '11px', fontFamily: 'serif',
+                        letterSpacing: '0.1em', textTransform: 'uppercase',
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleFramingAccept}
+                      disabled={frameSaveStatus === 'saving'}
+                      style={{
+                        background: frameSaveStatus === 'done' ? 'hsl(120 40% 20%)' : `${accent}22`,
+                        border: `1px solid ${frameSaveStatus === 'done' ? 'hsl(120 50% 30%)' : accent + '60'}`,
+                        borderRadius: '4px', padding: '6px 16px',
+                        cursor: frameSaveStatus === 'saving' ? 'wait' : 'pointer',
+                        color: frameSaveStatus === 'done' ? 'hsl(120 60% 55%)' : accent,
+                        fontSize: '11px', fontFamily: 'serif',
+                        letterSpacing: '0.1em', textTransform: 'uppercase',
+                        opacity: frameSaveStatus === 'saving' ? 0.6 : 1,
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      {frameSaveStatus === 'saving' ? 'Saving…' : frameSaveStatus === 'done' ? 'Saved' : 'Accept'}
+                    </button>
+                  </div>
+                  {frameSaveStatus === 'error' && (
+                    <p style={{ fontSize: '11px', color: 'hsl(0 70% 50%)', marginTop: '6px' }}>Save failed — check PAT</p>
+                  )}
+                </div>
               )}
 
               {/* DM image regen */}

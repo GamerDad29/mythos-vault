@@ -9,6 +9,7 @@ export interface VaultEntity {
   summary?: string;
   content: string;      // Markdown body, DM sections removed
   imageUrl?: string;    // Raw GitHub image URL
+  imagePosition?: string; // CSS object-position for portrait framing (e.g. "40% 20%")
   tags?: string[];
   factionId?: string;
   locationId?: string;
