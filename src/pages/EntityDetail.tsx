@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRoute, useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { ExternalLink, Eye, EyeOff, RefreshCw } from 'lucide-react';
@@ -8,7 +8,7 @@ import type { VaultEntity, VaultEntityStub } from '../types';
 import { FACTION_COLORS, TYPE_URL_SEGMENT, URL_SEGMENT_TO_TYPE } from '../types';
 import { renderContent, stripHiddenBlocks } from '../utils/renderContent';
 import { useAuth } from '../contexts/AuthContext';
-import { toggleEntityHidden, toggleSectionHidden, updateEntityImage } from '../services/githubService';
+import { toggleEntityHidden, toggleSectionHidden, updateEntityImage, updateImagePosition } from '../services/githubService';
 import { IMAGE_STYLES, buildVaultImagePrompt, generateVaultImage, uploadImageToVaultGitHub } from '../services/imageService';
 import type { ImageStyleConfig } from '../services/imageService';
 
@@ -138,6 +138,13 @@ export function EntityDetail() {
   const [promptOpen, setPromptOpen] = useState(false);
   const { isDM } = useAuth();
 
+  // ── Portrait framing ──
+  const [isFraming, setIsFraming] = useState(false);
+  const [framingPos, setFramingPos] = useState({ x: 50, y: 50 });
+  const [frameSaveStatus, setFrameSaveStatus] = useState<'idle'|'saving'|'done'|'error'>('idle');
+  const [imgHovered, setImgHovered] = useState(false);
+  const portraitRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!type || !slug) return;
     setLoading(true);
@@ -212,6 +219,42 @@ export function EntityDetail() {
     } catch (err) {
       setRegenError(err instanceof Error ? err.message : 'Commit failed');
       setRegenStatus('error');
+    }
+  }
+
+  function handleFramingStart() {
+    if (!entity) return;
+    const current = entity.imagePosition || 'center center';
+    const parts = current.split(' ');
+    const parseVal = (v: string, fallback: number) => {
+      if (v === 'center') return 50;
+      if (v === 'left') return 0; if (v === 'right') return 100;
+      if (v === 'top') return 0; if (v === 'bottom') return 100;
+      return parseFloat(v) || fallback;
+    };
+    setFramingPos({ x: parseVal(parts[0], 50), y: parseVal(parts[1] || parts[0], 50) });
+    setIsFraming(true); setFrameSaveStatus('idle');
+  }
+
+  function handleFramingMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isFraming || !portraitRef.current) return;
+    const rect = portraitRef.current.getBoundingClientRect();
+    const x = Math.round(Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100)));
+    const y = Math.round(Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100)));
+    setFramingPos({ x, y });
+  }
+
+  async function handleFramingAccept() {
+    if (!entity) return;
+    const posStr = `${framingPos.x}% ${framingPos.y}%`;
+    setFrameSaveStatus('saving');
+    try {
+      await updateImagePosition(entity, posStr, pat);
+      setEntity(e => e ? { ...e, imagePosition: posStr } : null);
+      setFrameSaveStatus('done');
+      setTimeout(() => { setIsFraming(false); setFrameSaveStatus('idle'); }, 1200);
+    } catch {
+      setFrameSaveStatus('error');
     }
   }
 
@@ -351,8 +394,16 @@ export function EntityDetail() {
           <div className="grid grid-cols-1 md:grid-cols-3">
             {/* Image */}
             <div
+              ref={portraitRef}
               className="relative overflow-hidden"
-              style={{ minHeight: '280px', background: 'hsl(15 6% 7%)' }}
+              style={{
+                minHeight: '280px', background: 'hsl(15 6% 7%)',
+                cursor: isFraming ? 'crosshair' : 'default',
+                outline: isFraming ? `2px solid ${accentColor}80` : 'none',
+              }}
+              onMouseEnter={() => { if (!isFraming) setImgHovered(true); }}
+              onMouseLeave={() => { if (!isFraming) setImgHovered(false); }}
+              onMouseMove={handleFramingMouseMove}
             >
               {/* Entity type badge — always visible */}
               <div
@@ -374,7 +425,11 @@ export function EntityDetail() {
                     src={entity.imageUrl}
                     alt={entity.name}
                     className="w-full h-full object-cover"
-                    style={{ minHeight: '280px', display: 'block' }}
+                    style={{
+                      minHeight: '280px', display: 'block',
+                      objectPosition: isFraming ? `${framingPos.x}% ${framingPos.y}%` : (entity.imagePosition || 'center center'),
+                      transition: isFraming ? 'object-position 0.05s linear' : undefined,
+                    }}
                     onError={() => setImgError(true)}
                   />
                   <div className="absolute inset-y-0 right-0 pointer-events-none hidden md:block" style={{
@@ -388,6 +443,51 @@ export function EntityDetail() {
                   <div className="absolute inset-0 pointer-events-none" style={{
                     background: 'radial-gradient(ellipse at 30% 50%, transparent 40%, rgba(0,0,0,0.4) 100%)',
                   }} />
+
+                  {/* ── Framing overlay (DM mode) ── */}
+                  {isFraming && (
+                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                      <div style={{
+                        position: 'absolute',
+                        left: `${framingPos.x}%`, top: `${framingPos.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                        width: '40px', height: '40px',
+                        pointerEvents: 'none',
+                      }}>
+                        <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1px', background: `${accentColor}cc`, transform: 'translateY(-50%)' }} />
+                        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: `${accentColor}cc`, transform: 'translateX(-50%)' }} />
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '8px', height: '8px', borderRadius: '50%', background: accentColor, boxShadow: `0 0 10px ${accentColor}` }} />
+                      </div>
+                      <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(8,6,4,0.85)', border: `1px solid ${accentColor}50`, borderRadius: '4px', padding: '4px 10px' }}>
+                        <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.2em', color: accentColor }}>
+                          Drag to Frame · {framingPos.x}% {framingPos.y}%
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── DM: Adjust Frame button ── */}
+                  {isDM && !isFraming && (
+                    <button
+                      onClick={handleFramingStart}
+                      style={{
+                        position: 'absolute', bottom: '10px', left: '10px',
+                        background: 'rgba(8,6,4,0.82)',
+                        border: `1px solid ${accentColor}40`,
+                        borderRadius: '4px', padding: '5px 10px',
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
+                        opacity: imgHovered ? 1 : 0,
+                        transition: 'opacity 0.2s ease',
+                      }}
+                    >
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                      </svg>
+                      <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: accentColor }}>
+                        Adjust Frame
+                      </span>
+                    </button>
+                  )}
                 </>
               ) : (
                 <div
@@ -464,6 +564,31 @@ export function EntityDetail() {
               {/* DM: entity-level toggle + image regen */}
               {isDM && (
                 <div className="mt-6 space-y-4">
+
+                  {/* Framing accept/cancel */}
+                  {isFraming && (
+                    <div style={{ borderRadius: '6px', padding: '12px 14px', background: 'rgba(10,8,6,0.6)', border: `1px solid ${accentColor}35`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                      <div>
+                        <p className="font-serif uppercase" style={{ fontSize: '10px', letterSpacing: '0.22em', color: accentColor, marginBottom: '2px' }}>Portrait Frame</p>
+                        <p className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 40%)' }}>
+                          Move cursor over image · {framingPos.x}% {framingPos.y}%
+                        </p>
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                        <button
+                          onClick={() => { setIsFraming(false); setFrameSaveStatus('idle'); }}
+                          style={{ background: 'transparent', border: '1px solid hsl(15 8% 22%)', borderRadius: '4px', padding: '6px 14px', cursor: 'pointer', color: 'hsl(15 4% 42%)', fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                        >Cancel</button>
+                        <button
+                          onClick={handleFramingAccept}
+                          disabled={frameSaveStatus === 'saving'}
+                          style={{ background: frameSaveStatus === 'done' ? 'hsl(120 40% 20%)' : `${accentColor}22`, border: `1px solid ${frameSaveStatus === 'done' ? 'hsl(120 50% 30%)' : accentColor + '60'}`, borderRadius: '4px', padding: '6px 16px', cursor: frameSaveStatus === 'saving' ? 'wait' : 'pointer', color: frameSaveStatus === 'done' ? 'hsl(120 60% 55%)' : accentColor, fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: frameSaveStatus === 'saving' ? 0.6 : 1, transition: 'all 0.2s ease' }}
+                        >
+                          {frameSaveStatus === 'saving' ? 'Saving…' : frameSaveStatus === 'done' ? 'Saved' : 'Accept'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   <button
                     onClick={handleToggleEntityHidden}
                     style={{

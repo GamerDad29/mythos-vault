@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar, Video } from 'lucide-react';
 import { vaultService } from '../vaultService';
+import { useAuth } from '../contexts/AuthContext';
+import { updateSessionImagePosition } from '../services/githubService';
 import type { SessionEntry } from '../types';
 
 // ─── Inline markdown ──────────────────────────────────────────────────────────
@@ -278,6 +280,15 @@ export function SessionDetail() {
   const [sessions, setSessions] = useState<SessionEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { isDM } = useAuth();
+  const pat = import.meta.env.VITE_GITHUB_PAT as string;
+
+  // ── Hero image framing ──
+  const [isFraming, setIsFraming] = useState(false);
+  const [framingPos, setFramingPos] = useState({ x: 50, y: 50 });
+  const [frameSaveStatus, setFrameSaveStatus] = useState<'idle'|'saving'|'done'|'error'>('idle');
+  const [heroHovered, setHeroHovered] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     vaultService.getSessions()
@@ -296,6 +307,42 @@ export function SessionDetail() {
   const formattedDate = session?.date
     ? new Date(session.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : null;
+
+  function handleFramingStart() {
+    if (!session) return;
+    const current = session.imagePosition ?? 'center center';
+    const parts = current.split(' ');
+    const parseVal = (v: string, fallback: number) => {
+      if (v === 'center') return 50;
+      if (v === 'left') return 0; if (v === 'right') return 100;
+      if (v === 'top') return 0; if (v === 'bottom') return 100;
+      return parseFloat(v) || fallback;
+    };
+    setFramingPos({ x: parseVal(parts[0], 50), y: parseVal(parts[1] || parts[0], 50) });
+    setIsFraming(true); setFrameSaveStatus('idle');
+  }
+
+  function handleFramingMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isFraming || !heroRef.current) return;
+    const rect = heroRef.current.getBoundingClientRect();
+    const x = Math.round(Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100)));
+    const y = Math.round(Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100)));
+    setFramingPos({ x, y });
+  }
+
+  async function handleFramingAccept() {
+    if (!session) return;
+    const posStr = `${framingPos.x}% ${framingPos.y}%`;
+    setFrameSaveStatus('saving');
+    try {
+      await updateSessionImagePosition(session.slug, posStr, pat);
+      setSessions(prev => prev.map(s => s.slug === session.slug ? { ...s, imagePosition: posStr } : s));
+      setFrameSaveStatus('done');
+      setTimeout(() => { setIsFraming(false); setFrameSaveStatus('idle'); }, 1200);
+    } catch {
+      setFrameSaveStatus('error');
+    }
+  }
 
   if (loading) {
     return (
@@ -322,14 +369,29 @@ export function SessionDetail() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
 
       {/* ── Hero ── */}
-      <div className="relative" style={{ height: 'clamp(360px, 60vh, 600px)', overflow: 'hidden' }}>
+      <div
+        ref={heroRef}
+        className="relative"
+        style={{
+          height: 'clamp(360px, 60vh, 600px)', overflow: 'hidden',
+          cursor: isFraming ? 'crosshair' : 'default',
+          outline: isFraming ? '2px solid hsl(25 100% 38%)80' : 'none',
+        }}
+        onMouseEnter={() => { if (!isFraming) setHeroHovered(true); }}
+        onMouseLeave={() => { if (!isFraming) setHeroHovered(false); }}
+        onMouseMove={handleFramingMouseMove}
+      >
         {session.imageUrl ? (
           <motion.img
             src={session.imageUrl}
             alt={session.title}
             className="w-full h-full object-cover"
-            style={{ opacity: 0.52, objectPosition: session.imagePosition ?? 'center center' }}
-            animate={{ scale: [1, 1.07] }}
+            style={{
+              opacity: 0.52,
+              objectPosition: isFraming ? `${framingPos.x}% ${framingPos.y}%` : (session.imagePosition ?? 'center center'),
+              transition: isFraming ? 'object-position 0.05s linear' : undefined,
+            }}
+            animate={isFraming ? {} : { scale: [1, 1.07] }}
             transition={{ duration: 16, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           />
         ) : (
@@ -337,9 +399,67 @@ export function SessionDetail() {
         )}
 
         {/* Multi-layer gradient: rich at bottom, lighter in middle */}
-        <div className="absolute inset-0" style={{
+        <div className="absolute inset-0 pointer-events-none" style={{
           background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, hsl(15 6% 8%)cc 15%, rgba(10,8,7,0.4) 50%, transparent 75%)'
         }} />
+
+        {/* ── Framing overlay (DM mode) ── */}
+        {isFraming && (
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+            <div style={{ position: 'absolute', left: `${framingPos.x}%`, top: `${framingPos.y}%`, transform: 'translate(-50%, -50%)', width: '40px', height: '40px' }}>
+              <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1px', background: 'hsl(25 100% 38%)cc', transform: 'translateY(-50%)' }} />
+              <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: 'hsl(25 100% 38%)cc', transform: 'translateX(-50%)' }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '8px', height: '8px', borderRadius: '50%', background: 'hsl(25 100% 38%)', boxShadow: '0 0 10px hsl(25 100% 38%)' }} />
+            </div>
+            <div style={{ position: 'absolute', top: '16px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(8,6,4,0.88)', border: '1px solid hsl(25 100% 38%)50', borderRadius: '4px', padding: '5px 12px' }}>
+              <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.2em', color: 'hsl(25 100% 48%)' }}>
+                Drag to Frame · {framingPos.x}% {framingPos.y}%
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* ── DM: Adjust Frame + Accept/Cancel ── */}
+        {isDM && session.imageUrl && !isFraming && (
+          <button
+            onClick={handleFramingStart}
+            style={{
+              position: 'absolute', bottom: '16px', right: '16px', zIndex: 10,
+              background: 'rgba(8,6,4,0.82)', border: '1px solid hsl(25 100% 38%)40',
+              borderRadius: '4px', padding: '6px 12px', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: '5px',
+              opacity: heroHovered ? 1 : 0, transition: 'opacity 0.2s ease',
+            }}
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="hsl(25 100% 38%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+            </svg>
+            <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: 'hsl(25 100% 38%)' }}>Adjust Frame</span>
+          </button>
+        )}
+        {isDM && isFraming && (
+          <div style={{
+            position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)',
+            zIndex: 10, display: 'flex', gap: '8px', alignItems: 'center',
+            background: 'rgba(8,6,4,0.9)', border: '1px solid hsl(25 100% 38%)35',
+            borderRadius: '6px', padding: '8px 14px',
+          }}>
+            <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 40%)', marginRight: '4px' }}>
+              {framingPos.x}% {framingPos.y}%
+            </span>
+            <button
+              onClick={() => { setIsFraming(false); setFrameSaveStatus('idle'); }}
+              style={{ background: 'transparent', border: '1px solid hsl(15 8% 22%)', borderRadius: '4px', padding: '5px 12px', cursor: 'pointer', color: 'hsl(15 4% 42%)', fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+            >Cancel</button>
+            <button
+              onClick={handleFramingAccept}
+              disabled={frameSaveStatus === 'saving'}
+              style={{ background: frameSaveStatus === 'done' ? 'hsl(120 40% 20%)' : 'hsl(25 100% 38%)22', border: `1px solid ${frameSaveStatus === 'done' ? 'hsl(120 50% 30%)' : 'hsl(25 100% 38%)60'}`, borderRadius: '4px', padding: '5px 14px', cursor: frameSaveStatus === 'saving' ? 'wait' : 'pointer', color: frameSaveStatus === 'done' ? 'hsl(120 60% 55%)' : 'hsl(25 100% 48%)', fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: frameSaveStatus === 'saving' ? 0.6 : 1 }}
+            >
+              {frameSaveStatus === 'saving' ? 'Saving…' : frameSaveStatus === 'done' ? 'Saved' : 'Accept'}
+            </button>
+          </div>
+        )}
 
         {/* Session number — top left */}
         <div className="absolute" style={{ top: '2rem', left: '2rem' }}>
