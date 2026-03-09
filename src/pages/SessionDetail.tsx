@@ -344,6 +344,13 @@ export function SessionDetail() {
     }
   }
 
+  useEffect(() => {
+    if (!isFraming) return;
+    function onKeyDown(e: KeyboardEvent) { if (e.key === 'Enter') handleFramingAccept(); }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isFraming, framingPos]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (loading) {
     return (
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>

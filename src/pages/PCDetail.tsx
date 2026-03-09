@@ -566,6 +566,13 @@ export function PCDetail() {
     }
   }
 
+  useEffect(() => {
+    if (!isFraming) return;
+    function onKeyDown(e: KeyboardEvent) { if (e.key === 'Enter') handleFramingAccept(); }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isFraming, framingPos]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (loading) return (
     <div className="max-w-5xl mx-auto px-6 py-16">
       <div style={{ height: '20px', width: '220px', background: 'hsl(20 6% 14%)', borderRadius: '4px', marginBottom: '32px' }} />

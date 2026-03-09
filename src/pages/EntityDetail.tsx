@@ -258,6 +258,13 @@ export function EntityDetail() {
     }
   }
 
+  useEffect(() => {
+    if (!isFraming) return;
+    function onKeyDown(e: KeyboardEvent) { if (e.key === 'Enter') handleFramingAccept(); }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isFraming, framingPos]); // eslint-disable-line react-hooks/exhaustive-deps
+
   async function handleRevealSection(sectionTitle: string) {
     if (!entity) return;
     try {
