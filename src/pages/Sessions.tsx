@@ -5,6 +5,116 @@ import { Calendar, Volume2, Image as ImageIcon } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import type { SessionEntry } from '../types';
 
+// ─── Featured (most recent) Session Card ───────────────────────────────────────
+
+function FeaturedSessionCard({ session }: { session: SessionEntry }) {
+  const [hovered, setHovered] = useState(false);
+  const formattedDate = session.date
+    ? new Date(session.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="mb-10"
+    >
+      <Link href={`/sessions/${session.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+        <div
+          className="overflow-hidden"
+          style={{
+            background: hovered ? 'hsl(15 6% 9%)' : 'hsl(15 6% 8%)',
+            border: `1px solid ${hovered ? 'hsl(25 70% 28%)' : 'hsl(25 40% 18%)'}`,
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'border-color 0.25s, background 0.25s',
+            boxShadow: hovered ? '0 0 40px hsl(25 80% 12%)' : 'none',
+          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          {/* Hero image */}
+          {session.imageUrl ? (
+            <div className="relative" style={{ height: '340px', overflow: 'hidden' }}>
+              <img
+                src={session.imageUrl}
+                alt={session.title}
+                className="w-full h-full object-cover"
+                style={{
+                  opacity: 0.5,
+                  objectPosition: session.imagePosition ?? 'center center',
+                  transform: hovered ? 'scale(1.05)' : 'scale(1)',
+                  transition: 'transform 0.8s ease',
+                }}
+              />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, hsl(15 6% 8%) 0%, hsl(15 6% 8%)10 40%, transparent 70%)' }} />
+              {/* Latest badge */}
+              <div className="absolute" style={{ top: '1.2rem', right: '1.2rem' }}>
+                <span className="font-display uppercase tracking-[0.25em]"
+                  style={{ fontSize: '0.55rem', color: 'hsl(25 100% 55%)', background: 'hsl(25 100% 38%)18', border: '1px solid hsl(25 80% 38%)40', borderRadius: '3px', padding: '3px 8px' }}>
+                  Latest Session
+                </span>
+              </div>
+              {/* Session number */}
+              <div className="absolute" style={{ top: '1.2rem', left: '1.5rem' }}>
+                <span className="font-display uppercase tracking-[0.3em]" style={{ fontSize: '0.55rem', color: 'hsl(25 80% 48%)', display: 'block', lineHeight: 1 }}>
+                  Session
+                </span>
+                <span className="font-serif font-black" style={{ fontSize: '3.8rem', color: 'hsl(25 100% 44%)', lineHeight: 1, textShadow: '0 0 40px hsl(25 80% 14%)' }}>
+                  {session.number}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="relative flex items-center" style={{ height: '100px', padding: '0 1.5rem', background: 'hsl(15 6% 7%)' }}>
+              <span className="font-display uppercase tracking-[0.3em]" style={{ fontSize: '0.55rem', color: 'hsl(25 60% 32%)', marginRight: '0.75rem' }}>Session</span>
+              <span className="font-serif font-black" style={{ fontSize: '3.5rem', color: 'hsl(25 80% 32%)', lineHeight: 1 }}>{session.number}</span>
+              <div className="flex-1 ml-4" style={{ height: '1px', background: 'linear-gradient(to right, hsl(25 40% 16%), transparent)' }} />
+            </div>
+          )}
+
+          {/* Content */}
+          <div style={{ padding: '1.4rem 1.8rem 1.6rem' }}>
+            <h2 className="font-serif font-black uppercase tracking-wide leading-tight mb-3"
+              style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'hsl(15 4% 92%)' }}>
+              {session.title}
+            </h2>
+
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              {formattedDate && (
+                <div className="flex items-center gap-1">
+                  <Calendar size={10} style={{ color: 'hsl(15 4% 32%)' }} />
+                  <span className="font-display text-[10px] uppercase tracking-[0.15em]" style={{ color: 'hsl(15 4% 38%)' }}>{formattedDate}</span>
+                </div>
+              )}
+              {session.audioUrl && (
+                <span className="flex items-center gap-1 font-display text-[10px] uppercase tracking-wider px-2 py-0.5"
+                  style={{ background: 'hsl(25 100% 38%)10', border: '1px solid hsl(25 100% 38%)30', borderRadius: '3px', color: 'hsl(25 80% 40%)' }}>
+                  <Volume2 size={9} /> Audio
+                </span>
+              )}
+              {session.images.length > 0 && (
+                <span className="flex items-center gap-1 font-display text-[10px] uppercase tracking-wider" style={{ color: 'hsl(15 4% 32%)' }}>
+                  <ImageIcon size={9} /> {session.images.length}
+                </span>
+              )}
+            </div>
+
+            <p className="font-serif italic mb-4" style={{ color: 'hsl(15 4% 52%)', fontSize: '1rem', lineHeight: 1.7, maxWidth: '72ch' }}>
+              {session.summary}
+            </p>
+
+            <span className="font-display text-[11px] uppercase tracking-[0.25em]" style={{ color: 'hsl(25 80% 40%)' }}>
+              Read the Recap →
+            </span>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
 // ─── Session Index Card ────────────────────────────────────────────────────────
 
 function SessionCard({ session, index }: { session: SessionEntry; index: number }) {
@@ -124,10 +234,12 @@ export function Sessions() {
 
   useEffect(() => {
     vaultService.getSessions()
-      .then(setSessions)
+      .then(data => setSessions([...data].sort((a, b) => b.number - a.number)))
       .catch(() => setError('Could not load session recaps from the Vault.'))
       .finally(() => setLoading(false));
   }, []);
+
+  const [featured, ...rest] = sessions;
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
@@ -147,17 +259,25 @@ export function Sessions() {
       {error ? (
         <p className="font-display italic text-center py-20" style={{ color: 'hsl(15 4% 40%)' }}>{error}</p>
       ) : loading ? (
-        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} style={{ height: '240px', background: 'hsl(15 6% 8%)', borderRadius: '6px', border: '1px solid hsl(15 8% 14%)', opacity: 0.4 }} />
-          ))}
-        </div>
+        <>
+          <div style={{ height: '340px', background: 'hsl(15 6% 8%)', borderRadius: '8px', border: '1px solid hsl(15 8% 14%)', opacity: 0.4, marginBottom: '2.5rem' }} />
+          <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} style={{ height: '240px', background: 'hsl(15 6% 8%)', borderRadius: '6px', border: '1px solid hsl(15 8% 14%)', opacity: 0.4 }} />
+            ))}
+          </div>
+        </>
       ) : (
-        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
-          {sessions.map((session, i) => (
-            <SessionCard key={session.id} session={session} index={i} />
-          ))}
-        </div>
+        <>
+          {featured && <FeaturedSessionCard session={featured} />}
+          {rest.length > 0 && (
+            <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+              {rest.map((session, i) => (
+                <SessionCard key={session.id} session={session} index={i} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
