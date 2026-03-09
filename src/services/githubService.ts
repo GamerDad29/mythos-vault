@@ -163,6 +163,29 @@ export async function updateImagePosition(
   vaultService.clearCache();
 }
 
+export async function updateSessionInlineImagePosition(
+  sessionSlug: string,
+  imageIndex: number,
+  imagePosition: string,
+  pat: string,
+): Promise<void> {
+  await putFileWithRetry(
+    'vault/sessions/index.json',
+    (raw) => {
+      const index = JSON.parse(raw);
+      const entry = index.sessions?.find((s: { slug: string }) => s.slug === sessionSlug);
+      if (entry) {
+        if (!entry.imagePositions) entry.imagePositions = [];
+        entry.imagePositions[imageIndex] = imagePosition;
+      }
+      return JSON.stringify(index, null, 2);
+    },
+    `frame: update inline image ${imageIndex} for session ${sessionSlug}`,
+    pat,
+  );
+  vaultService.clearCache();
+}
+
 export async function updateSessionImagePosition(
   sessionSlug: string,
   imagePosition: string,

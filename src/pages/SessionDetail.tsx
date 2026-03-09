@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar, Video } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { useAuth } from '../contexts/AuthContext';
-import { updateSessionImagePosition } from '../services/githubService';
+import { updateSessionImagePosition, updateSessionInlineImagePosition } from '../services/githubService';
 import type { SessionEntry } from '../types';
 
 // ─── Inline markdown ──────────────────────────────────────────────────────────
@@ -108,50 +108,170 @@ const KB_VARIANTS: Array<{ scale: number[]; x: number[]; y: number[]; duration: 
 
 // ─── Woven image (full-width inline figure) ───────────────────────────────────
 
-function WovenImage({ url, index, position }: { url: string; index: number; position?: string }) {
+function WovenImage({ url, index, position, isDM, onSavePosition }: {
+  url: string; index: number; position?: string;
+  isDM?: boolean; onSavePosition?: (pos: string) => Promise<void>;
+}) {
   const [lightbox, setLightbox] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [isFraming, setIsFraming] = useState(false);
+  const [framingPos, setFramingPos] = useState({ x: 50, y: 50 });
+  const [frameSaveStatus, setFrameSaveStatus] = useState<'idle'|'saving'|'done'|'error'>('idle');
+  const containerRef = useRef<HTMLDivElement>(null);
   const kb = KB_VARIANTS[index % KB_VARIANTS.length];
   const isGif = url.toLowerCase().endsWith('.gif');
+  const accent = 'hsl(25 100% 38%)';
+
+  function startFraming() {
+    const cur = position || 'center center';
+    const parts = cur.split(' ');
+    const pv = (v: string, fb: number) => {
+      if (v === 'center') return 50; if (v === 'left') return 0; if (v === 'right') return 100;
+      if (v === 'top') return 0; if (v === 'bottom') return 100;
+      return parseFloat(v) || fb;
+    };
+    setFramingPos({ x: pv(parts[0], 50), y: pv(parts[1] || parts[0], 50) });
+    setIsFraming(true); setFrameSaveStatus('idle');
+  }
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isFraming || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setFramingPos({
+      x: Math.round(Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100))),
+      y: Math.round(Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100))),
+    });
+  }
+
+  async function acceptFrame() {
+    if (!onSavePosition) return;
+    const posStr = `${framingPos.x}% ${framingPos.y}%`;
+    setFrameSaveStatus('saving');
+    try {
+      await onSavePosition(posStr);
+      setFrameSaveStatus('done');
+      setTimeout(() => { setIsFraming(false); setFrameSaveStatus('idle'); }, 1200);
+    } catch {
+      setFrameSaveStatus('error');
+    }
+  }
+
+  useEffect(() => {
+    if (!isFraming) return;
+    function onKeyDown(e: KeyboardEvent) { if (e.key === 'Enter') acceptFrame(); }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isFraming, framingPos]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const livePos = isFraming ? `${framingPos.x}% ${framingPos.y}%` : (position || 'center center');
 
   return (
     <>
       <div
-        className="my-10 cursor-pointer"
+        ref={containerRef}
+        className="my-10"
         style={{
+          position: 'relative',
           borderRadius: '5px',
-          border: '1px solid hsl(15 8% 14%)',
+          border: isFraming ? `2px solid ${accent}80` : '1px solid hsl(15 8% 14%)',
           overflow: 'hidden',
+          cursor: isFraming ? 'crosshair' : 'pointer',
           transition: 'border-color 0.25s, box-shadow 0.25s',
         }}
-        onClick={() => setLightbox(true)}
+        onClick={() => { if (!isFraming) setLightbox(true); }}
         onMouseEnter={e => {
-          (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 28%)';
-          (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px hsl(25 60% 10%)';
+          setHovered(true);
+          if (!isFraming) {
+            (e.currentTarget as HTMLElement).style.borderColor = 'hsl(25 60% 28%)';
+            (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px hsl(25 60% 10%)';
+          }
         }}
         onMouseLeave={e => {
-          (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 14%)';
-          (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+          setHovered(false);
+          if (!isFraming) {
+            (e.currentTarget as HTMLElement).style.borderColor = 'hsl(15 8% 14%)';
+            (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+          }
         }}
+        onMouseMove={handleMouseMove}
       >
         {isGif ? (
-          // GIFs: no Ken Burns (they animate themselves), just render directly
           <img
-            src={url}
-            alt=""
+            src={url} alt=""
             className="w-full object-cover"
-            style={{ maxHeight: '380px', opacity: 0.9, display: 'block', objectPosition: position || 'center center' }}
+            style={{ maxHeight: '380px', opacity: 0.9, display: 'block', objectPosition: livePos, transition: isFraming ? 'object-position 0.05s linear' : undefined }}
           />
         ) : (
           <motion.img
-            src={url}
-            alt=""
+            src={url} alt=""
             className="w-full object-cover"
-            style={{ maxHeight: '360px', opacity: 0.88, display: 'block', objectPosition: position || 'center center' }}
-            animate={{ scale: kb.scale, x: kb.x, y: kb.y }}
+            style={{ maxHeight: '360px', opacity: 0.88, display: 'block', objectPosition: livePos, transition: isFraming ? 'object-position 0.05s linear' : undefined }}
+            animate={isFraming ? {} : { scale: kb.scale, x: kb.x, y: kb.y }}
             transition={{ duration: kb.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           />
         )}
+
+        {/* ── Framing overlay ── */}
+        {isFraming && (
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+            <div style={{ position: 'absolute', left: `${framingPos.x}%`, top: `${framingPos.y}%`, transform: 'translate(-50%,-50%)', width: '36px', height: '36px' }}>
+              <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1px', background: `${accent}cc`, transform: 'translateY(-50%)' }} />
+              <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: `${accent}cc`, transform: 'translateX(-50%)' }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '7px', height: '7px', borderRadius: '50%', background: accent, boxShadow: `0 0 8px ${accent}` }} />
+            </div>
+            <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(8,6,4,0.88)', border: `1px solid ${accent}50`, borderRadius: '4px', padding: '4px 10px' }}>
+              <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.2em', color: accent }}>
+                Drag to Frame · {framingPos.x}% {framingPos.y}%
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* ── DM Adjust Frame button ── */}
+        {isDM && !isGif && !isFraming && (
+          <button
+            onClick={e => { e.stopPropagation(); startFraming(); }}
+            style={{
+              position: 'absolute', bottom: '10px', right: '10px',
+              background: 'rgba(8,6,4,0.82)', border: `1px solid ${accent}40`,
+              borderRadius: '4px', padding: '5px 10px',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
+              opacity: hovered ? 1 : 0, transition: 'opacity 0.2s ease',
+            }}
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+            </svg>
+            <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: accent }}>Adjust Frame</span>
+          </button>
+        )}
+
+        {/* ── Accept/Cancel bar ── */}
+        {isDM && isFraming && (
+          <div style={{
+            position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)',
+            display: 'flex', gap: '8px', alignItems: 'center',
+            background: 'rgba(8,6,4,0.9)', border: `1px solid ${accent}35`,
+            borderRadius: '6px', padding: '7px 12px',
+          }}>
+            <span className="font-display" style={{ fontSize: '11px', color: 'hsl(15 4% 40%)', marginRight: '4px' }}>
+              {framingPos.x}% {framingPos.y}%
+            </span>
+            <button
+              onClick={e => { e.stopPropagation(); setIsFraming(false); setFrameSaveStatus('idle'); }}
+              style={{ background: 'transparent', border: '1px solid hsl(15 8% 22%)', borderRadius: '4px', padding: '4px 12px', cursor: 'pointer', color: 'hsl(15 4% 42%)', fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+            >Cancel</button>
+            <button
+              onClick={e => { e.stopPropagation(); acceptFrame(); }}
+              disabled={frameSaveStatus === 'saving'}
+              style={{ background: frameSaveStatus === 'done' ? 'hsl(120 40% 20%)' : `${accent}22`, border: `1px solid ${frameSaveStatus === 'done' ? 'hsl(120 50% 30%)' : accent + '60'}`, borderRadius: '4px', padding: '4px 14px', cursor: frameSaveStatus === 'saving' ? 'wait' : 'pointer', color: frameSaveStatus === 'done' ? 'hsl(120 60% 55%)' : accent, fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: frameSaveStatus === 'saving' ? 0.6 : 1 }}
+            >
+              {frameSaveStatus === 'saving' ? 'Saving…' : frameSaveStatus === 'done' ? 'Saved' : 'Accept'}
+            </button>
+          </div>
+        )}
       </div>
+
       {lightbox && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-8 cursor-pointer"
@@ -237,7 +357,13 @@ function VideoEmbed({ url }: { url: string }) {
 
 // ─── Content renderer with woven images ──────────────────────────────────────
 
-function renderWovenContent(content: string, images: string[], imagePositions?: string[]): React.ReactNode[] {
+function renderWovenContent(
+  content: string,
+  images: string[],
+  imagePositions?: string[],
+  isDM?: boolean,
+  onSavePosition?: (imgIndex: number, pos: string) => Promise<void>,
+): React.ReactNode[] {
   const rawSections = content.split(/(?=^## )/m).filter(s => s.trim());
   const sectionCount = rawSections.length;
 
@@ -259,7 +385,16 @@ function renderWovenContent(content: string, images: string[], imagePositions?: 
     nodes.push(...renderLines(section.split('\n'), i * 1000));
     imageAfterSection.forEach((targetSection, imgIdx) => {
       if (targetSection === i) {
-        nodes.push(<WovenImage key={`woven-${imgIdx}`} url={images[imgIdx]} index={imgIdx} position={imagePositions?.[imgIdx]} />);
+        nodes.push(
+          <WovenImage
+            key={`woven-${imgIdx}`}
+            url={images[imgIdx]}
+            index={imgIdx}
+            position={imagePositions?.[imgIdx]}
+            isDM={isDM}
+            onSavePosition={onSavePosition ? (pos) => onSavePosition(imgIdx, pos) : undefined}
+          />
+        );
       }
     });
   });
@@ -328,6 +463,17 @@ export function SessionDetail() {
     const x = Math.round(Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100)));
     const y = Math.round(Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100)));
     setFramingPos({ x, y });
+  }
+
+  async function handleSaveInlinePosition(imgIndex: number, pos: string) {
+    if (!session) return;
+    await updateSessionInlineImagePosition(session.slug, imgIndex, pos, pat);
+    setSessions(prev => prev.map(s => {
+      if (s.slug !== session.slug) return s;
+      const positions = [...(s.imagePositions || s.images.map(() => 'center center'))];
+      positions[imgIndex] = pos;
+      return { ...s, imagePositions: positions };
+    }));
   }
 
   async function handleFramingAccept() {
@@ -567,7 +713,7 @@ export function SessionDetail() {
 
         {/* Content with woven images */}
         <div style={{ fontSize: '0.97rem', lineHeight: 1.88 }}>
-          {renderWovenContent(session.content, session.images, session.imagePositions)}
+          {renderWovenContent(session.content, session.images, session.imagePositions, isDM, handleSaveInlinePosition)}
         </div>
 
         {/* ── Prev / Next nav ── */}
