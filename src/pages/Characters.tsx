@@ -427,6 +427,8 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [sweepKey, setSweepKey] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  const cardRef = useRef<HTMLDivElement>(null);
   const accent = getAccent(pc);
   const quote = CARD_QUOTES[pc.id] || pc.summary || '';
   const meta = CHARACTER_META[pc.id] || { role: 'Adventurer', particleType: 'ember' as const, signature: '' };
@@ -436,6 +438,15 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
   const handleMouseEnter = useCallback(() => {
     setHovered(true);
     setSweepKey(k => k + 1);
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: (e.clientX - rect.left) / rect.width,
+      y: (e.clientY - rect.top) / rect.height,
+    });
   }, []);
 
   return (
@@ -459,8 +470,10 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
 
       <Link href={`/characters/${pc.slug}`}>
         <div
+          ref={cardRef}
           onMouseEnter={handleMouseEnter}
-          onMouseLeave={() => setHovered(false)}
+          onMouseLeave={() => { setHovered(false); setMousePos({ x: 0.5, y: 0.5 }); }}
+          onMouseMove={handleMouseMove}
           style={{
             position: 'relative',
             height: '100%',
@@ -472,8 +485,10 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             boxShadow: hovered
               ? `0 20px 60px -10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)`
               : '0 4px 20px -4px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02)',
-            transform: hovered ? 'translateY(-12px) scale(1.015)' : 'translateY(0) scale(1)',
-            transition: 'all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transform: hovered
+              ? `perspective(900px) rotateY(${(mousePos.x - 0.5) * 22}deg) rotateX(${(0.5 - mousePos.y) * 14}deg) translateY(-12px) scale(1.015)`
+              : 'perspective(900px) rotateY(0deg) rotateX(0deg) translateY(0px) scale(1)',
+            transition: 'transform 0.12s ease-out, border-color 0.45s ease, box-shadow 0.45s ease',
             zIndex: 1,
           }}
         >
@@ -517,6 +532,16 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             opacity: hovered ? 1 : 0.4,
             transition: 'opacity 0.4s ease',
             pointerEvents: 'none', zIndex: 3,
+          }} />
+
+          {/* Specular highlight — holographic foil, shifts with cursor */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: `radial-gradient(circle at ${mousePos.x * 100}% ${mousePos.y * 100}%, rgba(255,255,255,0.09) 0%, ${accent}18 30%, transparent 68%)`,
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+            pointerEvents: 'none', zIndex: 5,
+            mixBlendMode: 'screen' as const,
           }} />
 
           {/* Vignette */}

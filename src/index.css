@@ -264,6 +264,18 @@
   100% { box-shadow: 0 0 22px rgba(116,57,198,0.45),  0 0 50px rgba(80,30,160,0.3),  0 0 90px rgba(40,10,80,0.2); }
 }
 
+/* ── DM Ink Drop Reveal / Cover ── */
+
+@keyframes inkReveal {
+  from { clip-path: circle(150% at 50% 50%); }
+  to   { clip-path: circle(0%   at 50% 50%); }
+}
+
+@keyframes inkCover {
+  from { clip-path: circle(0%   at 50% 50%); }
+  to   { clip-path: circle(150% at 50% 50%); }
+}
+
 /* Morrighan — bioluminescent light radiating outward */
 @keyframes glowBioluminescent {
   0%   { box-shadow: 0 0 20px rgba(92,71,194,0.4),   0 0 50px rgba(100,180,220,0.2),  0 0 80px rgba(80,220,255,0.1); }

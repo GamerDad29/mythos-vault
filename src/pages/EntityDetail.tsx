@@ -963,21 +963,43 @@ export function EntityDetail() {
                     {group.items.map((s, idx) => (
                       <Link key={s.id} href={`/${TYPE_URL_SEGMENT[s.type] ?? s.type.toLowerCase() + 's'}/${s.slug}`}>
                         <div
-                          className="cursor-pointer py-2.5 transition-colors"
+                          className="cursor-pointer py-2"
                           style={{
-                            borderBottom: idx < group.items.length - 1 ? '1px solid hsl(15 8% 14%)' : 'none',
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            borderBottom: idx < group.items.length - 1 ? '1px solid hsl(15 8% 12%)' : 'none',
                           }}
-                          onMouseEnter={e => (e.currentTarget.style.color = accentColor)}
-                          onMouseLeave={e => (e.currentTarget.style.color = '')}
+                          onMouseEnter={e => { (e.currentTarget.style.opacity = '0.85'); }}
+                          onMouseLeave={e => { (e.currentTarget.style.opacity = '1'); }}
                         >
-                          {s.category && (
-                            <p className="font-serif text-xs uppercase tracking-wider mb-0.5" style={{ color: 'hsl(15 4% 35%)' }}>
-                              {s.category}
+                          {/* Thumbnail */}
+                          <div style={{
+                            width: '38px', height: '38px', flexShrink: 0,
+                            borderRadius: '3px', overflow: 'hidden',
+                            background: 'hsl(15 6% 7%)',
+                            border: `1px solid ${accentColor}18`,
+                          }}>
+                            {s.imageUrl ? (
+                              <img
+                                src={s.imageUrl} alt=""
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: (s as VaultEntityStub & { imagePosition?: string }).imagePosition || 'center center', display: 'block' }}
+                              />
+                            ) : (
+                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span style={{ fontSize: '13px', color: accentColor, opacity: 0.25 }}>⟁</span>
+                              </div>
+                            )}
+                          </div>
+                          {/* Text */}
+                          <div style={{ minWidth: 0 }}>
+                            {s.category && (
+                              <p className="font-serif text-xs uppercase tracking-wider" style={{ color: accentColor, opacity: 0.5, fontSize: '9px', letterSpacing: '0.16em', marginBottom: '1px' }}>
+                                {s.category}
+                              </p>
+                            )}
+                            <p className="font-serif text-sm" style={{ color: 'hsl(15 4% 68%)', fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {s.name}
                             </p>
-                          )}
-                          <p className="font-serif text-sm" style={{ color: 'hsl(15 4% 65%)' }}>
-                            {s.name}
-                          </p>
+                          </div>
                         </div>
                       </Link>
                     ))}

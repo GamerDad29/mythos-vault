@@ -25,6 +25,7 @@ interface Props {
 
 export function EntityCard({ entity, index = 0, isDM, onToggleHidden }: Props) {
   const [imgError, setImgError] = useState(false);
+  const [inkPhase, setInkPhase] = useState<'idle' | 'covering' | 'revealing'>('idle');
   const factionColor = entity.factionId ? FACTION_COLORS[entity.factionId] : undefined;
   const accentColor = factionColor || 'hsl(25 100% 40%)';
   const href = `/${TYPE_URL_SEGMENT[entity.type] ?? entity.type.toLowerCase() + 's'}/${entity.slug}`;
@@ -173,13 +174,27 @@ export function EntityCard({ entity, index = 0, isDM, onToggleHidden }: Props) {
         </div>
       </Link>
 
+      {/* Ink drop overlay — animates on hide/reveal */}
+      {inkPhase !== 'idle' && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 20,
+          background: 'rgba(4, 3, 2, 0.94)',
+          borderRadius: tokens.radius.card,
+          pointerEvents: 'none',
+          animation: `${inkPhase === 'revealing' ? 'inkReveal' : 'inkCover'} 0.6s ease-in-out forwards`,
+        }} />
+      )}
+
       {/* DM: visibility toggle button — outside Link so it doesn't navigate */}
       {isDM && onToggleHidden && (
         <button
           onClick={e => {
             e.preventDefault();
             e.stopPropagation();
+            const phase = isHidden ? 'revealing' : 'covering';
+            setInkPhase(phase);
             onToggleHidden(!isHidden);
+            setTimeout(() => setInkPhase('idle'), 700);
           }}
           title={isHidden ? 'Reveal to players' : 'Hide from players'}
           style={{
