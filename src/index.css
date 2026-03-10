@@ -121,3 +121,62 @@
   52%      { box-shadow: 0 0 10px -2px currentColor; }
   68%      { box-shadow: 0 0 0   0  transparent; }
 }
+
+/* ── Characters Bento Grid ── */
+
+.bento-characters {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 280px 280px 260px;
+  grid-template-areas:
+    "hero side1"
+    "hero side2"
+    "small stats";
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .bento-characters {
+    grid-template-columns: 1fr;
+    grid-template-rows: 480px 280px 280px 280px 300px;
+    grid-template-areas:
+      "hero"
+      "side1"
+      "side2"
+      "small"
+      "stats";
+  }
+}
+
+/* ── Character Particle Animations ── */
+
+/* Cannonball — ember sparks rising */
+@keyframes charEmberRise {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10%  { opacity: 0.8; }
+  100% { transform: translateY(-200px) translateX(var(--drift, 10px)) scale(0.3); opacity: 0; }
+}
+
+/* Morrighan — eldritch motes drifting */
+@keyframes eldritchFloat {
+  0%   { transform: translate(0, 0) scale(0.8); opacity: 0; }
+  20%  { opacity: 0.5; }
+  50%  { transform: translate(var(--dx, 15px), var(--dy, -20px)) scale(1.2); opacity: 0.35; }
+  80%  { opacity: 0.5; }
+  100% { transform: translate(0, 0) scale(0.8); opacity: 0; }
+}
+
+/* Bpop — forge gear sparks */
+@keyframes forgeSpark {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+  15%  { opacity: 0.9; }
+  100% { transform: translateY(-160px) rotate(180deg) scale(0.2); opacity: 0; }
+}
+
+/* Iblith — smoke and shadow wisps */
+@keyframes shadowDrift {
+  0%   { transform: translateX(var(--start-x, 0px)) scale(1); opacity: 0; }
+  30%  { opacity: 0.15; }
+  70%  { opacity: 0.1; }
+  100% { transform: translateX(var(--end-x, 30px)) scale(1.5); opacity: 0; }
+}
