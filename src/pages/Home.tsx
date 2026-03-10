@@ -5,6 +5,7 @@ import { ChevronDown, ChevronRight, User, Swords, MapPin, Shield, Package, Scrol
 import { vaultService } from '../vaultService';
 import type { VaultEntityStub } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { WebGLBackground } from '../components/WebGLBackground';
 
 // Nav order per P5-1
 const SECTIONS = [
@@ -273,6 +274,7 @@ export function Home() {
 
   return (
     <div className="min-h-screen">
+      <WebGLBackground />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section
