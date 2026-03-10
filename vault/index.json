@@ -983,7 +983,8 @@
       ],
       "cityId": "karnuk",
       "region": "underdark",
-      "publishedAt": "2026-02-25T00:00:00.000Z"
+      "publishedAt": "2026-02-25T00:00:00.000Z",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-karnuk-becoming.jpg"
     },
     {
       "id": "lore-karnuk-the-masks",
