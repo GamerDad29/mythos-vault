@@ -205,6 +205,29 @@ export async function updateSessionImagePosition(
   vaultService.clearCache();
 }
 
+export async function updateSessionHeroImage(
+  sessionSlug: string,
+  imageUrl: string,
+  imagePosition: string,
+  pat: string,
+): Promise<void> {
+  await putFileWithRetry(
+    'vault/sessions/index.json',
+    (raw) => {
+      const index = JSON.parse(raw);
+      const entry = index.sessions?.find((s: { slug: string }) => s.slug === sessionSlug);
+      if (entry) {
+        entry.imageUrl = imageUrl;
+        entry.imagePosition = imagePosition;
+      }
+      return JSON.stringify(index, null, 2);
+    },
+    `hero: promote woven image to hero for session ${sessionSlug}`,
+    pat,
+  );
+  vaultService.clearCache();
+}
+
 export async function toggleEntityHidden(
   stub: VaultEntityStub,
   hidden: boolean,

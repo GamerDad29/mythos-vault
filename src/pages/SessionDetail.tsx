@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar, Video } from 'lucide-react';
 import { vaultService } from '../vaultService';
 import { useAuth } from '../contexts/AuthContext';
-import { updateSessionImagePosition, updateSessionInlineImagePosition } from '../services/githubService';
+import { updateSessionImagePosition, updateSessionInlineImagePosition, updateSessionHeroImage } from '../services/githubService';
 import type { SessionEntry } from '../types';
 
 // ─── Inline markdown ──────────────────────────────────────────────────────────
@@ -108,9 +108,10 @@ const KB_VARIANTS: Array<{ scale: number[]; x: number[]; y: number[]; duration: 
 
 // ─── Woven image (full-width inline figure) ───────────────────────────────────
 
-function WovenImage({ url, index, position, isDM, onSavePosition }: {
+function WovenImage({ url, index, position, isDM, onSavePosition, onSetAsHero }: {
   url: string; index: number; position?: string;
   isDM?: boolean; onSavePosition?: (pos: string) => Promise<void>;
+  onSetAsHero?: () => void;
 }) {
   const [lightbox, setLightbox] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -227,23 +228,42 @@ function WovenImage({ url, index, position, isDM, onSavePosition }: {
           </div>
         )}
 
-        {/* ── DM Adjust Frame button ── */}
+        {/* ── DM buttons row ── */}
         {isDM && !isGif && !isFraming && (
-          <button
-            onClick={e => { e.stopPropagation(); startFraming(); }}
-            style={{
-              position: 'absolute', bottom: '10px', right: '10px',
-              background: 'rgba(8,6,4,0.82)', border: `1px solid ${accent}40`,
-              borderRadius: '4px', padding: '5px 10px',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
-              opacity: hovered ? 1 : 0, transition: 'opacity 0.2s ease',
-            }}
-          >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-            </svg>
-            <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: accent }}>Adjust Frame</span>
-          </button>
+          <div style={{
+            position: 'absolute', bottom: '10px', right: '10px',
+            display: 'flex', gap: '6px', alignItems: 'center',
+            opacity: hovered ? 1 : 0, transition: 'opacity 0.2s ease',
+          }}>
+            {onSetAsHero && (
+              <button
+                onClick={e => { e.stopPropagation(); onSetAsHero(); }}
+                style={{
+                  background: 'rgba(8,6,4,0.82)', border: `1px solid ${accent}60`,
+                  borderRadius: '4px', padding: '5px 10px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
+                }}
+              >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill={accent} stroke={accent} strokeWidth="1">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: accent }}>Set as Hero</span>
+              </button>
+            )}
+            <button
+              onClick={e => { e.stopPropagation(); startFraming(); }}
+              style={{
+                background: 'rgba(8,6,4,0.82)', border: `1px solid ${accent}40`,
+                borderRadius: '4px', padding: '5px 10px',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+              </svg>
+              <span className="font-serif uppercase" style={{ fontSize: '9px', letterSpacing: '0.18em', color: accent }}>Adjust Frame</span>
+            </button>
+          </div>
         )}
 
         {/* ── Accept/Cancel bar ── */}
@@ -363,6 +383,7 @@ function renderWovenContent(
   imagePositions?: string[],
   isDM?: boolean,
   onSavePosition?: (imgIndex: number, pos: string) => Promise<void>,
+  onSetAsHero?: (imgIndex: number) => void,
 ): React.ReactNode[] {
   const rawSections = content.split(/(?=^## )/m).filter(s => s.trim());
   const sectionCount = rawSections.length;
@@ -393,6 +414,7 @@ function renderWovenContent(
             position={imagePositions?.[imgIdx]}
             isDM={isDM}
             onSavePosition={onSavePosition ? (pos) => onSavePosition(imgIdx, pos) : undefined}
+            onSetAsHero={onSetAsHero ? () => onSetAsHero(imgIdx) : undefined}
           />
         );
       }
@@ -405,6 +427,14 @@ function renderWovenContent(
 
   return nodes;
 }
+
+// ─── Hero picker ─────────────────────────────────────────────────────────────
+
+const POSITION_PRESETS = [
+  ['top left',    'top center',    'top right'],
+  ['center left', 'center center', 'center right'],
+  ['bottom left', 'bottom center', 'bottom right'],
+];
 
 // ─── Session Detail Page ──────────────────────────────────────────────────────
 
@@ -424,6 +454,11 @@ export function SessionDetail() {
   const [frameSaveStatus, setFrameSaveStatus] = useState<'idle'|'saving'|'done'|'error'>('idle');
   const [heroHovered, setHeroHovered] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  // ── Hero image picker ──
+  const [heroPickerUrl, setHeroPickerUrl] = useState<string | null>(null);
+  const [heroPickerPosition, setHeroPickerPosition] = useState('center center');
+  const [heroPickerStatus, setHeroPickerStatus] = useState<'idle'|'saving'|'done'|'error'>('idle');
 
   useEffect(() => {
     vaultService.getSessions()
@@ -474,6 +509,28 @@ export function SessionDetail() {
       positions[imgIndex] = pos;
       return { ...s, imagePositions: positions };
     }));
+  }
+
+  function handleSetAsHero(imgIndex: number) {
+    if (!session) return;
+    setHeroPickerUrl(session.images[imgIndex]);
+    setHeroPickerPosition(session.imagePosition ?? 'center center');
+    setHeroPickerStatus('idle');
+  }
+
+  async function handleConfirmHeroImage() {
+    if (!session || !heroPickerUrl) return;
+    setHeroPickerStatus('saving');
+    try {
+      await updateSessionHeroImage(session.slug, heroPickerUrl, heroPickerPosition, pat);
+      setSessions(prev => prev.map(s =>
+        s.slug === session.slug ? { ...s, imageUrl: heroPickerUrl, imagePosition: heroPickerPosition } : s
+      ));
+      setHeroPickerStatus('done');
+      setTimeout(() => { setHeroPickerUrl(null); setHeroPickerStatus('idle'); }, 1400);
+    } catch {
+      setHeroPickerStatus('error');
+    }
   }
 
   async function handleFramingAccept() {
@@ -713,7 +770,7 @@ export function SessionDetail() {
 
         {/* Content with woven images */}
         <div style={{ fontSize: '0.97rem', lineHeight: 1.88 }}>
-          {renderWovenContent(session.content, session.images, session.imagePositions, isDM, handleSaveInlinePosition)}
+          {renderWovenContent(session.content, session.images, session.imagePositions, isDM, handleSaveInlinePosition, isDM ? handleSetAsHero : undefined)}
         </div>
 
         {/* ── Prev / Next nav ── */}
@@ -762,6 +819,99 @@ export function SessionDetail() {
         </div>
 
       </div>
+
+      {/* ── DM: Hero Image Picker panel ── */}
+      {isDM && heroPickerUrl && (
+        <div style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
+          background: 'rgba(6,5,4,0.97)',
+          borderTop: '1px solid hsl(25 100% 38%)30',
+          backdropFilter: 'blur(12px)',
+          padding: '14px 24px',
+          display: 'flex', alignItems: 'center', gap: '16px',
+          boxShadow: '0 -8px 32px rgba(0,0,0,0.6)',
+          animation: 'mobileMenuIn 0.22s ease',
+        }}>
+          {/* Thumbnail */}
+          <div style={{ position: 'relative', flexShrink: 0 }}>
+            <img
+              src={heroPickerUrl}
+              alt=""
+              style={{
+                height: '64px', width: '114px', objectFit: 'cover', objectPosition: heroPickerPosition,
+                borderRadius: '3px', border: '1px solid hsl(25 100% 38%)50', display: 'block',
+              }}
+            />
+            <div style={{
+              position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)',
+              borderRadius: '3px', pointerEvents: 'none',
+            }} />
+            <span className="font-display uppercase" style={{
+              position: 'absolute', bottom: '4px', left: '0', right: '0', textAlign: 'center',
+              fontSize: '7px', letterSpacing: '0.2em', color: 'hsl(25 80% 72%)',
+            }}>Preview</span>
+          </div>
+
+          {/* Label */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="font-display uppercase" style={{ fontSize: '9px', letterSpacing: '0.22em', color: 'hsl(25 80% 52%)', marginBottom: '3px' }}>
+              Promote to Session Hero
+            </div>
+            <div style={{ fontSize: '11px', color: 'hsl(15 4% 36%)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              Session {session?.number} · {session?.title}
+            </div>
+          </div>
+
+          {/* Position preset grid */}
+          <div style={{ flexShrink: 0 }}>
+            <div className="font-display uppercase" style={{ fontSize: '7px', letterSpacing: '0.18em', color: 'hsl(15 4% 28%)', marginBottom: '5px', textAlign: 'center' }}>
+              Focal Point
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 20px)', gap: '3px' }}>
+              {POSITION_PRESETS.flat().map(preset => (
+                <button
+                  key={preset}
+                  title={preset}
+                  onClick={() => setHeroPickerPosition(preset)}
+                  style={{
+                    width: '20px', height: '20px', borderRadius: '3px', cursor: 'pointer',
+                    background: heroPickerPosition === preset ? 'hsl(25 100% 38%)' : 'hsl(15 8% 14%)',
+                    border: `1px solid ${heroPickerPosition === preset ? 'hsl(25 100% 52%)' : 'hsl(15 8% 20%)'}`,
+                    transition: 'background 0.15s, border-color 0.15s',
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+            <button
+              onClick={() => { setHeroPickerUrl(null); setHeroPickerStatus('idle'); }}
+              style={{
+                background: 'transparent', border: '1px solid hsl(15 8% 22%)',
+                borderRadius: '4px', padding: '6px 14px', cursor: 'pointer',
+                color: 'hsl(15 4% 40%)', fontSize: '11px', fontFamily: 'serif',
+                letterSpacing: '0.1em', textTransform: 'uppercase',
+              }}
+            >Cancel</button>
+            <button
+              onClick={handleConfirmHeroImage}
+              disabled={heroPickerStatus === 'saving'}
+              style={{
+                background: heroPickerStatus === 'done' ? 'hsl(120 40% 20%)' : 'hsl(25 100% 38%)22',
+                border: `1px solid ${heroPickerStatus === 'done' ? 'hsl(120 50% 30%)' : 'hsl(25 100% 38%)60'}`,
+                borderRadius: '4px', padding: '6px 16px', cursor: heroPickerStatus === 'saving' ? 'wait' : 'pointer',
+                color: heroPickerStatus === 'done' ? 'hsl(120 60% 55%)' : 'hsl(25 100% 48%)',
+                fontSize: '11px', fontFamily: 'serif', letterSpacing: '0.1em', textTransform: 'uppercase',
+                opacity: heroPickerStatus === 'saving' ? 0.6 : 1, transition: 'all 0.2s',
+              }}
+            >
+              {heroPickerStatus === 'saving' ? 'Saving…' : heroPickerStatus === 'done' ? 'Set ✓' : 'Set as Hero'}
+            </button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
