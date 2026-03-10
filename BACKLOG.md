@@ -272,6 +272,36 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 
 ## Session Log
 
+### 2026-03-10 (Session 12 — P5-6 Cinematic Bento + UI Review Brief)
+**Characters page fully rebuilt as cinematic bento layout. UI review brief applied. 4 files changed across 4 commits, pushed to main, deployed.**
+
+**Characters.tsx — Full Cinematic Bento (Option C):**
+- **Hero Banner**: Full-width cinematic party banner (~55vh) with 4 overlapping portrait strips blended via CSS `mask-image` gradients. Per-strip Ken Burns (22-34s staggered). Per-character ambient particles in each strip zone. Accent light pillars per character. Atmospheric fog layers (warm→cool). Film grain SVG overlay. Parallax scroll (0.25x) + opacity fade-out on scroll. Runic glyph star SVG separators at column boundaries with `glyphBreath` CSS pulse animation.
+- **4 Compact Tiles**: 380px row of 4 equal character-select cards. Per-character particles (10 idle, 16 on hover). Energy sweep FX on hover (amber light line sweeps left→right, re-triggers via React key). Pulsing level badge (16px numeral, `badgePulse` animation). Role pills (Tank/Artificer/Striker/Caster). 13px quotes with 3-line clamp + accent left border. "View Chronicle →" CTA on hover.
+- **Per-character animated card outline glow** on hover (radiates from behind card):
+  - Cannonball: `glowFlame` — flickering fire, red-orange shadows dancing unevenly (2s)
+  - Bpop: `glowForge` — rhythmic forge pulse with smoky amber edges (3s)
+  - Iblith: `glowShadow` — dark shadow flame, deep purple, creeping unstably (2.5s)
+  - Morrighan: `glowBioluminescent` — bioluminescent cyan-violet light radiating outward (3.5s)
+- **Bottom Left — Quote Carousel**: Replaced static Party Stats with rotating quote carousel. 5 quotes (4 character + 1 campaign chronicle), 8s auto-rotate, fade+translateY transitions, clickable dot indicators with character-colored active state, character-colored attribution, member role pills below.
+- **Bottom Right — Campaign Progress**: "Pathways Unseen" header, featured latest session card (links to `/sessions/:slug`), 3 previous session mini-blocks row, session count + entity count stats footer.
+
+**UI Review Brief (MythosVault_ClaudeCode_Brief.docx) applied:**
+- Party renamed: "The Company" → "Bear Force One" throughout
+- Tagline updated: lore-accurate fate/bond version ("Brought together by fate's indifferent hand...")
+- Hero banner: removed scan line effect, removed "Pathways Unseen · Karnuk" eyebrow text
+- Hero banner vignette: extended with more gradient stops (55/68/80/90%) for seamless fade
+- Compact cards: removed class/race badge above names, removed "Played by" attribution
+- Compact cards: removed signature ability text on hover
+- Character accent colors updated per brief spec: Cannonball `rgb(226,46,18)`, Bpop `rgb(211,161,23)`, Iblith `rgb(116,57,198)`, Morrighan `rgb(92,71,194)` — particle colors also updated to match
+- Level badge: glow now uses character accent color on hover
+- Header brand lockup: horizontal single line with centered dot separator (was stacked two-line)
+- Home page: Characters section description updated to "Bear Force One"
+
+**CSS keyframes added to `src/index.css`:** `charEmberRise`, `eldritchFloat`, `forgeSpark`, `shadowDrift`, `energySweep`, `badgePulse`, `glyphBreath`, `glowFlame`, `glowForge`, `glowShadow`, `glowBioluminescent`. Bento grid classes: `.hero-banner-container`, `.bento-cinematic-row`, `.bento-cinematic-bottom` with responsive breakpoints at 900px and 640px.
+
+**Files changed:** `src/pages/Characters.tsx` (complete rewrite), `src/index.css`, `src/components/Header.tsx`, `src/pages/Home.tsx`
+
 ### 2026-03-08 (Session 11)
 - **Session 24 "The Tunnel Dock" added:** 7-section recap, 7 woven images (Soren.gif, Scampers, etc.), inline MP4 video (Brindle Nacklewitt), `videoUrl` field added to `SessionEntry` type
 - **Sessions page re-ordered:** Most recent session featured full-width at top (`FeaturedSessionCard`), rest in grid newest → oldest
