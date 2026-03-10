@@ -230,32 +230,43 @@ function StatBox({ label, score, accent, isHighest }: { label: string; score: nu
   return (
     <div style={{
       textAlign: 'center',
-      padding: '14px 10px 12px',
-      borderRadius: '5px',
+      padding: isHighest ? '16px 10px 14px' : '12px 10px 10px',
+      borderRadius: '6px',
       flex: 1, minWidth: '54px',
       background: isHighest
-        ? `linear-gradient(180deg, ${accent}20 0%, ${accent}0a 100%)`
-        : 'linear-gradient(180deg, hsl(20 6% 11%) 0%, hsl(20 6% 9%) 100%)',
-      border: `1px solid ${isHighest ? accent + '55' : 'hsl(15 8% 16%)'}`,
-      boxShadow: isHighest ? `0 0 20px -6px ${accent}40, inset 0 1px 0 ${accent}20` : 'inset 0 1px 0 rgba(255,255,255,0.02)',
+        ? `linear-gradient(160deg, ${accent}28 0%, ${accent}12 60%, ${accent}08 100%)`
+        : 'hsl(15 6% 6%)',
+      border: `1px solid ${isHighest ? accent + '70' : 'hsl(15 8% 11%)'}`,
+      boxShadow: isHighest
+        ? `0 6px 24px -6px ${accent}50, 0 2px 8px -2px rgba(0,0,0,0.6), inset 0 1px 0 ${accent}30`
+        : 'inset 0 2px 4px rgba(0,0,0,0.35)',
+      transform: isHighest ? 'translateY(-3px)' : 'none',
       transition: 'all 0.2s ease',
+      position: 'relative' as const,
     }}>
+      {/* Accent top edge on raised stat */}
+      {isHighest && (
+        <div style={{
+          position: 'absolute', top: 0, left: '20%', right: '20%', height: '2px',
+          background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+          borderRadius: '0 0 2px 2px',
+        }} />
+      )}
       <div className="font-serif" style={{
         fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
-        color: isHighest ? accent : 'hsl(15 4% 35%)', marginBottom: '6px',
+        color: isHighest ? accent : 'hsl(15 4% 26%)', marginBottom: '6px',
       }}>
         {label}
       </div>
       <div className="font-serif font-black" style={{
-        fontSize: '1.75rem', lineHeight: 1,
-        color: isHighest ? 'hsl(15 4% 96%)' : 'hsl(15 4% 82%)',
-        textShadow: isHighest ? `0 0 20px ${accent}60` : 'none',
-        animation: isHighest ? `skillPulse 3s ease-in-out infinite` : 'none',
+        fontSize: isHighest ? '2rem' : '1.6rem', lineHeight: 1,
+        color: isHighest ? 'hsl(15 4% 98%)' : 'hsl(15 4% 44%)',
+        textShadow: isHighest ? `0 0 24px ${accent}70, 0 0 8px ${accent}40` : 'none',
       }}>
         {score}
       </div>
-      <div style={{ width: '24px', height: '1px', margin: '6px auto 5px', background: isHighest ? `${accent}60` : 'hsl(15 8% 20%)' }} />
-      <div className="font-mono" style={{ fontSize: '13px', fontWeight: 600, color: isHighest ? accent : 'hsl(15 4% 50%)' }}>
+      <div style={{ width: '24px', height: '1px', margin: '6px auto 5px', background: isHighest ? `${accent}70` : 'hsl(15 8% 14%)' }} />
+      <div className="font-mono" style={{ fontSize: '13px', fontWeight: 600, color: isHighest ? accent : 'hsl(15 4% 32%)' }}>
         {statMod(score)}
       </div>
     </div>
