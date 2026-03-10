@@ -77,19 +77,20 @@ export function Header() {
                 style={{ color: 'hsl(25 100% 40%)', flexShrink: 0 }}
                 strokeWidth={1.5}
               />
-              <div className="flex flex-col justify-center" style={{ gap: '3px' }}>
-                <div
+              <div className="flex items-baseline gap-2">
+                <span
                   className="font-serif font-bold uppercase tracking-[0.2em]"
                   style={{ color: 'hsl(15 4% 92%)', fontSize: '13px', lineHeight: 1 }}
                 >
                   Mythos Vault
-                </div>
-                <div
+                </span>
+                <span style={{ color: 'hsl(15 4% 30%)', fontSize: '10px' }}>&middot;</span>
+                <span
                   className="font-display italic"
-                  style={{ color: 'hsl(15 4% 50%)', fontSize: '11px', letterSpacing: '0.08em', lineHeight: 1 }}
+                  style={{ color: 'hsl(15 4% 45%)', fontSize: '11px', letterSpacing: '0.06em', lineHeight: 1 }}
                 >
                   Pathways Unseen
-                </div>
+                </span>
               </div>
             </div>
           </Link>

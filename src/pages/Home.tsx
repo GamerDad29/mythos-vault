@@ -14,7 +14,7 @@ const SECTIONS = [
   { label: 'Items',      href: '/items',      desc: 'Artifacts, weapons, and curiosities',     Icon: Package,   type: 'ITEM'     },
   { label: 'NPCs',       href: '/npcs',       desc: 'Characters encountered in the Underdark', Icon: User,      type: 'NPC'      },
   { label: 'Creatures',  href: '/creatures',  desc: 'Beasts and beings of the deep',           Icon: Swords,    type: 'CREATURE' },
-  { label: 'Characters', href: '/characters', desc: 'The party of adventurers',                Icon: Users,     type: 'PC'       },
+  { label: 'Characters', href: '/characters', desc: 'Bear Force One',                           Icon: Users,     type: 'PC'       },
 ];
 
 const TOOLS = [

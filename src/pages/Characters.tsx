@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Link } from 'wouter';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { vaultService } from '../vaultService';
-import type { VaultEntity, VaultEntityStub, SessionEntry } from '../types';
+import type { VaultEntity, SessionEntry } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
 
@@ -21,6 +21,14 @@ interface PCFull extends VaultEntity {
 
 // ─── Character Config ───────────────────────────────────────────────────────────
 
+// Accent colors per brief spec
+const CHARACTER_COLORS: Record<string, string> = {
+  'pc-cannonball-kar-thul':  'rgb(226, 46, 18)',
+  'pc-bpop':                 'rgb(211, 161, 23)',
+  'pc-iblith-gorch':         'rgb(116, 57, 198)',
+  'pc-morrighan-bustlewing': 'rgb(92, 71, 194)',
+};
+
 const CHARACTER_META: Record<string, {
   role: string;
   particleType: 'ember' | 'eldritch' | 'forge' | 'shadow';
@@ -32,6 +40,15 @@ const CHARACTER_META: Record<string, {
   'pc-morrighan-bustlewing':  { role: 'Caster',     particleType: 'eldritch', signature: 'Form of Dread' },
 };
 
+// Rotating quotes for the carousel (bottom-left panel)
+const CAROUSEL_QUOTES = [
+  { text: '\u201CYou exploded her?\u201D Drevlyn said. \u201CBrilliant.\u201D', attribution: 'Cannonball Kar-thul', pcId: 'pc-cannonball-kar-thul' },
+  { text: 'He looked at every fortress the world had built against creatures of his kind and quietly, methodically, found the door.', attribution: 'Bpop', pcId: 'pc-bpop' },
+  { text: 'Not for greed. Not for revenge. For proof. For purpose.', attribution: 'Iblith Gorch', pcId: 'pc-iblith-gorch' },
+  { text: '\u201C\u2026to ensure that death claims only what it must \u2014 or perhaps, what it should not.\u201D', attribution: 'Morrighan Bustlewing', pcId: 'pc-morrighan-bustlewing' },
+  { text: 'Four souls carried into the dark by forces none of them chose. The remarkable thing was not that they survived. It was that they still had opinions about it.', attribution: 'Campaign Chronicle', pcId: '' },
+];
+
 const CARD_QUOTES: Record<string, string> = {
   'pc-cannonball-kar-thul': '\u201CYou exploded her?\u201D Drevlyn said. \u201CBrilliant.\u201D',
   'pc-bpop': 'He looked at every fortress the world had built against creatures of his kind and quietly, methodically, found the door.',
@@ -39,13 +56,17 @@ const CARD_QUOTES: Record<string, string> = {
   'pc-morrighan-bustlewing': '\u201C\u2026to ensure that death claims only what it must \u2014 or perhaps, what it should not.\u201D',
 };
 
-// Banner strip positioning — warm to cool gradient across the banner
+// Banner strip positioning
 const BANNER_POSITIONS = [
   { left: '0%',  width: '32%' },
   { left: '22%', width: '30%' },
   { left: '46%', width: '30%' },
   { left: '70%', width: '32%' },
 ];
+
+function getAccent(pc: PCFull): string {
+  return CHARACTER_COLORS[pc.id] || pc.accentColor || 'hsl(25 100% 38%)';
+}
 
 // ─── Particle System ────────────────────────────────────────────────────────────
 
@@ -62,7 +83,7 @@ function CharacterParticles({ type, count = 8 }: { type: string; count?: number 
           width: `${r(2, 6)}px`,
           height: `${r(2, 6)}px`,
           borderRadius: '50%',
-          background: ['hsl(8 90% 58%)', 'hsl(25 95% 55%)', 'hsl(40 85% 50%)', 'hsl(15 80% 45%)'][i % 4],
+          background: ['rgb(226,46,18)', 'rgb(240,100,30)', 'rgb(255,140,20)', 'rgb(200,40,10)'][i % 4],
           animation: `charEmberRise ${r(2, 4.5)}s ease-out ${r(0, 4)}s infinite`,
           '--drift': `${r(-18, 18)}px`,
           pointerEvents: 'none' as const,
@@ -77,7 +98,7 @@ function CharacterParticles({ type, count = 8 }: { type: string; count?: number 
           width: `${r(3, 9)}px`,
           height: `${r(3, 9)}px`,
           borderRadius: '50%',
-          background: ['hsl(250 65% 72%)', 'hsl(220 55% 68%)', 'hsl(270 50% 62%)', 'hsl(290 40% 55%)'][i % 4],
+          background: ['rgb(92,71,194)', 'rgb(130,100,220)', 'rgb(110,85,210)', 'rgb(80,60,180)'][i % 4],
           filter: `blur(${r(1, 4)}px)`,
           animation: `eldritchFloat ${r(4, 8)}s ease-in-out ${r(0, 5)}s infinite`,
           '--dx': `${r(-35, 35)}px`,
@@ -94,7 +115,7 @@ function CharacterParticles({ type, count = 8 }: { type: string; count?: number 
           width: `${r(2, 5)}px`,
           height: `${r(3, 7)}px`,
           borderRadius: '1px',
-          background: ['hsl(44 95% 58%)', 'hsl(30 90% 52%)', 'hsl(50 85% 52%)', 'hsl(38 100% 48%)'][i % 4],
+          background: ['rgb(211,161,23)', 'rgb(230,180,40)', 'rgb(200,150,10)', 'rgb(240,190,50)'][i % 4],
           animation: `forgeSpark ${r(1.8, 3.5)}s ease-out ${r(0, 3)}s infinite`,
           pointerEvents: 'none' as const,
           zIndex: 2,
@@ -108,13 +129,14 @@ function CharacterParticles({ type, count = 8 }: { type: string; count?: number 
           width: `${r(30, 70)}px`,
           height: `${r(18, 40)}px`,
           borderRadius: '50%',
-          background: ['hsl(265 35% 18%)', 'hsl(280 30% 14%)', 'hsl(250 25% 16%)', 'hsl(300 20% 12%)'][i % 4],
+          background: ['rgb(116,57,198)', 'rgb(90,40,170)', 'rgb(70,30,150)', 'rgb(60,25,130)'][i % 4],
           filter: `blur(${r(14, 24)}px)`,
           animation: `shadowDrift ${r(5, 10)}s ease-in-out ${r(0, 6)}s infinite`,
           '--start-x': `${r(-25, 25)}px`,
           '--end-x': `${r(-50, 50)}px`,
           pointerEvents: 'none' as const,
           zIndex: 2,
+          opacity: 0.4,
         }));
 
       default:
@@ -123,6 +145,33 @@ function CharacterParticles({ type, count = 8 }: { type: string; count?: number 
   }, [type, count]);
 
   return <>{particles.map((s, i) => <div key={i} style={s as React.CSSProperties} />)}</>;
+}
+
+// ─── Runic Glyph Separator (Option A from brief) ───────────────────────────────
+
+function RunicGlyph({ x }: { x: string }) {
+  return (
+    <div style={{
+      position: 'absolute',
+      left: x,
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      zIndex: 12,
+      pointerEvents: 'none',
+    }}>
+      <svg width="22" height="22" viewBox="0 0 22 22" style={{
+        animation: 'glyphBreath 4s ease-in-out infinite',
+      }}>
+        <polygon
+          points="11,1 14,8 21,8 15.5,13 17.5,20 11,16 4.5,20 6.5,13 1,8 8,8"
+          fill="none"
+          stroke="rgba(201,168,76,0.4)"
+          strokeWidth="1"
+          style={{ filter: 'drop-shadow(0 0 4px rgba(201,168,76,0.3))' }}
+        />
+      </svg>
+    </div>
+  );
 }
 
 // ─── Cinematic Hero Banner ──────────────────────────────────────────────────────
@@ -137,7 +186,10 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
   }, []);
 
   const bannerOpacity = Math.max(0, 1 - scrollY / 600);
-  const bannerShift = scrollY * 0.25; // parallax
+  const bannerShift = scrollY * 0.25;
+
+  // Glyph positions at column boundaries
+  const glyphPositions = ['27%', '48%', '73%'];
 
   return (
     <motion.div
@@ -155,7 +207,7 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
         {/* ── Portrait Strips ── */}
         {pcs.slice(0, 4).map((pc, i) => {
           const pos = BANNER_POSITIONS[i] || BANNER_POSITIONS[0];
-          const accent = pc.accentColor || 'hsl(25 100% 38%)';
+          const accent = getAccent(pc);
           const meta = CHARACTER_META[pc.id];
           const isFirst = i === 0;
           const isLast = i === pcs.length - 1 || i === 3;
@@ -177,7 +229,6 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
                 zIndex: i + 1,
               }}
             >
-              {/* Portrait image with per-strip Ken Burns */}
               {pc.imageUrl && (
                 <img
                   src={pc.imageUrl}
@@ -193,31 +244,33 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
                 />
               )}
 
-              {/* Per-character particles in their strip */}
               <CharacterParticles type={meta?.particleType || 'ember'} count={10} />
 
-              {/* Accent light pillar rising from bottom */}
+              {/* Accent light pillar */}
               <div style={{
                 position: 'absolute', bottom: 0, left: '30%', right: '30%', height: '100%',
-                background: `linear-gradient(to top, ${accent}30 0%, ${accent}08 40%, transparent 70%)`,
+                background: `linear-gradient(to top, ${accent}40 0%, ${accent}10 40%, transparent 70%)`,
                 pointerEvents: 'none', zIndex: 3,
               }} />
             </div>
           );
         })}
 
-        {/* ── Atmospheric fog layers ── */}
+        {/* ── Runic Glyph Separators (Option A) ── */}
+        {glyphPositions.map(x => <RunicGlyph key={x} x={x} />)}
+
+        {/* ── Atmospheric fog ── */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 5,
           background: `
-            radial-gradient(ellipse at 20% 80%, rgba(180,60,20,0.12) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 70%, rgba(120,80,200,0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.08) 0%, transparent 40%)
+            radial-gradient(ellipse at 20% 80%, rgba(226,46,18,0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, rgba(92,71,194,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.07) 0%, transparent 40%)
           `,
           pointerEvents: 'none',
         }} />
 
-        {/* ── Heavy bottom vignette ── */}
+        {/* ── Heavy vignette ── */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 6,
           background: `
@@ -244,7 +297,7 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
           pointerEvents: 'none',
         }} />
 
-        {/* ── Film grain overlay ── */}
+        {/* ── Film grain ── */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 8,
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E")`,
@@ -259,14 +312,11 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
         zIndex: 10, padding: '0 0 40px',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
       }}>
-        {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          style={{
-            display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px',
-          }}
+          style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}
         >
           <div style={{ height: '1px', width: '80px', background: 'linear-gradient(to right, transparent, hsl(25 100% 32%))' }} />
           <p className="font-serif uppercase" style={{
@@ -277,7 +327,6 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
           <div style={{ height: '1px', width: '80px', background: 'linear-gradient(to left, transparent, hsl(25 100% 32%))' }} />
         </motion.div>
 
-        {/* Title */}
         <motion.h1
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -288,19 +337,14 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
             letterSpacing: '0.14em',
             lineHeight: 0.85,
             color: 'hsl(15 4% 96%)',
-            textShadow: `
-              0 0 120px rgba(201,168,76,0.25),
-              0 0 60px rgba(201,168,76,0.15),
-              0 4px 20px rgba(0,0,0,0.8)
-            `,
+            textShadow: '0 0 120px rgba(201,168,76,0.25), 0 0 60px rgba(201,168,76,0.15), 0 4px 20px rgba(0,0,0,0.8)',
             marginBottom: '14px',
             textAlign: 'center',
           }}
         >
-          The Company
+          Bear Force One
         </motion.h1>
 
-        {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -308,13 +352,12 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
           className="font-display italic"
           style={{
             fontSize: '15px', color: 'hsl(15 4% 48%)',
-            maxWidth: '460px', textAlign: 'center', lineHeight: 1.65,
+            maxWidth: '500px', textAlign: 'center', lineHeight: 1.65,
           }}
         >
-          Four souls who fell into the dark and found, to their mutual inconvenience, each other.
+          Brought together by fate&rsquo;s indifferent hand. Held together by something none of them would name aloud.
         </motion.p>
 
-        {/* Animated divider */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -330,7 +373,7 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
   );
 }
 
-// ─── Level Badge (pulsing on hover) ─────────────────────────────────────────────
+// ─── Level Badge ────────────────────────────────────────────────────────────────
 
 function LevelBadge({ level, accent, pulse }: { level: number; accent: string; pulse?: boolean }) {
   return (
@@ -338,20 +381,20 @@ function LevelBadge({ level, accent, pulse }: { level: number; accent: string; p
       position: 'absolute', top: '10px', right: '10px', zIndex: 8,
       background: 'rgba(8,6,4,0.8)',
       backdropFilter: 'blur(10px)',
-      border: `1px solid ${accent}60`,
+      border: `1px solid ${accent}`,
       borderRadius: '6px',
       padding: '3px 10px',
       display: 'flex', alignItems: 'center', gap: '4px',
       boxShadow: pulse
-        ? `0 0 18px ${accent}50, 0 0 40px ${accent}20`
-        : `0 0 12px ${accent}20`,
+        ? `0 0 20px ${accent}, 0 0 40px ${accent}60`
+        : `0 0 12px ${accent}40`,
       transition: 'box-shadow 0.4s ease',
       animation: pulse ? 'badgePulse 2s ease-in-out infinite' : 'none',
     }}>
       <span style={{ fontSize: '9px', color: accent, letterSpacing: '0.15em', fontFamily: 'Cinzel, serif', textTransform: 'uppercase' }}>
         Lvl
       </span>
-      <span style={{ fontSize: '14px', fontWeight: 700, color: 'hsl(15 4% 94%)', fontFamily: 'Cinzel, serif' }}>
+      <span style={{ fontSize: '16px', fontWeight: 700, color: 'hsl(15 4% 94%)', fontFamily: 'Cinzel, serif' }}>
         {level}
       </span>
     </div>
@@ -364,8 +407,8 @@ function RolePill({ role, accent }: { role: string; accent: string }) {
   return (
     <span style={{
       display: 'inline-block',
-      background: `${accent}18`,
-      border: `1px solid ${accent}45`,
+      background: `${accent}25`,
+      border: `1px solid ${accent}60`,
       borderRadius: '20px',
       padding: '3px 12px',
       fontSize: '9px',
@@ -386,7 +429,7 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [sweepKey, setSweepKey] = useState(0);
-  const accent = pc.accentColor || 'hsl(25 100% 38%)';
+  const accent = getAccent(pc);
   const quote = CARD_QUOTES[pc.id] || pc.summary || '';
   const meta = CHARACTER_META[pc.id] || { role: 'Adventurer', particleType: 'ember' as const, signature: '' };
   const totalLevel = pc.classes?.reduce((s, c) => s + c.level, 0) ?? 0;
@@ -414,15 +457,15 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             overflow: 'hidden',
             cursor: 'pointer',
             background: 'hsl(15 6% 5%)',
-            border: `1px solid ${hovered ? accent + '70' : 'hsl(15 8% 13%)'}`,
+            border: `1px solid ${hovered ? accent : 'hsl(15 8% 13%)'}`,
             boxShadow: hovered
-              ? `0 0 0 1px ${accent}15, 0 20px 60px -10px ${accent}50, 0 40px 100px -25px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05)`
+              ? `0 0 0 1px ${accent}20, 0 20px 60px -10px ${accent}50, 0 40px 100px -25px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05)`
               : '0 4px 20px -4px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02)',
             transform: hovered ? 'translateY(-12px) scale(1.015)' : 'translateY(0) scale(1)',
             transition: 'all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
-          {/* ── Portrait ── */}
+          {/* Portrait */}
           {pc.imageUrl && !imgError ? (
             <img
               src={pc.imageUrl}
@@ -448,10 +491,10 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             </div>
           )}
 
-          {/* ── Particles (more on hover via larger base count) ── */}
+          {/* Particles */}
           <CharacterParticles type={meta.particleType} count={hovered ? 16 : 10} />
 
-          {/* ── Accent fog ── */}
+          {/* Accent fog */}
           <div style={{
             position: 'absolute',
             top: 0, left: 0, right: 0, height: '70%',
@@ -464,74 +507,64 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             pointerEvents: 'none', zIndex: 3,
           }} />
 
-          {/* ── Vignette ── */}
+          {/* Vignette */}
           <div style={{
             position: 'absolute', inset: 0,
             background: `
               linear-gradient(180deg,
-                rgba(8,6,4,0.35) 0%,
-                transparent 18%,
-                transparent 38%,
-                rgba(8,6,4,0.65) 55%,
-                rgba(8,6,4,0.92) 72%,
-                rgba(8,6,4,1) 100%
+                rgba(8,6,4,0.35) 0%, transparent 18%, transparent 38%,
+                rgba(8,6,4,0.65) 55%, rgba(8,6,4,0.92) 72%, rgba(8,6,4,1) 100%
               ),
               linear-gradient(90deg, rgba(8,6,4,0.35) 0%, transparent 12%, transparent 88%, rgba(8,6,4,0.35) 100%)
             `,
             pointerEvents: 'none', zIndex: 3,
           }} />
 
-          {/* ── Top-right accent bleed ── */}
+          {/* Top-right accent bleed */}
           <div style={{
-            position: 'absolute', top: 0, right: 0,
-            width: '70px', height: '70px',
-            background: `linear-gradient(225deg, ${accent}25 0%, transparent 65%)`,
+            position: 'absolute', top: 0, right: 0, width: '70px', height: '70px',
+            background: `linear-gradient(225deg, ${accent}30 0%, transparent 65%)`,
             opacity: hovered ? 1 : 0.4,
             transition: 'opacity 0.35s ease',
             pointerEvents: 'none', zIndex: 4,
           }} />
 
-          {/* ── Energy sweep on hover ── */}
+          {/* Energy sweep on hover */}
           {hovered && (
-            <div
-              key={sweepKey}
-              style={{
-                position: 'absolute', top: 0, bottom: 0, width: '80px',
-                background: `linear-gradient(90deg, transparent, ${accent}35, ${accent}15, transparent)`,
-                animation: 'energySweep 0.7s ease-out forwards',
-                pointerEvents: 'none', zIndex: 9,
-              }}
-            />
+            <div key={sweepKey} style={{
+              position: 'absolute', top: 0, bottom: 0, width: '80px',
+              background: `linear-gradient(90deg, transparent, ${accent}40, ${accent}15, transparent)`,
+              animation: 'energySweep 0.7s ease-out forwards',
+              pointerEvents: 'none', zIndex: 9,
+            }} />
           )}
 
-          {/* ── Level badge ── */}
+          {/* Level badge */}
           <LevelBadge level={totalLevel} accent={accent} pulse={hovered} />
 
-          {/* ── Bottom accent sweep ── */}
+          {/* Bottom accent sweep */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px',
-            background: `linear-gradient(90deg, transparent 0%, ${accent}80 20%, ${accent} 50%, ${accent}80 80%, transparent 100%)`,
+            background: `linear-gradient(90deg, transparent 0%, ${accent} 20%, ${accent} 80%, transparent 100%)`,
             opacity: hovered ? 1 : 0,
             transition: 'opacity 0.3s ease', zIndex: 9,
-            boxShadow: `0 0 12px ${accent}60, 0 0 30px ${accent}25`,
+            boxShadow: `0 0 12px ${accent}, 0 0 30px ${accent}60`,
           }} />
 
-          {/* ── Top accent line ── */}
+          {/* Top accent line */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-            background: `linear-gradient(90deg, transparent 10%, ${accent}50 50%, transparent 90%)`,
+            background: `linear-gradient(90deg, transparent 10%, ${accent}60 50%, transparent 90%)`,
             opacity: hovered ? 0.8 : 0,
             transition: 'opacity 0.3s ease', zIndex: 9,
           }} />
 
-          {/* ── Content ── */}
+          {/* Content — no class/race badge, no "Played by" per brief */}
           <div style={{
-            position: 'absolute',
-            bottom: 0, left: 0, right: 0,
-            padding: '0 18px 18px',
-            zIndex: 6,
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            padding: '0 18px 18px', zIndex: 6,
           }}>
-            {/* Signature ability — appears on hover */}
+            {/* Signature ability on hover */}
             <div style={{
               marginBottom: '8px',
               opacity: hovered ? 1 : 0,
@@ -539,10 +572,8 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
               transition: 'all 0.35s ease',
             }}>
               <span className="font-display italic" style={{
-                fontSize: '10px',
-                color: accent,
-                letterSpacing: '0.05em',
-                textShadow: `0 0 20px ${accent}40`,
+                fontSize: '10px', color: accent, letterSpacing: '0.05em',
+                textShadow: `0 0 20px ${accent}50`,
               }}>
                 {meta.signature}
               </span>
@@ -553,17 +584,6 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
               <RolePill role={meta.role} accent={accent} />
             </div>
 
-            {/* Class */}
-            <p className="font-serif" style={{
-              fontSize: '9px',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: accent, opacity: 0.85,
-              marginBottom: '4px',
-            }}>
-              {pc.category}
-            </p>
-
             {/* Name */}
             <h2 className="font-serif font-black uppercase" style={{
               fontSize: 'clamp(1.3rem, 2.2vw, 1.7rem)',
@@ -571,35 +591,27 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
               lineHeight: 0.95,
               color: 'hsl(15 4% 96%)',
               textShadow: hovered
-                ? `0 0 40px ${accent}80, 0 0 80px ${accent}40, 0 0 120px ${accent}20, 0 2px 4px rgba(0,0,0,0.9)`
-                : `0 0 20px ${accent}25, 0 2px 4px rgba(0,0,0,0.8)`,
-              marginBottom: '5px',
+                ? `0 0 40px ${accent}, 0 0 80px ${accent}60, 0 0 120px ${accent}30, 0 2px 4px rgba(0,0,0,0.9)`
+                : `0 0 20px ${accent}40, 0 2px 4px rgba(0,0,0,0.8)`,
+              marginBottom: '8px',
               transition: 'text-shadow 0.4s ease',
             }}>
               {pc.name}
             </h2>
 
-            {/* Player */}
-            <p className="font-display" style={{
-              fontSize: '10px', color: 'hsl(15 4% 32%)',
-              letterSpacing: '0.08em', marginBottom: '6px',
-            }}>
-              Played by {pc.player}
-            </p>
-
-            {/* Quote — clamped */}
+            {/* Quote — 13px min, 3-line clamp, accent left border per brief */}
             <div style={{
-              borderLeft: `2px solid ${accent}50`,
+              borderLeft: `2px solid ${accent}70`,
               paddingLeft: '10px',
-              opacity: hovered ? 0.9 : 0.5,
+              opacity: hovered ? 1 : 0.7,
               transition: 'opacity 0.35s ease',
             }}>
               <p className="font-display italic" style={{
-                fontSize: '10px',
-                color: 'hsl(15 4% 50%)',
+                fontSize: '13px',
+                color: 'hsl(15 4% 58%)',
                 lineHeight: 1.55,
                 display: '-webkit-box',
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 3,
                 WebkitBoxOrient: 'vertical' as const,
                 overflow: 'hidden',
               }}>
@@ -633,24 +645,31 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
   );
 }
 
-// ─── Party Stats (Glassmorphism) ────────────────────────────────────────────────
+// ─── Quote Carousel (Bottom Left — replaces Party Stats) ────────────────────────
 
-function PartyStats({ pcs }: { pcs: PCFull[] }) {
-  const totalHP = pcs.reduce((s, pc) => s + (pc.hp ?? 0), 0);
-  const avgLevel = pcs.length
-    ? Math.round(pcs.reduce((s, pc) => s + (pc.classes?.reduce((a, c) => a + c.level, 0) ?? 0), 0) / pcs.length)
-    : 0;
+function QuoteCarousel({ pcs }: { pcs: PCFull[] }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval>>();
 
-  const STAT_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
-  const statLeaders = STAT_KEYS.map(key => {
-    let best: PCFull | undefined;
-    let bestVal = 0;
-    pcs.forEach(pc => {
-      const val = pc.stats?.[key] ?? 0;
-      if (val > bestVal) { bestVal = val; best = pc; }
-    });
-    return { stat: key.toUpperCase(), value: bestVal, pc: best };
-  });
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setActiveIdx(i => (i + 1) % CAROUSEL_QUOTES.length);
+    }, 5000);
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  const goTo = (idx: number) => {
+    setActiveIdx(idx);
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setActiveIdx(i => (i + 1) % CAROUSEL_QUOTES.length);
+    }, 5000);
+  };
+
+  const current = CAROUSEL_QUOTES[activeIdx];
+  const quoteAccent = current.pcId
+    ? CHARACTER_COLORS[current.pcId] || 'hsl(25 100% 38%)'
+    : 'hsl(25 100% 38%)';
 
   return (
     <motion.div
@@ -665,145 +684,115 @@ function PartyStats({ pcs }: { pcs: PCFull[] }) {
         WebkitBackdropFilter: 'blur(20px)',
         border: '1px solid rgba(255,255,255,0.06)',
         padding: '22px',
-        display: 'flex', flexDirection: 'column', gap: '14px',
+        display: 'flex', flexDirection: 'column',
         overflow: 'hidden',
         position: 'relative',
       }}
     >
-      {/* Corner glows */}
+      {/* Corner glow */}
       <div style={{
         position: 'absolute', top: '-40px', right: '-40px',
         width: '150px', height: '150px',
         background: 'radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
-      <div style={{
-        position: 'absolute', bottom: '-30px', left: '-30px',
-        width: '120px', height: '120px',
-        background: 'radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 65%)',
-        pointerEvents: 'none',
-      }} />
 
       {/* Header */}
-      <div>
+      <div style={{ marginBottom: '16px' }}>
         <p className="font-serif uppercase" style={{
           fontSize: '9px', letterSpacing: '0.25em', color: 'hsl(25 100% 38%)',
           marginBottom: '3px',
         }}>
-          Party Composition
+          Words From the Dark
         </p>
         <h3 className="font-serif font-bold" style={{ fontSize: '17px', color: 'hsl(15 4% 90%)' }}>
-          The Company
+          Bear Force One
         </h3>
       </div>
 
-      {/* Role pills */}
+      {/* Quote area */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100px' }}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIdx}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4 }}
+          >
+            <p className="font-display italic" style={{
+              fontSize: '17px',
+              color: 'hsl(15 4% 72%)',
+              lineHeight: 1.6,
+              marginBottom: '12px',
+            }}>
+              {current.text}
+            </p>
+            <p style={{
+              fontSize: '11px',
+              color: quoteAccent,
+              letterSpacing: '0.1em',
+              fontFamily: 'Cinzel, serif',
+            }}>
+              &mdash; {current.attribution}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{
+        display: 'flex', gap: '8px', justifyContent: 'center',
+        marginTop: '16px', marginBottom: '14px',
+      }}>
+        {CAROUSEL_QUOTES.map((q, i) => {
+          const dotColor = q.pcId ? CHARACTER_COLORS[q.pcId] || 'hsl(25 100% 38%)' : 'hsl(25 100% 38%)';
+          return (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              style={{
+                width: i === activeIdx ? '20px' : '8px',
+                height: '8px',
+                borderRadius: '4px',
+                background: i === activeIdx ? dotColor : 'hsl(15 8% 20%)',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: i === activeIdx ? `0 0 8px ${dotColor}60` : 'none',
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Member color tags */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
         {pcs.map(pc => {
+          const a = getAccent(pc);
           const m = CHARACTER_META[pc.id];
-          const a = pc.accentColor || 'hsl(25 100% 38%)';
           return (
             <div key={pc.id} style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
+              display: 'flex', alignItems: 'center', gap: '5px',
               background: `${a}10`, border: `1px solid ${a}30`,
-              borderRadius: '20px', padding: '4px 10px',
+              borderRadius: '20px', padding: '3px 9px',
             }}>
               <div style={{
                 width: '6px', height: '6px', borderRadius: '50%',
-                background: a, boxShadow: `0 0 8px ${a}70`,
-                animation: 'badgePulse 3s ease-in-out infinite',
+                background: a, boxShadow: `0 0 6px ${a}60`,
               }} />
               <span style={{
-                fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase',
+                fontSize: '8px', letterSpacing: '0.1em', textTransform: 'uppercase',
                 color: a, fontFamily: 'Cinzel, serif',
               }}>
-                {m?.role || 'Adventurer'}
+                {m?.role}
               </span>
-              <span style={{ fontSize: '9px', color: 'hsl(15 4% 45%)', fontFamily: 'EB Garamond, serif' }}>
+              <span style={{ fontSize: '8px', color: 'hsl(15 4% 40%)' }}>
                 {pc.name?.split(' ')[0]}
               </span>
             </div>
           );
         })}
-      </div>
-
-      {/* Stat leaders */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
-        {statLeaders.map(({ stat, value, pc: leader }) => {
-          const a = leader?.accentColor || 'hsl(25 100% 38%)';
-          const firstName = leader?.name?.split(' ')[0] || '';
-          return (
-            <div key={stat} style={{
-              background: 'rgba(255,255,255,0.025)',
-              borderRadius: '8px', padding: '7px 8px',
-              textAlign: 'center',
-              border: '1px solid rgba(255,255,255,0.04)',
-            }}>
-              <div style={{ fontSize: '9px', color: 'hsl(15 4% 40%)', letterSpacing: '0.1em', marginBottom: '1px' }}>
-                {stat}
-              </div>
-              <div style={{
-                fontSize: '15px', fontWeight: 700, color: a, fontFamily: 'Cinzel, serif',
-                textShadow: `0 0 10px ${a}30`,
-              }}>
-                {value}
-              </div>
-              <div style={{ fontSize: '8px', color: 'hsl(15 4% 32%)', marginTop: '1px' }}>
-                {firstName}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* HP bar */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <span style={{ fontSize: '9px', color: 'hsl(15 4% 40%)', letterSpacing: '0.1em' }}>COMBINED HP</span>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: 'hsl(15 4% 80%)', fontFamily: 'Cinzel, serif' }}>{totalHP}</span>
-        </div>
-        <div style={{
-          height: '5px', borderRadius: '3px', overflow: 'hidden',
-          display: 'flex', background: 'rgba(255,255,255,0.04)',
-          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
-        }}>
-          {pcs.map(pc => {
-            const pct = totalHP > 0 ? ((pc.hp ?? 0) / totalHP) * 100 : 25;
-            const a = pc.accentColor || 'hsl(25 100% 38%)';
-            return (
-              <div key={pc.id} style={{
-                width: `${pct}%`, height: '100%', background: a,
-                boxShadow: `0 0 8px ${a}40`,
-                transition: 'width 0.6s ease',
-              }} />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div style={{
-        display: 'flex', justifyContent: 'space-between',
-        borderTop: '1px solid rgba(255,255,255,0.04)',
-        paddingTop: '10px', marginTop: 'auto',
-      }}>
-        {[
-          { label: 'Members', value: String(pcs.length), color: 'hsl(15 4% 85%)' },
-          { label: 'Avg Level', value: String(avgLevel), color: 'hsl(15 4% 85%)' },
-          { label: 'Total HP', value: String(totalHP), color: 'hsl(25 100% 38%)' },
-        ].map(item => (
-          <div key={item.label} style={{ textAlign: 'center', flex: 1 }}>
-            <div style={{
-              fontSize: '17px', fontWeight: 700, color: item.color, fontFamily: 'Cinzel, serif',
-              textShadow: item.color.includes('25 100%') ? '0 0 10px rgba(201,168,76,0.3)' : 'none',
-            }}>
-              {item.value}
-            </div>
-            <div style={{ fontSize: '8px', color: 'hsl(15 4% 35%)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-              {item.label}
-            </div>
-          </div>
-        ))}
       </div>
     </motion.div>
   );
@@ -817,6 +806,7 @@ function CampaignProgress({ sessions, entityCount }: { sessions: SessionEntry[];
     [sessions]
   );
   const latest = sorted[0];
+  const previous = sorted.slice(1, 4); // 3 previous sessions
   const sessionCount = sessions.length;
 
   return (
@@ -832,12 +822,12 @@ function CampaignProgress({ sessions, entityCount }: { sessions: SessionEntry[];
         WebkitBackdropFilter: 'blur(16px)',
         border: '1px solid rgba(255,255,255,0.05)',
         padding: '22px',
-        display: 'flex', flexDirection: 'column', gap: '14px',
+        display: 'flex', flexDirection: 'column', gap: '12px',
         overflow: 'hidden',
         position: 'relative',
       }}
     >
-      {/* Atmospheric glow */}
+      {/* Glow */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -859,69 +849,78 @@ function CampaignProgress({ sessions, entityCount }: { sessions: SessionEntry[];
         </h3>
       </div>
 
-      {/* Session timeline dots */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
-        {sorted.slice().reverse().map((s, i) => {
-          const isLatest = s.number === latest?.number;
-          return (
-            <div key={s.number} style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{
-                width: isLatest ? '10px' : '6px',
-                height: isLatest ? '10px' : '6px',
-                borderRadius: '2px',
-                transform: 'rotate(45deg)',
-                background: isLatest ? 'hsl(25 100% 38%)' : 'hsl(15 8% 20%)',
-                boxShadow: isLatest ? '0 0 10px rgba(201,168,76,0.5)' : 'none',
-                animation: isLatest ? 'badgePulse 2.5s ease-in-out infinite' : 'none',
-                transition: 'all 0.3s ease',
-              }} />
-              {i < sorted.length - 1 && (
-                <div style={{
-                  width: '8px', height: '1px',
-                  background: 'hsl(15 8% 16%)',
-                }} />
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Latest session */}
+      {/* Latest session — featured */}
       {latest && (
         <Link href={`/sessions/${latest.slug}`}>
           <div style={{
-            background: 'rgba(255,255,255,0.025)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            borderRadius: '8px', padding: '12px',
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: '8px', padding: '14px',
             cursor: 'pointer',
-            transition: 'border-color 0.3s ease',
-          }}>
+            transition: 'border-color 0.3s ease, background 0.3s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,0.3)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
+          >
             <p style={{
               fontSize: '9px', color: 'hsl(25 100% 38%)', letterSpacing: '0.15em',
               textTransform: 'uppercase', marginBottom: '4px', fontFamily: 'Cinzel, serif',
             }}>
-              Session {latest.number}
+              Session {latest.number} &middot; Latest
             </p>
             <p className="font-serif" style={{
-              fontSize: '14px', color: 'hsl(15 4% 82%)', lineHeight: 1.3,
-              marginBottom: '4px',
+              fontSize: '15px', color: 'hsl(15 4% 85%)', lineHeight: 1.3, marginBottom: '4px',
             }}>
               {latest.title}
             </p>
             {latest.date && (
-              <p style={{ fontSize: '9px', color: 'hsl(15 4% 35%)' }}>
-                {latest.date}
-              </p>
+              <p style={{ fontSize: '9px', color: 'hsl(15 4% 38%)' }}>{latest.date}</p>
             )}
           </div>
         </Link>
       )}
 
-      {/* Stats */}
+      {/* Previous sessions — 3 mini-blocks */}
+      {previous.length > 0 && (
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {previous.map(s => (
+            <Link key={s.slug} href={`/sessions/${s.slug}`}>
+              <div style={{
+                flex: 1,
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.04)',
+                borderRadius: '6px', padding: '10px',
+                cursor: 'pointer',
+                transition: 'border-color 0.3s ease',
+                minWidth: 0,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; }}
+              >
+                <p style={{
+                  fontSize: '9px', color: 'hsl(25 100% 38%)', letterSpacing: '0.12em',
+                  textTransform: 'uppercase', marginBottom: '3px', fontFamily: 'Cinzel, serif',
+                }}>
+                  S{s.number}
+                </p>
+                <p className="font-serif" style={{
+                  fontSize: '11px', color: 'hsl(15 4% 60%)', lineHeight: 1.25,
+                  display: '-webkit-box', WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical' as const, overflow: 'hidden',
+                }}>
+                  {s.title}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Stats footer */}
       <div style={{
         display: 'flex', gap: '16px',
         borderTop: '1px solid rgba(255,255,255,0.04)',
-        paddingTop: '12px', marginTop: 'auto',
+        paddingTop: '10px', marginTop: 'auto',
       }}>
         <div style={{ flex: 1 }}>
           <div style={{
@@ -974,7 +973,7 @@ export function Characters() {
 
   return (
     <div className="min-h-screen" style={{ background: 'hsl(15 6% 8%)' }}>
-      {/* ── Cinematic Hero Banner ── */}
+      {/* Hero Banner */}
       {!loading && pcs.length > 0 ? (
         <HeroBanner pcs={pcs} />
       ) : (
@@ -984,10 +983,9 @@ export function Characters() {
         }} />
       )}
 
-      {/* ── Content Below Banner ── */}
+      {/* Content */}
       <div className="max-w-6xl mx-auto px-5" style={{ position: 'relative', zIndex: 2, marginTop: '-20px' }}>
-
-        {/* ── 4 Compact Character Tiles ── */}
+        {/* 4 Character Tiles */}
         {loading ? (
           <div className="bento-cinematic-row">
             {[0, 1, 2, 3].map(i => (
@@ -1007,12 +1005,12 @@ export function Characters() {
           </div>
         )}
 
-        {/* ── Bottom Row: Stats + Campaign ── */}
+        {/* Bottom: Quote Carousel + Campaign */}
         <div className="bento-cinematic-bottom">
           {!loading && (
             <>
               <div style={{ gridArea: 'stats' }}>
-                <PartyStats pcs={pcs} />
+                <QuoteCarousel pcs={pcs} />
               </div>
               <div style={{ gridArea: 'campaign' }}>
                 <CampaignProgress sessions={sessions} entityCount={entityCount} />
@@ -1021,7 +1019,7 @@ export function Characters() {
           )}
         </div>
 
-        {/* ── Footer ── */}
+        {/* Footer */}
         {!loading && pcs.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
