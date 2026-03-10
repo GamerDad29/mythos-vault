@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { ChevronDown, ChevronRight, User, Swords, MapPin, Shield, Package, Scroll, Users, Clock, BarChart2, ScrollText, BookOpen } from 'lucide-react';
@@ -59,8 +59,19 @@ interface SectionCardProps {
 
 function SectionCard({ section, imageUrl, count, delay = 0, featured = false }: SectionCardProps) {
   const [hovered, setHovered] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  const cardRef = useRef<HTMLDivElement>(null);
   const height = featured ? 340 : 230;
   const gradient = TYPE_GRADIENTS[section.type] || TYPE_GRADIENTS.NPC;
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: (e.clientX - rect.left) / rect.width,
+      y: (e.clientY - rect.top) / rect.height,
+    });
+  }, []);
 
   return (
     <motion.div
@@ -70,19 +81,25 @@ function SectionCard({ section, imageUrl, count, delay = 0, featured = false }: 
     >
       <Link href={section.href}>
         <div
+          ref={cardRef}
           className="relative overflow-hidden cursor-pointer"
           style={{
             height,
             borderRadius: '6px',
             border: `1px solid ${hovered ? 'hsl(25 60% 20%)' : 'hsl(15 8% 13%)'}`,
-            transition: 'border-color 0.35s, transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.45s',
-            transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
+            transition: hovered
+              ? 'border-color 0.35s, transform 0.12s ease-out, box-shadow 0.45s'
+              : 'border-color 0.35s, transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.45s',
+            transform: hovered
+              ? `perspective(900px) rotateY(${(mousePos.x - 0.5) * 18}deg) rotateX(${(0.5 - mousePos.y) * 12}deg) translateY(-6px) scale(1.01)`
+              : 'perspective(900px) rotateY(0deg) rotateX(0deg) translateY(0px) scale(1)',
             boxShadow: hovered
               ? '0 24px 64px rgba(0,0,0,0.55), 0 0 40px rgba(180,90,20,0.1)'
               : '0 4px 20px rgba(0,0,0,0.3)',
           }}
           onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
+          onMouseLeave={() => { setHovered(false); setMousePos({ x: 0.5, y: 0.5 }); }}
+          onMouseMove={handleMouseMove}
         >
           {/* Background */}
           {imageUrl ? (
@@ -203,6 +220,19 @@ function SectionCard({ section, imageUrl, count, delay = 0, featured = false }: 
               transform: hovered ? 'scaleX(1)' : 'scaleX(0)',
               transformOrigin: 'left center',
               transition: 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)',
+            }}
+          />
+
+          {/* Holographic specular highlight — shifts opposite to tilt */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: `radial-gradient(circle at ${mousePos.x * 100}% ${mousePos.y * 100}%, rgba(255,255,255,0.08) 0%, rgba(201,120,30,0.12) 35%, transparent 70%)`,
+              opacity: hovered ? 1 : 0,
+              transition: 'opacity 0.3s ease',
+              mixBlendMode: 'screen',
+              pointerEvents: 'none',
             }}
           />
         </div>
