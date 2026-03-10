@@ -64,6 +64,26 @@ const BANNER_POSITIONS = [
   { left: '70%', width: '32%' },
 ];
 
+// Per-character hover outline glow — radiates from behind the card
+const CHARACTER_GLOW: Record<string, { shadows: string; animation: string }> = {
+  'pc-cannonball-kar-thul': {
+    shadows: '0 0 20px rgba(226,46,18,0.6), 0 0 50px rgba(226,46,18,0.35), 0 0 90px rgba(255,100,20,0.2), inset 0 0 30px rgba(226,46,18,0.08)',
+    animation: 'glowFlame 2s ease-in-out infinite',
+  },
+  'pc-bpop': {
+    shadows: '0 0 18px rgba(211,161,23,0.5), 0 0 45px rgba(211,161,23,0.3), 0 0 80px rgba(180,140,20,0.15), inset 0 0 25px rgba(211,161,23,0.06)',
+    animation: 'glowForge 3s ease-in-out infinite',
+  },
+  'pc-iblith-gorch': {
+    shadows: '0 0 22px rgba(116,57,198,0.55), 0 0 55px rgba(80,30,160,0.35), 0 0 100px rgba(40,10,80,0.25), inset 0 0 30px rgba(116,57,198,0.08)',
+    animation: 'glowShadow 2.5s ease-in-out infinite',
+  },
+  'pc-morrighan-bustlewing': {
+    shadows: '0 0 25px rgba(92,71,194,0.5), 0 0 60px rgba(120,200,220,0.25), 0 0 100px rgba(80,220,255,0.15), inset 0 0 30px rgba(100,200,240,0.06)',
+    animation: 'glowBioluminescent 3.5s ease-in-out infinite',
+  },
+};
+
 function getAccent(pc: PCFull): string {
   return CHARACTER_COLORS[pc.id] || pc.accentColor || 'hsl(25 100% 38%)';
 }
@@ -277,23 +297,16 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
             linear-gradient(180deg,
               rgba(12,10,8,0.5) 0%,
               rgba(12,10,8,0.1) 15%,
-              transparent 30%,
-              transparent 45%,
-              rgba(12,10,8,0.4) 65%,
-              rgba(12,10,8,0.85) 82%,
+              transparent 28%,
+              transparent 40%,
+              rgba(12,10,8,0.25) 55%,
+              rgba(12,10,8,0.55) 68%,
+              rgba(12,10,8,0.82) 80%,
+              rgba(12,10,8,0.95) 90%,
               hsl(15 6% 8%) 100%
             ),
             linear-gradient(90deg, rgba(12,10,8,0.6) 0%, transparent 12%, transparent 88%, rgba(12,10,8,0.6) 100%)
           `,
-          pointerEvents: 'none',
-        }} />
-
-        {/* ── Scan line ── */}
-        <div style={{
-          position: 'absolute', left: 0, right: 0,
-          height: '2px', zIndex: 7,
-          background: 'linear-gradient(90deg, transparent 5%, rgba(201,168,76,0.15) 30%, rgba(201,168,76,0.25) 50%, rgba(201,168,76,0.15) 70%, transparent 95%)',
-          animation: 'scanLine 8s linear infinite',
           pointerEvents: 'none',
         }} />
 
@@ -312,21 +325,6 @@ function HeroBanner({ pcs }: { pcs: PCFull[] }) {
         zIndex: 10, padding: '0 0 40px',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
       }}>
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}
-        >
-          <div style={{ height: '1px', width: '80px', background: 'linear-gradient(to right, transparent, hsl(25 100% 32%))' }} />
-          <p className="font-serif uppercase" style={{
-            fontSize: '10px', letterSpacing: '0.35em', color: 'hsl(25 100% 40%)',
-          }}>
-            Pathways Unseen &middot; Karnuk, The Underdark
-          </p>
-          <div style={{ height: '1px', width: '80px', background: 'linear-gradient(to left, transparent, hsl(25 100% 32%))' }} />
-        </motion.div>
-
         <motion.h1
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -432,6 +430,7 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
   const accent = getAccent(pc);
   const quote = CARD_QUOTES[pc.id] || pc.summary || '';
   const meta = CHARACTER_META[pc.id] || { role: 'Adventurer', particleType: 'ember' as const, signature: '' };
+  const glow = CHARACTER_GLOW[pc.id];
   const totalLevel = pc.classes?.reduce((s, c) => s + c.level, 0) ?? 0;
 
   const handleMouseEnter = useCallback(() => {
@@ -444,8 +443,20 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.7, delay: 0.3 + index * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-      style={{ height: '100%' }}
+      style={{ height: '100%', position: 'relative' }}
     >
+      {/* Per-character outline glow — behind the card */}
+      <div style={{
+        position: 'absolute', inset: '-3px',
+        borderRadius: '13px',
+        boxShadow: hovered && glow ? glow.shadows : 'none',
+        animation: hovered && glow ? glow.animation : 'none',
+        opacity: hovered ? 1 : 0,
+        transition: 'opacity 0.4s ease',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }} />
+
       <Link href={`/characters/${pc.slug}`}>
         <div
           onMouseEnter={handleMouseEnter}
@@ -457,12 +468,13 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             overflow: 'hidden',
             cursor: 'pointer',
             background: 'hsl(15 6% 5%)',
-            border: `1px solid ${hovered ? accent : 'hsl(15 8% 13%)'}`,
+            border: `1px solid ${hovered ? accent + '80' : 'hsl(15 8% 13%)'}`,
             boxShadow: hovered
-              ? `0 0 0 1px ${accent}20, 0 20px 60px -10px ${accent}50, 0 40px 100px -25px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05)`
+              ? `0 20px 60px -10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)`
               : '0 4px 20px -4px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02)',
             transform: hovered ? 'translateY(-12px) scale(1.015)' : 'translateY(0) scale(1)',
             transition: 'all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            zIndex: 1,
           }}
         >
           {/* Portrait */}
@@ -564,21 +576,6 @@ function CompactCard({ pc, index }: { pc: PCFull; index: number }) {
             position: 'absolute', bottom: 0, left: 0, right: 0,
             padding: '0 18px 18px', zIndex: 6,
           }}>
-            {/* Signature ability on hover */}
-            <div style={{
-              marginBottom: '8px',
-              opacity: hovered ? 1 : 0,
-              transform: hovered ? 'translateY(0)' : 'translateY(6px)',
-              transition: 'all 0.35s ease',
-            }}>
-              <span className="font-display italic" style={{
-                fontSize: '10px', color: accent, letterSpacing: '0.05em',
-                textShadow: `0 0 20px ${accent}50`,
-              }}>
-                {meta.signature}
-              </span>
-            </div>
-
             {/* Role pill */}
             <div style={{ marginBottom: '6px' }}>
               <RolePill role={meta.role} accent={accent} />
@@ -654,7 +651,7 @@ function QuoteCarousel({ pcs }: { pcs: PCFull[] }) {
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setActiveIdx(i => (i + 1) % CAROUSEL_QUOTES.length);
-    }, 5000);
+    }, 8000);
     return () => clearInterval(timerRef.current);
   }, []);
 
@@ -663,7 +660,7 @@ function QuoteCarousel({ pcs }: { pcs: PCFull[] }) {
     clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setActiveIdx(i => (i + 1) % CAROUSEL_QUOTES.length);
-    }, 5000);
+    }, 8000);
   };
 
   const current = CAROUSEL_QUOTES[activeIdx];

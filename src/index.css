@@ -236,3 +236,39 @@
   0%, 100% { opacity: 0.3; filter: drop-shadow(0 0 3px rgba(201,168,76,0.2)); }
   50%      { opacity: 0.7; filter: drop-shadow(0 0 8px rgba(201,168,76,0.5)); }
 }
+
+/* Per-character card outline glow animations */
+
+/* Cannonball — flickering fire glow */
+@keyframes glowFlame {
+  0%   { box-shadow: 0 0 20px rgba(226,46,18,0.5),  0 0 50px rgba(226,46,18,0.3),  0 0 80px rgba(255,100,20,0.15); }
+  25%  { box-shadow: 0 0 25px rgba(255,80,20,0.6),   0 0 55px rgba(226,46,18,0.35), 0 0 95px rgba(255,120,30,0.2); }
+  50%  { box-shadow: 0 0 18px rgba(200,40,15,0.45),  0 0 45px rgba(226,46,18,0.25), 0 0 75px rgba(255,80,10,0.12); }
+  75%  { box-shadow: 0 0 28px rgba(255,100,30,0.55), 0 0 60px rgba(226,46,18,0.35), 0 0 100px rgba(240,90,20,0.2); }
+  100% { box-shadow: 0 0 20px rgba(226,46,18,0.5),   0 0 50px rgba(226,46,18,0.3),  0 0 80px rgba(255,100,20,0.15); }
+}
+
+/* Bpop — rhythmic forge pulse with smoky edges */
+@keyframes glowForge {
+  0%   { box-shadow: 0 0 18px rgba(211,161,23,0.4),  0 0 40px rgba(211,161,23,0.25), 0 0 70px rgba(180,140,20,0.1); }
+  33%  { box-shadow: 0 0 24px rgba(230,180,40,0.55), 0 0 55px rgba(211,161,23,0.35), 0 0 85px rgba(200,150,10,0.18); }
+  66%  { box-shadow: 0 0 15px rgba(190,140,15,0.35), 0 0 35px rgba(211,161,23,0.2),  0 0 65px rgba(160,120,10,0.08); }
+  100% { box-shadow: 0 0 18px rgba(211,161,23,0.4),  0 0 40px rgba(211,161,23,0.25), 0 0 70px rgba(180,140,20,0.1); }
+}
+
+/* Iblith — dark shadow flame, creeping and unstable */
+@keyframes glowShadow {
+  0%   { box-shadow: 0 0 22px rgba(116,57,198,0.45), 0 0 50px rgba(80,30,160,0.3),  0 0 90px rgba(40,10,80,0.2); }
+  30%  { box-shadow: 0 0 30px rgba(90,40,180,0.55),  0 0 65px rgba(60,20,140,0.4),  0 0 110px rgba(30,5,60,0.25); }
+  60%  { box-shadow: 0 0 18px rgba(116,57,198,0.35),  0 0 40px rgba(100,50,180,0.2), 0 0 75px rgba(50,15,100,0.12); }
+  100% { box-shadow: 0 0 22px rgba(116,57,198,0.45),  0 0 50px rgba(80,30,160,0.3),  0 0 90px rgba(40,10,80,0.2); }
+}
+
+/* Morrighan — bioluminescent light radiating outward */
+@keyframes glowBioluminescent {
+  0%   { box-shadow: 0 0 20px rgba(92,71,194,0.4),   0 0 50px rgba(100,180,220,0.2),  0 0 80px rgba(80,220,255,0.1); }
+  25%  { box-shadow: 0 0 28px rgba(100,200,240,0.45), 0 0 60px rgba(80,180,220,0.3),   0 0 100px rgba(60,200,240,0.18); }
+  50%  { box-shadow: 0 0 22px rgba(92,71,194,0.5),    0 0 55px rgba(120,200,230,0.25),  0 0 90px rgba(100,220,255,0.15); }
+  75%  { box-shadow: 0 0 30px rgba(80,200,250,0.4),   0 0 65px rgba(92,71,194,0.3),     0 0 110px rgba(60,180,240,0.2); }
+  100% { box-shadow: 0 0 20px rgba(92,71,194,0.4),    0 0 50px rgba(100,180,220,0.2),   0 0 80px rgba(80,220,255,0.1); }
+}
