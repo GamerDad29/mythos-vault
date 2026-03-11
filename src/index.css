@@ -2,6 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKEN SYSTEM — 3 tiers: Primitive → Semantic → Component
+   All color in oklch for perceptual uniformity.
+   Hue ~50-55 = warm amber-dark backgrounds
+   Hue ~52-57 = amber/gold accent family
+   ═══════════════════════════════════════════════════════ */
+:root {
+  /* ─── PRIMITIVE ─── raw values, never referenced directly in components */
+  --p-bg-void:        oklch(0.10 0.007 55);
+  --p-bg-deep:        oklch(0.12 0.008 55);
+  --p-bg-card:        oklch(0.14 0.008 55);
+  --p-bg-surface:     oklch(0.16 0.009 55);
+  --p-bg-elevated:    oklch(0.19 0.011 55);
+
+  --p-border-faint:   oklch(0.19 0.009 50);
+  --p-border-subtle:  oklch(0.22 0.011 50);
+  --p-border-mid:     oklch(0.25 0.013 50);
+  --p-border-strong:  oklch(0.30 0.015 50);
+
+  --p-amber-deep:     oklch(0.47 0.175 52);
+  --p-amber-core:     oklch(0.54 0.180 52);
+  --p-amber-mid:      oklch(0.58 0.165 54);
+  --p-amber-light:    oklch(0.64 0.150 54);
+  --p-amber-hover:    oklch(0.42 0.085 52);
+
+  --p-text-bright:    oklch(0.96 0.003 70);
+  --p-text-primary:   oklch(0.93 0.004 65);
+  --p-text-body:      oklch(0.89 0.004 65);
+  --p-text-secondary: oklch(0.67 0.004 58);
+  --p-text-muted:     oklch(0.47 0.004 55);
+  --p-text-faint:     oklch(0.40 0.003 55);
+  --p-text-ghost:     oklch(0.36 0.003 55);
+
+  /* ─── SEMANTIC ─── map primitives to purpose */
+  --color-bg-page:         var(--p-bg-deep);
+  --color-bg-card:         var(--p-bg-card);
+  --color-bg-surface:      var(--p-bg-surface);
+  --color-bg-elevated:     var(--p-bg-elevated);
+
+  --color-accent:          var(--p-amber-core);
+  --color-accent-deep:     var(--p-amber-deep);
+  --color-accent-mid:      var(--p-amber-mid);
+  --color-accent-text:     var(--p-amber-light);
+  --color-accent-hover:    var(--p-amber-hover);
+
+  --color-border:          var(--p-border-subtle);
+  --color-border-subtle:   var(--p-border-faint);
+  --color-border-mid:      var(--p-border-mid);
+
+  --color-text-primary:    var(--p-text-primary);
+  --color-text-body:       var(--p-text-body);
+  --color-text-secondary:  var(--p-text-secondary);
+  --color-text-muted:      var(--p-text-muted);
+  --color-text-faint:      var(--p-text-faint);
+  --color-text-ghost:      var(--p-text-ghost);
+
+  --color-selection:       oklch(0.38 0.12 52 / 0.40);
+
+  /* ─── COMPONENT ─── specific to UI elements */
+  --card-bg:      var(--color-bg-card);
+  --card-border:  var(--color-border);
+  --card-radius:  8px;
+  --tile-radius:  12px;
+  --btn-radius:   4px;
+  --badge-radius: 2px;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -10,8 +77,8 @@
   }
 
   html {
-    background-color: hsl(15 6% 8%);
-    color: hsl(15 4% 92%);
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
     scroll-behavior: smooth;
   }
 
@@ -21,7 +88,7 @@
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    background-color: hsl(15 6% 8%);
+    background-color: var(--color-bg-page);
   }
 
   /* Subtle noise texture overlay */
@@ -41,41 +108,48 @@
   }
 
   ::selection {
-    background-color: rgba(130, 80, 20, 0.4);
-    color: hsl(15 4% 95%);
+    background-color: var(--color-selection);
+    color: var(--p-text-bright);
   }
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: hsl(15 6% 8%); }
-  ::-webkit-scrollbar-thumb { background: hsl(15 8% 22%); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: hsl(25 60% 28%); }
+  ::-webkit-scrollbar-track { background: var(--color-bg-page); }
+  ::-webkit-scrollbar-thumb { background: var(--p-border-mid); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-accent-hover); }
+
+  /* Heading balance — prevents awkward single-word wrap */
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
 }
 
 @layer utilities {
-  .text-primary { color: hsl(25 100% 32%); }
-  .border-primary { border-color: hsl(25 100% 32%); }
+  .text-primary   { color: var(--color-accent-deep); }
+  .border-primary { border-color: var(--color-accent-deep); }
 
   .forge-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(25 100% 32%), transparent);
+    background: linear-gradient(90deg, transparent, var(--color-accent-deep), transparent);
   }
 
   .card-surface {
-    background: hsl(20 6% 10%);
-    border: 1px solid hsl(15 8% 18%);
-    border-radius: 4px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-mid);
+    border-radius: var(--badge-radius);
+    contain: layout style paint;
   }
 
   .faction-glow {
-    box-shadow: 0 0 40px -10px var(--faction-color, rgba(130,80,20,0.3));
+    box-shadow: 0 0 40px -10px var(--faction-color, oklch(0.38 0.12 52 / 0.30));
   }
 
   .content-panel {
-    background: hsl(20 6% 11%);
-    border: 1px solid hsl(15 8% 17%);
-    border-radius: 8px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
     padding: 2rem;
+    contain: layout style paint;
   }
 
   .page-section {
@@ -83,6 +157,28 @@
     margin: 0 auto;
     padding: 0 1.5rem;
   }
+
+  /* Lazy render off-screen list groups for performance */
+  .vault-list-group {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+}
+
+/* ── Lore Audio Player ─────────────────────────────────────── */
+@keyframes lorePlayPulse {
+  0%   { transform: scale(1);   opacity: 0.65; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+
+@keyframes waveBar {
+  0%   { transform: scaleY(0.55); }
+  100% { transform: scaleY(1.2); }
+}
+
+@keyframes loreKenBurns {
+  0%   { transform: scale(1)    translateX(0%)    translateY(0%); }
+  100% { transform: scale(1.08) translateX(-1.5%) translateY(-1%); }
 }
 
 @keyframes floatUp {
@@ -99,14 +195,6 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
-}
-
-@keyframes kenBurns {
-  0%   { transform: scale(1)    translate(0%,     0%); }
-  25%  { transform: scale(1.04) translate(-0.8%,  0.4%); }
-  50%  { transform: scale(1.06) translate(0.6%,  -0.6%); }
-  75%  { transform: scale(1.04) translate(0.4%,   0.8%); }
-  100% { transform: scale(1)    translate(0%,     0%); }
 }
 
 @keyframes skillPulse {

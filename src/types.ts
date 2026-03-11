@@ -20,6 +20,8 @@ export interface VaultEntity {
   source: string;       // "The Forge" | "Lore Import" | etc.
   hidden?: boolean;     // DM sets true to show entity as locked/unrevealed
   meta?: Record<string, string>; // arbitrary city/entity metadata (e.g. accentColor)
+  audioUrl?: string;    // Raw audio URL (GitHub raw or Google Drive)
+  provenance?: string;  // "Told in X · Travels as Y" — lore origin line
 }
 
 export interface VaultIndex {

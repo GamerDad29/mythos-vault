@@ -971,6 +971,48 @@
       "publishedAt": "2026-02-25T00:00:00.000Z"
     },
     {
+      "id": "lore-the-long-betrayal",
+      "slug": "the-long-betrayal",
+      "name": "The Long Betrayal",
+      "type": "LORE",
+      "category": "The Thousand Year War",
+      "region": "underdark",
+      "provenance": "Told in the Underdark · Travels as scratched stone-records and whispers",
+      "summary": "Three hundred years of trade ended when they sealed the door on our dead and called it self-defense.",
+      "audioUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/audio/lore/the-long-betrayal.mp3",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-the-long-betrayal.jpg",
+      "tags": ["lore", "underdark", "history", "war", "the-sealing"],
+      "publishedAt": "2026-03-11T00:00:00.000Z"
+    },
+    {
+      "id": "lore-the-day-the-stone-breathed-back",
+      "slug": "the-day-the-stone-breathed-back",
+      "name": "The Day the Stone Breathed Back",
+      "type": "LORE",
+      "category": "The Thousand Year War",
+      "region": "surface",
+      "provenance": "Told in UTTP · Travels as a confession whispered over cheap ale",
+      "summary": "A surface soldier's account of the morning the divine went quiet and the enemy stopped hating itself.",
+      "audioUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/audio/lore/the-day-the-stone-breathed-back.mp3",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-the-day-the-stone-breathed-back.jpg",
+      "tags": ["lore", "surface", "history", "war", "uttp"],
+      "publishedAt": "2026-03-11T00:00:00.000Z"
+    },
+    {
+      "id": "lore-the-great-unbinding",
+      "slug": "the-great-unbinding",
+      "name": "The Great Unbinding",
+      "type": "LORE",
+      "category": "The Thousand Year War",
+      "region": "surface",
+      "provenance": "Told on the surface · Travels as liturgy and high-verse song",
+      "summary": "The official surface account — how the Sentinel became the last option when the gods had already left the room.",
+      "audioUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/audio/lore/the-great-unbinding.mp3",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-the-great-unbinding.jpg",
+      "tags": ["lore", "surface", "history", "war", "the-sentinel"],
+      "publishedAt": "2026-03-11T00:00:00.000Z"
+    },
+    {
       "id": "lore-karnuk-becoming",
       "slug": "karnuk-becoming",
       "name": "Legends of the Iron Order: Becoming",
