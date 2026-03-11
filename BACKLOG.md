@@ -1,6 +1,6 @@
 # Mythos Vault — Backlog
 
-_Last updated: 2026-03-08 (Session 11)_
+_Last updated: 2026-03-10 (Session 13)_
 
 > Phased by dependency and complexity, not by the original request batches.
 > Engineering Workflow applied: inspect → clarify → plan → implement.
@@ -132,36 +132,19 @@ Depends on P1 complete. P2 not required to start.
 
 ---
 
-## 🔴 HIGH PRIORITY — Admin: Hero Image Picker
+## Admin: Hero Image Picker
 
-### A1 — Session Hero Image Drag-to-Primary (Admin Only)
+### A1 — Session Hero Image Drag-to-Primary (Admin Only) ✅
 
 **What it does:**
 When logged in as DM, session detail pages get an interactive image management mode.
 The DM can click any woven (inline) image and promote it to the hero — replacing `imageUrl`
 in `vault/sessions/index.json` via a GitHub push, no manual JSON editing required.
 
-**User story:**
-> "I log into Mythos Vault with my admin password → open a session → click an existing
-> woven image → drag it into the primary hero frame → hit Save → hero updates live."
-
-**Scope:**
-- DM-only UI: only visible when `useAuth()` returns `isAuthenticated === true`
-- Works on `/sessions/:slug` (SessionDetail page)
-- Woven images get a visible "Set as Hero" affordance in DM mode (click or drag)
-- A preview frame at the top of the edit panel shows the current hero + proposed replacement
-- On confirm → `imageUrl` field patched in `vault/sessions/index.json` via `proxyService.pushToGitHub()`
-- Optional: also allow adjusting `imagePosition` (the CSS `object-position` value) from a preset grid (top/center/bottom × left/center/right)
-
-**Dependencies:**
-- `proxyService.pushToGitHub()` already exists and works (used by Architect)
-- `vault/sessions/index.json` is the single source of truth for sessions
-- `useAuth()` context already wired in app
-
-**Out of scope (first pass):**
-- Reordering woven images (separate feature)
-- Changing hero for entity pages (not sessions)
-- Drag-and-drop file upload (that's a separate upload flow)
+**Implemented (2026-03-10 Session 13):**
+- `SessionDetail.tsx`: "Set as Hero" star button alongside "Adjust Frame" on each WovenImage in DM mode
+- Fixed-bottom `HeroPickerPanel`: thumbnail preview, "Promote to Session Hero" label, 3×3 focal point grid (CSS position presets), Cancel/Confirm buttons with saving/done states
+- `githubService.ts`: `updateSessionHeroImage(sessionSlug, imageUrl, imagePosition, pat)` — patches both fields in `vault/sessions/index.json` via `putFileWithRetry`, then calls `vaultService.clearCache()`
 
 ---
 
@@ -238,11 +221,9 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 - **Architect synced**: `utils/imagePromptBuilder.ts` updated with same 5 styles + `VaultImageStyle` type + style-aware framing helpers (`characterFraming`, `constructFraming`, `itemFraming`)
 - **Build fix**: `regenStatus === 'committing'` added to generate button render condition in `EntityDetail.tsx` — was blocking all Cloudflare Pages builds
 
-### P5-6 — Characters Page (New)
-- New route `/characters` with full player character showcase
-- Import full player sheet data (TBD format — user to provide)
-- "Super cool presentation" — think hero card with portrait, stats, backstory panels
-- Design TBD until sheet data is available; build data schema first
+### P5-6 — Characters Page ✅
+- Cinematic bento layout fully built (Sessions 9, 10, 12)
+- PCDetail: StatBox hierarchy reversed — highest stat raised (lifted 3px, solid accent bg, elevation shadow, accent top-edge line, larger 2rem numeral, no pulse); other stats recede (dark inset bg, muted text) — done Session 13
 
 ### P5-7 — Sessions Page ✅
 - `/sessions` → compact grid index; `/sessions/:slug` → individual cinematic session pages
@@ -271,6 +252,35 @@ _Source: Mythos Vault Updates.3.3.26.txt_
 ---
 
 ## Session Log
+
+### 2026-03-10 (Session 13 — A1 + UI/UX Review + Visual FX Sprint)
+**Admin hero image picker, stat box polish, full codebase review, 6 visual features shipped. Multiple commits, deployed.**
+
+**A1 — Session Hero Image Picker (DM):**
+- `SessionDetail.tsx`: star "Set as Hero" button grouped with "Adjust Frame" on each WovenImage (DM mode only)
+- Fixed-bottom `HeroPickerPanel`: thumbnail preview, "Promote to Session Hero" label, 3×3 focal point preset grid, Cancel/Confirm with saving/done states
+- `githubService.ts`: `updateSessionHeroImage()` — patches `imageUrl` + `imagePosition` in `vault/sessions/index.json` via `putFileWithRetry`, clears cache on success
+
+**PCDetail StatBox — visual hierarchy reversed:**
+- Best stat raised: `translateY(-3px)`, padding 16px 10px 14px, accent gradient bg, `1px solid ${accent}70` border, elevation + inner glow box-shadow, 2px accent top-edge line, `fontSize: '2rem'` score, text glow, no skillPulse animation
+- Other stats recede: dark `hsl(15 6% 6%)` bg, inset shadow, muted text colors
+
+**UI/UX Codebase Review (full audit):**
+- 14 code issues documented (C1–C14): unused imports, `as any` casts, prop drilling, missing memoization, etc.
+- 10 UI/UX issues documented (U1–U10): type badge truncation, mobile hero overflow, empty states, etc.
+- 9 fix items (FIX-1–FIX-9), 5 UX items (UX-1–UX-5) queued
+- 12 creative ideas generated and ranked by effort (lowest→highest)
+
+**Visual FX Sprint — Ideas 3, 7, 8, 11 + Home holographic:**
+- **Idea 3 — Holographic card tilt** (`Characters.tsx`): `perspective(900px) rotateX/Y` cursor tracking, 0.12s snap on move, specular radial-gradient with `mixBlendMode: screen`
+- **Idea 7 — Related entries thumbnails** (`EntityDetail.tsx`): 38px×38px thumbnails with `object-fit: cover` + fallback ⟁ glyph on each related entry in sidebar
+- **Idea 8 — Ink drop reveal** (`EntityCard.tsx` + `index.css`): `inkCover`/`inkReveal` `@keyframes` via `clip-path: circle()`, triggered on DM hide/show toggle with 700ms phase reset
+- **Idea 11 — WebGL shader background** (`WebGLBackground.tsx` NEW + `Home.tsx`): raw WebGL fragment shader — simplex noise + 4-octave fBm stone wall texture, 2 independently-flickering amber torch lights, slow-breathing arcane indigo glow, secondary blue-violet arcane point, edge vignette. DPR-aware, pauses on `document.hidden`, full cleanup on unmount.
+- **Home holographic tilt**: same 3D tilt + specular highlight applied to all `SectionCard` instances on Home page
+
+**Files changed:** `src/pages/SessionDetail.tsx`, `src/services/githubService.ts`, `src/pages/PCDetail.tsx`, `src/pages/Characters.tsx`, `src/pages/EntityDetail.tsx`, `src/components/EntityCard.tsx`, `src/components/WebGLBackground.tsx` (NEW), `src/pages/Home.tsx`, `src/index.css`
+
+---
 
 ### 2026-03-10 (Session 12 — P5-6 Cinematic Bento + UI Review Brief)
 **Characters page fully rebuilt as cinematic bento layout. UI review brief applied. 4 files changed across 4 commits, pushed to main, deployed.**
