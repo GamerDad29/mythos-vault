@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "npc-ruby-aurenthal",
+      "slug": "ruby-aurenthal",
+      "name": "Ruby Aurenthal",
+      "type": "NPC",
+      "category": "Aasimar Barbarian (Path of the Ancestral Guardian)",
+      "summary": "Aasimar Barbarian (Path of the Ancestral Guardian) — The Undying Tribunal of the Pale Flame",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1773353752955-v9vuho.jpg",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-12T22:16:28.609Z"
+    },
+    {
       "id": "pc-cannonball-kar-thul",
       "slug": "cannonball-kar-thul",
       "name": "\"Cannonball\" Kar-thul",
@@ -1333,5 +1348,5 @@
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-vorrak-half-tongue.jpg"
     }
   ],
-  "updatedAt": "2026-03-06T22:25:42.017Z"
+  "updatedAt": "2026-03-12T22:16:29.654Z"
 }
