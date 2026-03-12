@@ -193,7 +193,7 @@
       "type": "CREATURE",
       "category": "Medium Construct",
       "summary": "Medium Construct, Lawful Neutral â€” Challenge 5 (1,800 XP)",
-      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1772340903923-axgo1g.jpg",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/monster-stonebond-sentinel.jpg",
       "tags": [
         "monster",
         "forged",
@@ -981,7 +981,13 @@
       "summary": "Three hundred years of trade ended when they sealed the door on our dead and called it self-defense.",
       "audioUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/audio/lore/the-long-betrayal.mp3",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-the-long-betrayal.jpg",
-      "tags": ["lore", "underdark", "history", "war", "the-sealing"],
+      "tags": [
+        "lore",
+        "underdark",
+        "history",
+        "war",
+        "the-sealing"
+      ],
       "publishedAt": "2026-03-11T00:00:00.000Z"
     },
     {
@@ -995,7 +1001,13 @@
       "summary": "A surface soldier's account of the morning the divine went quiet and the enemy stopped hating itself.",
       "audioUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/audio/lore/the-day-the-stone-breathed-back.mp3",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-the-day-the-stone-breathed-back.jpg",
-      "tags": ["lore", "surface", "history", "war", "uttp"],
+      "tags": [
+        "lore",
+        "surface",
+        "history",
+        "war",
+        "uttp"
+      ],
       "publishedAt": "2026-03-11T00:00:00.000Z"
     },
     {
@@ -1009,7 +1021,13 @@
       "summary": "The official surface account — how the Sentinel became the last option when the gods had already left the room.",
       "audioUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/audio/lore/the-great-unbinding.mp3",
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/lore-the-great-unbinding.jpg",
-      "tags": ["lore", "surface", "history", "war", "the-sentinel"],
+      "tags": [
+        "lore",
+        "surface",
+        "history",
+        "war",
+        "the-sentinel"
+      ],
       "publishedAt": "2026-03-11T00:00:00.000Z"
     },
     {
