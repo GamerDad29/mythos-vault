@@ -1,0 +1,17 @@
+{
+  "id": "npc-bodrun-saltmarrow",
+  "slug": "bodrun-saltmarrow",
+  "name": "Bodrun Saltmarrow",
+  "type": "NPC",
+  "category": "Dwarf Harbormistress",
+  "summary": "Dwarf Harbormistress — The Tidal Compact",
+  "content": "> *Dwarf Harbormistress — The Tidal Compact*\n**Bodrun Saltmarrow**\n*(A name from the deep-vein Dwarven mercantile clans of the coastal ranges — \"Saltmarrow\" is not a family name but a professional title, inherited through appointment rather than blood, meaning the holder is responsible for what the sea brings in)*\n*Every ship that enters this harbor pays a tax that funds a war that ended sixty years ago — and Bodrun is the only one who knows the war didn't end, it just moved.*\n\n**Weight of History:** The Tidal Compact was established as a wartime emergency measure to coordinate naval supply lines during the Threefold Blockade; when peace was declared, no one repealed it, and the Compact simply... continued, accumulating authority over every port in the region with the quiet patience of an institution that has stopped needing a reason to exist.\n\n**Appearance:** Bodrun is a broad dwarf of around 180 years, with close-cropped iron-white hair and a beard she keeps sealed in a thick nautical braid against the sea wind. She is almost always in motion — walking a pier, reviewing manifests, pointing at something with a battered brass telescope — and she has the thick, scarred hands of someone who loaded cargo herself for the first fifty years of her career before anyone promoted her. She wears the Compact's blue-and-salt uniform under a waxed storm cloak, and a master's chain of office around her neck that she uses, visibly and often, to open locked harbor gate mechanisms.\n\n**Personality:**\n- **Trait.** Bodrun thinks in tonnage, tidal schedules, and debt-cycles. She finds interpersonal conflict wasteful and will always attempt to negotiate a *transactional* resolution before anything else.\n- **Bond.** The harbor is not a place to her — it is a living institution, and every ship chandler, rope-maker, and dockhand who depends on it is her responsibility. She has refused bribes and promotions alike because both would take her away from the work.\n- **Flaw.** She has learned to move things — cargo, information, people — without asking too many questions about what she's moving. The habit has made her efficient and it has made her complicit, and she has organized her life to avoid examining where those two things overlap.\n\n**Secret (Structural):** Three of the Tidal Compact's nine harbormasters are not actually Compact officers — they are agents of a foreign naval power who infiltrated the organization during the Threefold Blockade and were never extracted. They've been operating as loyal Compact officials for six decades, genuinely doing the job, because the conflict their nation sent them to undermine *did* end and they received no recall order. Bodrun has found the discrepancy in the charter records. She does not know what they want now — if they want anything — but she knows that sixty years of a foreign power having eyes inside every major port of the region is not something she can report up the chain, because she isn't certain the chain isn't already compromised.",
+  "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1773545814874-q5xw9q.jpg",
+  "tags": [
+    "npc",
+    "forged",
+    "ai-generated"
+  ],
+  "publishedAt": "2026-03-15T03:37:05.528Z",
+  "source": "The Forge"
+}
