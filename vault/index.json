@@ -1,6 +1,21 @@
 {
   "entities": [
     {
+      "id": "npc-bodrun-saltmarrow",
+      "slug": "bodrun-saltmarrow",
+      "name": "Bodrun Saltmarrow",
+      "type": "NPC",
+      "category": "Dwarf Harbormistress",
+      "summary": "Dwarf Harbormistress — The Tidal Compact",
+      "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/forge-1773545814874-q5xw9q.jpg",
+      "tags": [
+        "npc",
+        "forged",
+        "ai-generated"
+      ],
+      "publishedAt": "2026-03-15T03:37:05.528Z"
+    },
+    {
       "id": "npc-ruby-aurenthal",
       "slug": "ruby-aurenthal",
       "name": "Ruby Aurenthal",
@@ -1348,5 +1363,5 @@
       "imageUrl": "https://raw.githubusercontent.com/GamerDad29/mythos-vault/main/images/npc-vorrak-half-tongue.jpg"
     }
   ],
-  "updatedAt": "2026-03-12T22:16:29.654Z"
+  "updatedAt": "2026-03-15T03:37:06.626Z"
 }
